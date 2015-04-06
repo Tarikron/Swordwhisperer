@@ -1,74 +1,55 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Spine;
 
 
-public class cPlayer_c : MonoBehaviour {
+[RequireComponent(typeof(SkeletonAnimation))]
+public class cPlayer_c : MonoBehaviour 
+{
 
 	public SkeletonAnimation skeletonAnimation;
-	private string currentAnim = "";
+	private string currentAnimation = "";
 	public float jump_height = 3.0f;
-	private Vector3 jump_target = Vector3.zero;
-	private Vector3 origin_target = Vector3.zero;
-
+	
+	private int iJumpCounter = 0;
+	private float jumpForce = 300f;
 
 	// Use this for initialization
 	void Start () {
-		skeletonAnimation.state.Start += this.startListener;
-		skeletonAnimation.state.End += this.endListener;
+		//skeletonAnimation.state.Start += this.startListener;
+		//skeletonAnimation.state.End += this.endListener;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-
-		if (jump_target != Vector3.zero) 
+		if (currentAnimation != "wakeup")
 		{
-			transform.position = Vector3.MoveTowards(transform.position,jump_target,5.0f * Time.deltaTime);
-			if (jump_target == transform.position)
+			float x = Input.GetAxis("Horizontal");
+			float absX = Mathf.Abs(x);
+
+			if (x > 0)
+				skeletonAnimation.skeleton.FlipX = false;
+			else if (x < 0)
+				skeletonAnimation.skeleton.FlipX = true;
+
+			if (absX > 0) 
+				SetAnimation ("walkcycle", true);
+			else
+				SetAnimation ("Idle_NO_sword", true);
+
+			if (Input.GetButtonDown ("jump"))
 			{
-				jump_target.y = origin_target.y;
-				transform.position = Vector3.MoveTowards(transform.position,jump_target,5.0f * Time.deltaTime);
+				GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
 			}
-		}
 
-		if (Input.GetButtonDown("jump"))
-		{
-			origin_target = transform.position;
-			jump_target = transform.position;
-			jump_target.y += jump_height;
-		}
-		if (Input.GetButton ("Horizontal")) 
-		{
-			currentAnim = "walkcycle";
-			skeletonAnimation.state.AddAnimation (0, "walkcycle", true, 0);
-
-			Vector3 vPos = this.gameObject.transform.position;
-			vPos.z += Input.GetAxis("Horizontal");
-			this.gameObject.transform.LookAt(vPos);
-			Debug.Log (vPos);
-
-		}
-		else if (currentAnim == "walkcycle")
-		{
-			skeletonAnimation.state.SetAnimation (0, "walkcycle", false);
-			skeletonAnimation.state.AddAnimation (0, "Idle_NO_sword", true, 0);
-			currentAnim = "Idle_NO_sword";
 		}
 	}
-
-	public void startListener(Spine.AnimationState state, int trackIndex)
+	void SetAnimation (string anim, bool loop) 
 	{
-		Debug.Log(trackIndex + " " + state.GetCurrent(trackIndex) + ": start ");
-	}
-	public void endListener(Spine.AnimationState state, int trackIndex)
-	{
-		Debug.Log(trackIndex + " " + state.GetCurrent(trackIndex) + ": end");
-		string track = state.GetCurrent (trackIndex).ToString();
-		if (track == "wakeup") 
+		if (currentAnimation != anim) 
 		{
-			skeletonAnimation.state.AddAnimation (0, "Idle_NO_sword", true, 0);
-			currentAnim = "Idle_NO_sword";
+			skeletonAnimation.state.SetAnimation(0, anim, loop);
+			currentAnimation = anim;
 		}
 	}
 }
