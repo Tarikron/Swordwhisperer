@@ -8,15 +8,16 @@ public class cPlayer_c : MonoBehaviour
 
 	public SkeletonAnimation skeletonAnimation;
 	private string currentAnimation = "";
-	public float jump_height = 3.0f;
-	
+		
 	private int iJumpCounter = 0;
-	private float jumpForce = 300f;
+	public float jumpForce = 300f;
+	public float walkVelocity = 3.0f;
 
 	// Use this for initialization
 	void Start () {
-		//skeletonAnimation.state.Start += this.startListener;
-		//skeletonAnimation.state.End += this.endListener;
+		SetAnimation ("wakeup", false);
+
+		skeletonAnimation.state.End += endAnimListener;
 	}
 	
 	// Update is called once per frame
@@ -33,10 +34,15 @@ public class cPlayer_c : MonoBehaviour
 				skeletonAnimation.skeleton.FlipX = true;
 
 			if (absX > 0) 
+			{
 				SetAnimation ("walkcycle", true);
+				GetComponent<Rigidbody2D>().velocity = new Vector2(walkVelocity * Mathf.Sign(x), GetComponent<Rigidbody2D>().velocity.y);
+			}
 			else
+			{
 				SetAnimation ("Idle_NO_sword", true);
-
+				GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
+			}
 			if (Input.GetButtonDown ("jump"))
 			{
 				GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
@@ -44,6 +50,12 @@ public class cPlayer_c : MonoBehaviour
 
 		}
 	}
+	void endAnimListener (Spine.AnimationState state, int trackIndex)
+	{
+		if (state.GetCurrent (trackIndex).Animation.Name == "wakeup")
+			currentAnimation = "";
+	}
+
 	void SetAnimation (string anim, bool loop) 
 	{
 		if (currentAnimation != anim) 
