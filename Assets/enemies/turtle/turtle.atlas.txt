@@ -1,0 +1,146 @@
+
+turtle.png
+size: 4096,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Auge
+  rotate: false
+  xy: 3050, 238
+  size: 263, 172
+  orig: 263, 172
+  offset: 0, 0
+  index: -1
+Bauch
+  rotate: false
+  xy: 1866, 693
+  size: 726, 303
+  orig: 726, 303
+  offset: 0, 0
+  index: -1
+BeinHhinten1
+  rotate: false
+  xy: 2374, 93
+  size: 246, 451
+  orig: 246, 451
+  offset: 0, 0
+  index: -1
+BeinHhinten2
+  rotate: true
+  xy: 2414, 547
+  size: 144, 174
+  orig: 144, 174
+  offset: 0, 0
+  index: -1
+BeinHinten1
+  rotate: true
+  xy: 3612, 663
+  size: 333, 455
+  orig: 333, 455
+  offset: 0, 0
+  index: -1
+BeinHinten2
+  rotate: false
+  xy: 3352, 421
+  size: 156, 171
+  orig: 156, 171
+  offset: 0, 0
+  index: -1
+BeinVorn1
+  rotate: false
+  xy: 1997, 140
+  size: 375, 404
+  orig: 375, 404
+  offset: 0, 0
+  index: -1
+BeinVorn2
+  rotate: true
+  xy: 3076, 412
+  size: 180, 274
+  orig: 180, 274
+  offset: 0, 0
+  index: -1
+BeinVornhinten
+  rotate: false
+  xy: 1684, 20
+  size: 311, 468
+  orig: 311, 468
+  offset: 0, 0
+  index: -1
+BeinVornhinten2
+  rotate: true
+  xy: 869, 2
+  size: 328, 483
+  orig: 328, 483
+  offset: 0, 0
+  index: -1
+Beinornhinten
+  rotate: false
+  xy: 1354, 5
+  size: 328, 483
+  orig: 328, 483
+  offset: 0, 0
+  index: -1
+Kopf
+  rotate: false
+  xy: 1301, 490
+  size: 563, 506
+  orig: 563, 506
+  offset: 0, 0
+  index: -1
+Maul
+  rotate: false
+  xy: 2622, 422
+  size: 452, 185
+  orig: 452, 185
+  offset: 0, 0
+  index: -1
+Moos
+  rotate: false
+  xy: 2, 6
+  size: 865, 324
+  orig: 865, 324
+  offset: 0, 0
+  index: -1
+Panzer
+  rotate: false
+  xy: 2, 332
+  size: 1297, 664
+  orig: 1297, 664
+  offset: 0, 0
+  index: -1
+SchulterHinten
+  rotate: false
+  xy: 3115, 594
+  size: 495, 402
+  orig: 495, 402
+  offset: 0, 0
+  index: -1
+SchulterVorn
+  rotate: false
+  xy: 2594, 609
+  size: 519, 387
+  orig: 519, 387
+  offset: 0, 0
+  index: -1
+Verbindung1
+  rotate: false
+  xy: 1866, 546
+  size: 546, 145
+  orig: 546, 145
+  offset: 0, 0
+  index: -1
+Verbindung2
+  rotate: false
+  xy: 2622, 209
+  size: 426, 211
+  orig: 426, 211
+  offset: 0, 0
+  index: -1
+Wurzeln
+  rotate: false
+  xy: 3612, 386
+  size: 462, 275
+  orig: 462, 275
+  offset: 0, 0
+  index: -1

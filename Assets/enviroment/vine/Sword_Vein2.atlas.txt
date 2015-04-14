@@ -1,0 +1,95 @@
+
+Sword_Vein2.png
+size: 4096,4096
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+FelsenRanke
+  rotate: false
+  xy: 1262, 3057
+  size: 2692, 891
+  orig: 2692, 891
+  offset: 0, 0
+  index: -1
+RankeG2
+  rotate: false
+  xy: 1262, 2
+  size: 1145, 3053
+  orig: 1145, 3053
+  offset: 0, 0
+  index: -1
+RankeKlein1
+  rotate: false
+  xy: 3637, 2007
+  size: 395, 1048
+  orig: 395, 1048
+  offset: 0, 0
+  index: -1
+RankeKlein2
+  rotate: true
+  xy: 2, 126
+  size: 449, 1258
+  orig: 449, 1258
+  offset: 0, 0
+  index: -1
+RankeM1
+  rotate: false
+  xy: 2409, 51
+  size: 1226, 3004
+  orig: 1226, 3004
+  offset: 0, 0
+  index: -1
+RankeM2
+  rotate: false
+  xy: 2, 577
+  size: 1258, 3371
+  orig: 1258, 3371
+  offset: 0, 0
+  index: -1
+
+Sword_Vein22.png
+size: 4096,4096
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+RankeG1
+  rotate: false
+  xy: 2, 76
+  size: 1662, 3280
+  orig: 1662, 3280
+  offset: 0, 0
+  index: -1
+RankeG3
+  rotate: false
+  xy: 1666, 2
+  size: 1069, 3354
+  orig: 1069, 3354
+  offset: 0, 0
+  index: -1
+RankeM3
+  rotate: false
+  xy: 2737, 993
+  size: 1284, 2363
+  orig: 1284, 2363
+  offset: 0, 0
+  index: -1
+
+Sword_Vein23.png
+size: 4096,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer31
+  rotate: false
+  xy: 2017, 2
+  size: 1881, 946
+  orig: 1881, 946
+  offset: 0, 0
+  index: -1
+RankeBroken
+  rotate: true
+  xy: 2, 62
+  size: 886, 2013
+  orig: 886, 2013
+  offset: 0, 0
+  index: -1
