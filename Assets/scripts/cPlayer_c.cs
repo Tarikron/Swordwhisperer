@@ -110,19 +110,22 @@ public class cPlayer_c : MonoBehaviour
 
 			iJumpCounter++;
 			if (iJumpCounter <= 2)
+			{
 				jumpDestHeight = rb2D.position.y+jumpHeight;
-			animLoop = false;
-			animationToPlay = "jump_sword";
-			animAdd = true;
-			if (currentAnimation != "")
-				animationToPlayAfter = currentAnimation;
-			else
-				animationToPlayAfter = "idle_"+sword;
+				animLoop = false;
+				animationToPlay = "jump_sword";
+				animAdd = true;
+				if (currentAnimation != "")
+					animationToPlayAfter = currentAnimation;
+				else
+					animationToPlayAfter = "idle_"+sword;
 
-			animLoopAfter = true;
+				animLoopAfter = true;
 
-			if (animationToPlayAfter == "walkcycle_end_"+sword || animationToPlayAfter == "walkcycle_start_"+sword)
-				animLoopAfter = false;
+				if (animationToPlayAfter == "walkcycle_end_"+sword || animationToPlayAfter == "walkcycle_start_"+sword)
+					animLoopAfter = false;
+			}
+
 
 		}
 	}
@@ -186,6 +189,10 @@ public class cPlayer_c : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		if (Input.GetKeyDown(KeyCode.F2))
+			Application.LoadLevel ("swordwhisperer");
+
+
 		if (sleepAnim)
 		{
 			SetAnimation("wakeup_nosword",false);
@@ -286,8 +293,10 @@ public class cPlayer_c : MonoBehaviour
 				SetAnimation (animationToPlay, animLoop);
 		}
 		else
+		{
+			Debug.Log ("currentAnim: " + currentAnimation);
 			GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
-		
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
