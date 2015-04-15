@@ -23,7 +23,7 @@ public class cPlayer_c : MonoBehaviour
 	private string animationToPlay = "idle_nosword";
 	private string animationToPlayAfter = "idle_nosword";
 	private bool animLoopAfter = false;
-
+	private bool sleepAnim = true;
 	private eAnimTakeSword iAnimTakeSword = 0;
 
 	//gameplay related
@@ -174,6 +174,8 @@ public class cPlayer_c : MonoBehaviour
 		rb2D = GetComponent<Rigidbody2D>();
 		jumpDestHeight = -999.0f;
 		isAnimQueueDone = true;
+		currentAnimation = "";
+		sleepAnim = true;
 	}
 
 	void FixedUpdate()
@@ -184,6 +186,11 @@ public class cPlayer_c : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		if (sleepAnim)
+		{
+			SetAnimation("wakeup_nosword",false);
+			return;
+		}
 		string sword = "nosword";
 		if (bCollectedSword == true)
 			sword = "sword";
@@ -342,6 +349,7 @@ public class cPlayer_c : MonoBehaviour
 			    state.GetCurrent (trackIndex).Animation.Name == "walkcycle_end_"+sword)
 			{
 				animationToPlay = "idle_"+sword;
+				sleepAnim = false;
 			}
 			else if (state.GetCurrent (trackIndex).Animation.Name == "walkcycle_start_"+sword)
 			{
