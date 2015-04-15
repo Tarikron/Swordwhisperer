@@ -11,6 +11,8 @@ public class cTurtle : MonoBehaviour {
 	public float triggerDistance = 0.0f;
 	public float triggerAttack = 0.0f;
 
+	public int life = 3;
+
 	private string currentAnimation = "";
 	private string animationToPlay = "";
 	private bool animLoop = false;
@@ -39,7 +41,7 @@ public class cTurtle : MonoBehaviour {
 				animationToPlay = "wakeUP";
 				animLoop = false;
 			}
-			else if (animationToPlay != "wakeUP")
+			else if (animationToPlay == "idle")
 			{
 				currentTimeScale = 1.0f;
 				animLoop = true;
@@ -61,17 +63,38 @@ public class cTurtle : MonoBehaviour {
 	{
 		currentAnimation ="";
 		//Debug.Log ("end - " + state.GetCurrent (trackIndex).Animation.Name);
-		if (state.GetCurrent (trackIndex).Animation.Name == "wakeUP")
-			animationToPlay = "Idle";
+		if (state.GetCurrent (trackIndex).Animation.Name == "wakeUP" ||
+		    state.GetCurrent (trackIndex).Animation.Name == "recieved_hit")
+			animationToPlay = "idle";
+		else if (state.GetCurrent (trackIndex).Animation.Name == "death")
+			this.gameObject.SetActive(false);
 	}
 	
 	void SetAnimation (string anim, bool loop) 
 	{
 		if (currentAnimation != anim) 
 		{	
+			Debug.Log ("  " + anim + "   " + loop);
 			skeletonAnimation.state.SetAnimation(0,anim,loop);
 			skeletonAnimation.timeScale = currentTimeScale;
 			currentAnimation = anim;
+		}
+	}
+
+	void receive_hit()
+	{
+		if (life > 0)
+		{
+			currentTimeScale = 1.0f;
+			animationToPlay = "recieved_hit";
+			animLoop = false;
+			life--;
+		}
+		else if (life <= 0)
+		{
+			currentTimeScale = 1.0f;
+			animationToPlay = "death";
+			animLoop = false;
 		}
 	}
 }
