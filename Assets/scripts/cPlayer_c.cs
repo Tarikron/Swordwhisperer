@@ -34,6 +34,8 @@ public class cPlayer_c : MonoBehaviour
 	private Rigidbody2D rb2D;
 	private float jumpDestHeight = 0.0f;
 
+	private bool bSkipMovementForAnim = false;
+
 	void collectSword()
 	{
 
@@ -222,8 +224,8 @@ public class cPlayer_c : MonoBehaviour
 				animLoop = false;
 				GameObject vine = GameObject.Find("vine");
 				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"Idle_nosword",true);
-
-				animationToPlay = "walkcycle_end_"+sword;
+				bSkipMovementForAnim = true;
+				animationToPlay = "walkcycle_end_sword";
 				iAnimTakeSword = eAnimTakeSword.ANIM_NONE;
 				break;
 			}
@@ -255,32 +257,34 @@ public class cPlayer_c : MonoBehaviour
 		if (isAnimQueueDone == true) 
 		{
 			float x = Input.GetAxis("Horizontal");
-			
-			handleMovement (x);
-			handleJump (x);
 
-			//movement
-			if (iJumpCounter >= 0)
+			if (!bSkipMovementForAnim)
 			{
-				//jump chunk
-				if (rb2D.position.y <= jumpDestHeight)
-				{
-					float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
-					float jumpChunk = jumpHeight/timePart;
-					movementDirection.y += jumpChunk * Time.deltaTime;
-				}
-				else
-				{
-					jumpDestHeight = -999.0f;
-					if (bGrounded == false)
-						movementDirection.y -= gravity * Time.deltaTime;
-				}
-			}
-			//Debug.Log( rb2D.position + movementDirection);
-			
-			rb2D.MovePosition( rb2D.position  + movementDirection);
-			handleAttack ();
+				handleMovement (x);
+				handleJump (x);
 
+				//movement
+				if (iJumpCounter >= 0)
+				{
+					//jump chunk
+					if (rb2D.position.y <= jumpDestHeight)
+					{
+						float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
+						float jumpChunk = jumpHeight/timePart;
+						movementDirection.y += jumpChunk * Time.deltaTime;
+					}
+					else
+					{
+						jumpDestHeight = -999.0f;
+						if (bGrounded == false)
+							movementDirection.y -= gravity * Time.deltaTime;
+					}
+				}
+				//Debug.Log( rb2D.position + movementDirection);
+				
+				rb2D.MovePosition( rb2D.position  + movementDirection);
+				handleAttack ();
+			}
 			if (animAdd) 
 			{
 				isAnimQueueDone = false;
@@ -295,7 +299,10 @@ public class cPlayer_c : MonoBehaviour
 		else
 		{
 			Debug.Log ("currentAnim: " + currentAnimation);
-			GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
+			if (currentAnimation == "attack_kick")
+				GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
+			else
+				isAnimQueueDone = true;
 		}
 	}
 
@@ -325,12 +332,12 @@ public class cPlayer_c : MonoBehaviour
 	{
 		animIsPlaying = true;
 
-		//Debug.Log("start anim: " + state.GetCurrent (trackIndex).Animation.Name);
+		Debug.Log("start anim: " + state.GetCurrent (trackIndex).Animation.Name);
 
 	}
 	void endAnimListener (Spine.AnimationState state, int trackIndex)
 	{
-		//Debug.Log("end anim: " + state.GetCurrent (trackIndex).Animation.Name);
+		Debug.Log("end anim: " + state.GetCurrent (trackIndex).Animation.Name);
 
 		animIsPlaying = false;
 		if (isAnimQueueDone == false) 
@@ -359,6 +366,7 @@ public class cPlayer_c : MonoBehaviour
 			{
 				animationToPlay = "idle_"+sword;
 				sleepAnim = false;
+				bSkipMovementForAnim = false;
 			}
 			else if (state.GetCurrent (trackIndex).Animation.Name == "walkcycle_start_"+sword)
 			{
