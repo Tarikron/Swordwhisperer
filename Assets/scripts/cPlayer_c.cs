@@ -193,7 +193,8 @@ public class cPlayer_c : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.F2))
 			Application.LoadLevel ("swordwhisperer");
-
+		else if (Input.GetKeyDown (KeyCode.Escape))
+			Application.Quit();
 
 		if (sleepAnim)
 		{
@@ -257,6 +258,8 @@ public class cPlayer_c : MonoBehaviour
 		if (isAnimQueueDone == true) 
 		{
 			float x = Input.GetAxis("Horizontal");
+			if (x <= 0.05f)
+				x = 0.0f;
 
 			if (!bSkipMovementForAnim)
 			{
