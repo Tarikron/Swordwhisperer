@@ -6,94 +6,151 @@ using System.Collections;
 public class cPlayer_c : MonoBehaviour 
 {
 	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_DONE};
+	enum eAnimWalk{ANIM_NONE = 0,ANIM_WALK,ANIM_END};
 
 	//settings via unity
 	public SkeletonAnimation skeletonAnimation;
+
 	public float jumpHeight = 300f;
 	public float jumpTime = 10.0f;
+	public float hurtVelocity = 3.0f;
 	public float walkVelocity = 3.0f;
+	public float runVelocity = 6.0f;
 	public float gravity = 1.0f;
 
 	//animation stuff
-	private bool animIsPlaying = false;
-	private bool animAdd = false; //Test var
-	private bool isAnimQueueDone = false;
-	private bool animLoop = false;
-	private string currentAnimation = "";
-	private string animationToPlay = "idle_nosword";
-	private string animationToPlayAfter = "idle_nosword";
-	private bool animLoopAfter = false;
+	cAnimationHandler animHandler;
+	private bool bCutscene = false;
 	private bool sleepAnim = true;
 	private eAnimTakeSword iAnimTakeSword = 0;
+	private eAnimWalk iAnimWalk = 0;
 
 	//gameplay related
-	private bool bCollectedSword = false;
+	// - movement and jump related
 	private bool bGrounded = false;
 	private int iJumpCounter = 0;
+	private float fTempTimeGravity = 0.0f;
 	private Vector2 movementDirection;
 	private Rigidbody2D rb2D;
 	private float jumpDestHeight = 0.0f;
-
 	private bool bSkipMovementForAnim = false;
 
-	void collectSword()
-	{
 
+	//sword
+	private struct stSword
+	{
+		public bool bCollectedSword;
+		public string sSword;
 	}
+	private stSword sword;
+
+	void handleSwordPickup()
+	{
+		if (Input.GetButtonDown("CtrlBButton"))
+		{
+			GameObject swTakePos = GameObject.Find("swordTakePosition");
+			Vector3 enemyPos = swTakePos.transform.position;
+			Vector3 playerPos = this.gameObject.transform.position;
+			
+			float distance = Vector2.Distance (playerPos,enemyPos);
+			if (distance <= 3) 
+			{
+				iAnimTakeSword = eAnimTakeSword.ANIM_WALK;
+			}
+		}
+		switch (iAnimTakeSword)
+		{
+			case eAnimTakeSword.ANIM_DONE:
+			{
+				sword.bCollectedSword = true;
+				sword.sSword = "sword";
+				GameObject vine = GameObject.Find("vine");
+				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"Idle_nosword",true);
+				bSkipMovementForAnim = true;
+				bCutscene = false;
+				iAnimTakeSword = eAnimTakeSword.ANIM_NONE;
+				animHandler.addAnimation("walkcycle_end_sword",false);
+				break;
+			}
+			case eAnimTakeSword.ANIM_START:
+			{
+				iAnimTakeSword = eAnimTakeSword.ANIM_START;
+				break;
+			}
+			case eAnimTakeSword.ANIM_WALK:
+			{
+				GameObject swTakePos = GameObject.Find("swordTakePosition");
+				Vector3 enemyPos = swTakePos.transform.position;
+				Vector3 playerPos = this.gameObject.transform.position;
+				transform.position = Vector3.MoveTowards(playerPos,enemyPos,Time.deltaTime * walkVelocity);
+				
+				if (transform.position == enemyPos)
+				{
+					iAnimTakeSword = eAnimTakeSword.ANIM_START;
+					animHandler.addAnimation("swordTake_QuicknDirty",false);
+					bCutscene = true;
+				}
+				else
+					animHandler.addAnimation("walkcycle_"+sword.sSword,true);
+				break;
+			}
+		}
+	}
+
 
 	void handleMovement(float x)
 	{
 		float absX = Mathf.Abs(x);
-		animAdd = false;
 		float velocity = 0.0f;
-		if (currentAnimation != "wakeup_nosword")
+
+		cAnimation anim = animHandler.getCurrent();
+		bool animLoop = false;
+		string animationToPlay = "";
+		
+		if (x > 0)
+			skeletonAnimation.skeleton.FlipX = false;
+		else if (x < 0)
+			skeletonAnimation.skeleton.FlipX = true;
+		
+		if  (absX > 0.7f && sword.bCollectedSword == true)
 		{
-			string sword = "nosword";
-			if (bCollectedSword == true)
-				sword = "sword";
-			//Debug.Log("x: " + x + "  absX: " + absX + "  Mathf.Sign(x):" + Mathf.Sign(x));
-			
-			if (x > 0)
-				skeletonAnimation.skeleton.FlipX = false;
-			else if (x < 0)
-				skeletonAnimation.skeleton.FlipX = true;
-			
-			if  (absX > 0.7f && bCollectedSword == true)
+			animHandler.addAnimation("runcycle_sword",true);
+			velocity = 1.3f * runVelocity;
+		}
+		else if (absX > 0) 
+		{
+			if (iAnimWalk == eAnimWalk.ANIM_WALK)
 			{
+				velocity = walkVelocity;
+				animationToPlay = "walkcycle_"+sword.sSword;
 				animLoop = true;
-				walkVelocity = 6.0f;
-				animationToPlay = "runcycle_sword";
-				velocity = 1.3f;
-			}
-			else if (absX > 0) 
-			{
-				animLoop = true;
-				if (animationToPlay != "walkcycle_"+sword)
-				{
-					animLoop = false;
-					animationToPlay = "walkcycle_start_"+sword;
-				}
-				velocity = 1f;
 			}
 			else
 			{
-				//Debug.Log ("current: " + currentAnimation);
-				if (currentAnimation == "walkcycle_"+sword || currentAnimation == "walkcycle_start_"+sword)
-				{
-					animLoop = false;
-					animationToPlay = "walkcycle_end_"+sword;
-					velocity = 0.3f;
-				}
-				else if (currentAnimation == "")
-				{
-					animLoop = true;
-					animationToPlay = "idle_"+sword;
-					velocity = 0f;
-				}
+				iAnimWalk = eAnimWalk.ANIM_NONE;
+				animationToPlay = "walkcycle_start_"+sword.sSword;
+				animLoop = false;
+				velocity = 0.3f*walkVelocity;
 			}
 		}
-
-		movementDirection.x = velocity * walkVelocity * Mathf.Sign(x) * Time.deltaTime;
+		else
+		{
+			//Debug.Log ("current: " + currentAnimation);
+			if (anim.sAnimation == "walkcycle_"+sword.sSword || anim.sAnimation == "walkcycle_start_"+sword.sSword)
+			{
+				animLoop = false;
+				animationToPlay = "walkcycle_end_"+sword.sSword;
+				velocity = 0.3f * walkVelocity;
+			}
+			else if (anim.sAnimation == "")
+			{
+					animLoop = true;
+					animationToPlay = "idle_"+sword.sSword;
+			}
+		}
+		
+		animHandler.addAnimation(animationToPlay,animLoop);
+		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
 		movementDirection.y = rb2D.velocity.y;
 	} //end - handleMovement
 
@@ -103,10 +160,6 @@ public class cPlayer_c : MonoBehaviour
 		{
 			float absX = Mathf.Abs(x);
 
-			string sword = "nosword";
-			if (bCollectedSword == true)
-				sword = "sword";
-
 			if (bGrounded)
 				iJumpCounter = 0;
 
@@ -114,21 +167,17 @@ public class cPlayer_c : MonoBehaviour
 			if (iJumpCounter <= 2)
 			{
 				jumpDestHeight = rb2D.position.y+jumpHeight;
-				animLoop = false;
-				animationToPlay = "jump_sword";
-				animAdd = true;
-				if (currentAnimation != "")
-					animationToPlayAfter = currentAnimation;
+	
+
+				animHandler.addAnimation("jump_sword",false);
+
+				cAnimation anim = animHandler.getCurrent();
+				if (anim == null)
+					animHandler.addToQueue("idle_"+sword.sSword,true);
 				else
-					animationToPlayAfter = "idle_"+sword;
-
-				animLoopAfter = true;
-
-				if (animationToPlayAfter == "walkcycle_end_"+sword || animationToPlayAfter == "walkcycle_start_"+sword)
-					animLoopAfter = false;
+					animHandler.addToQueue(anim);
+			
 			}
-
-
 		}
 	}
 
@@ -136,24 +185,14 @@ public class cPlayer_c : MonoBehaviour
 	{
 		if (Input.GetButtonDown ("attack")) 
 		{
-			string sword = "nosword";
-			if (bCollectedSword == true)
-				sword = "sword";
-
-			animationToPlay = "attack_kick";
-			if (currentAnimation != "")
-				animationToPlayAfter = currentAnimation;
+			animHandler.addAnimation("attack_kick",false);
+			bSkipMovementForAnim = true; //look after this one, just test
+			cAnimation anim = animHandler.getCurrent();
+			if (anim == null)
+				animHandler.addToQueue("idle_"+sword.sSword,true);
 			else
-				animationToPlayAfter = "idle_"+sword;
+				animHandler.addToQueue(anim);
 
-			animLoopAfter = true;
-
-			Debug.Log (animationToPlay + " " + animationToPlayAfter);
-
-			if (animationToPlayAfter == "walkcycle_end_"+sword || animationToPlayAfter == "walkcycle_start_"+sword)
-				animLoopAfter = false;
-			animLoop = false;
-			animAdd = true;
 			GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
 			
 			GameObject turtle = GameObject.Find("turtle");
@@ -172,15 +211,16 @@ public class cPlayer_c : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-		
-		skeletonAnimation.state.Start += startAnimListener;
-		skeletonAnimation.state.End += endAnimListener;
 
 		rb2D = GetComponent<Rigidbody2D>();
 		jumpDestHeight = -999.0f;
-		isAnimQueueDone = true;
-		currentAnimation = "";
 		sleepAnim = true;
+
+		sword.bCollectedSword = false;
+		sword.sSword = "nosword";
+		animHandler = new cAnimationHandler(skeletonAnimation);
+		animHandler.delStart = startAnimListener;
+		animHandler.delEnd = endAnimListener;
 	}
 
 	void FixedUpdate()
@@ -198,115 +238,53 @@ public class cPlayer_c : MonoBehaviour
 
 		if (sleepAnim)
 		{
-			SetAnimation("wakeup_nosword",false);
-			return;
+			animHandler.addAnimation("wakeup_nosword",false);
+			bCutscene = true;
+			sleepAnim = false;
 		}
-		string sword = "nosword";
-		if (bCollectedSword == true)
-			sword = "sword";
+		handleSwordPickup();
 
-		if (Input.GetButtonDown("CtrlBButton"))
-		{
-			GameObject swTakePos = GameObject.Find("swordTakePosition");
-			Vector3 enemyPos = swTakePos.transform.position;
-			Vector3 playerPos = this.gameObject.transform.position;
-			
-			float distance = Vector2.Distance (playerPos,enemyPos);
-			if (distance <= 3) 
-			{
-				iAnimTakeSword = eAnimTakeSword.ANIM_WALK;
-			}
-		}
-		switch (iAnimTakeSword)
-		{
-			case eAnimTakeSword.ANIM_DONE:
-			{
-				bCollectedSword = true;
-				animLoop = false;
-				GameObject vine = GameObject.Find("vine");
-				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"Idle_nosword",true);
-				bSkipMovementForAnim = true;
-				animationToPlay = "walkcycle_end_sword";
-				iAnimTakeSword = eAnimTakeSword.ANIM_NONE;
-				break;
-			}
-			case eAnimTakeSword.ANIM_START:
-			{
-				iAnimTakeSword = eAnimTakeSword.ANIM_START;
-				SetAnimation ("swordTake_QuicknDirty", false);
-				return;
-			}
-			case eAnimTakeSword.ANIM_WALK:
-			{
-				GameObject swTakePos = GameObject.Find("swordTakePosition");
-				Vector3 enemyPos = swTakePos.transform.position;
-				Vector3 playerPos = this.gameObject.transform.position;
-				transform.position = Vector3.MoveTowards(playerPos,enemyPos,Time.deltaTime * walkVelocity);
-				
-				if (transform.position == enemyPos)
-				{
-					iAnimTakeSword = eAnimTakeSword.ANIM_START;
-					SetAnimation ("swordTake_QuicknDirty", false);
-					return;
-				}
-				else
-					SetAnimation ("walkcycle_"+sword, true);	
-				break;
-			}
-		}
-		
-		if (isAnimQueueDone == true) 
+
+		//skip all related input/movement/loop animation for cutscene
+		if (bCutscene == false)
 		{
 			float x = Input.GetAxis("Horizontal");
-			if (x <= 0.05f)
+			if ((x >= 0.0f && x <= 0.05f) || (x <= 0.0f && x >= -0.05f ))
 				x = 0.0f;
+
+			if (sword.bCollectedSword)
+				handleAttack ();
 
 			if (!bSkipMovementForAnim)
 			{
-				handleMovement (x);
-				handleJump (x);
-
 				//movement
-				if (iJumpCounter >= 0)
+				if (sword.bCollectedSword)
+					handleJump (x);
+				handleMovement (x);
+				//jumps & gravitation
+				//jump chunk
+				if (rb2D.position.y <= jumpDestHeight)
 				{
-					//jump chunk
-					if (rb2D.position.y <= jumpDestHeight)
+					float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
+					float jumpChunk = jumpHeight/timePart;
+					movementDirection.y += jumpChunk * Time.deltaTime;
+				}
+				else
+				{
+					jumpDestHeight = -999.0f;
+					if (bGrounded == false)
 					{
-						float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
-						float jumpChunk = jumpHeight/timePart;
-						movementDirection.y += jumpChunk * Time.deltaTime;
-					}
-					else
-					{
-						jumpDestHeight = -999.0f;
-						if (bGrounded == false)
-							movementDirection.y -= gravity * Time.deltaTime;
+						fTempTimeGravity += gravity;
+						movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity)  * Time.deltaTime;
 					}
 				}
-				//Debug.Log( rb2D.position + movementDirection);
 				
 				rb2D.MovePosition( rb2D.position  + movementDirection);
-				handleAttack ();
 			}
-			if (animAdd) 
-			{
-				isAnimQueueDone = false;
-				if (animationToPlay != "")
-					skeletonAnimation.state.SetAnimation (0, animationToPlay, animLoop);
-				if (animationToPlayAfter != "")
-					skeletonAnimation.state.AddAnimation (0, animationToPlayAfter, animLoopAfter, 0);
-			} 
-			else
-				SetAnimation (animationToPlay, animLoop);
 		}
-		else
-		{
-			Debug.Log ("currentAnim: " + currentAnimation);
-			if (currentAnimation == "attack_kick")
-				GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
-			else
-				isAnimQueueDone = true;
-		}
+
+		animHandler.playAnimation();
+
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
@@ -331,70 +309,25 @@ public class cPlayer_c : MonoBehaviour
 	//################# Animation ################
 	//########################################
 
-	void startAnimListener(Spine.AnimationState state, int trackIndex)
+	void startAnimListener()
 	{
-		animIsPlaying = true;
-
-		Debug.Log("start anim: " + state.GetCurrent (trackIndex).Animation.Name);
-
 	}
-	void endAnimListener (Spine.AnimationState state, int trackIndex)
-	{
-		Debug.Log("end anim: " + state.GetCurrent (trackIndex).Animation.Name);
-
-		animIsPlaying = false;
-		if (isAnimQueueDone == false) 
-		{
-			//Debug.Log (state.GetCurrent (trackIndex).Animation.Name + "==" + animationToPlayAfter);
-			if (state.GetCurrent (trackIndex).Animation.Name == animationToPlayAfter)
-			{
-				string sword = "nosword";
-				if (bCollectedSword == true)
-					sword = "sword";
-
-				isAnimQueueDone = true;
-				animAdd = false;
-				animationToPlay = "idle_"+sword;
-				animationToPlayAfter = "";
-			}
-		} 
-		else 
-		{
-			string sword = "nosword";
-			if (bCollectedSword == true)
-				sword = "sword";
-
-			if (state.GetCurrent (trackIndex).Animation.Name == "wakeup_"+sword || 
-			    state.GetCurrent (trackIndex).Animation.Name == "walkcycle_end_"+sword)
-			{
-				animationToPlay = "idle_"+sword;
-				sleepAnim = false;
-				bSkipMovementForAnim = false;
-			}
-			else if (state.GetCurrent (trackIndex).Animation.Name == "walkcycle_start_"+sword)
-			{
-				animationToPlay ="walkcycle_"+sword;
-			}
-			else if (state.GetCurrent (trackIndex).Animation.Name == "swordTake_QuicknDirty")
-				iAnimTakeSword = eAnimTakeSword.ANIM_DONE;
-			currentAnimation ="";
-		}
-	}
-
-	void SetAnimation (string anim, bool loop) 
+	void endAnimListener (string animName)
 	{
 
-		string sword = "nosword";
-		if (bCollectedSword == true)
-			sword = "sword";
-
-		if (anim == "")
-			anim = "idle_"+sword;
-
-		if (currentAnimation != anim) 
+		if (animName == "wakeup_"+sword.sSword || 
+		    animName == "walkcycle_end_"+sword.sSword ||
+		    animName == "attack_kick")
 		{
-			skeletonAnimation.state.SetAnimation(0, anim, loop);
-			currentAnimation = anim;
+			bSkipMovementForAnim = false;
+			bCutscene = false; // for wakeup
+			iAnimWalk = eAnimWalk.ANIM_END;
 		}
+		else if (animName == "walkcycle_start_"+sword.sSword)
+			iAnimWalk = eAnimWalk.ANIM_WALK;
+		else if (animName == "swordTake_QuicknDirty")
+			iAnimTakeSword = eAnimTakeSword.ANIM_DONE;
+			
+
 	}
 }
