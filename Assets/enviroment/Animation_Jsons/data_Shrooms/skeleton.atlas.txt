@@ -1,0 +1,13 @@
+
+skeleton.png
+size: 4096,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+allePilze_Hoehle
+  rotate: false
+  xy: 2, 2
+  size: 3506, 303
+  orig: 3506, 303
+  offset: 0, 0
+  index: -1

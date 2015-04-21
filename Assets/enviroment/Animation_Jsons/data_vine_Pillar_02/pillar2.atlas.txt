@@ -1,0 +1,20 @@
+
+pillar2.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+13 Kopie 2
+  rotate: true
+  xy: 2, 19
+  size: 362, 925
+  orig: 362, 925
+  offset: 0, 0
+  index: -1
+Layer40 Kopie
+  rotate: true
+  xy: 929, 2
+  size: 379, 815
+  orig: 379, 815
+  offset: 0, 0
+  index: -1

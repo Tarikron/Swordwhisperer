@@ -1,0 +1,20 @@
+
+pillar1.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer37 Kopie 3
+  rotate: true
+  xy: 2, 2
+  size: 381, 940
+  orig: 381, 940
+  offset: 0, 0
+  index: -1
+Layer39 Kopie 3
+  rotate: true
+  xy: 944, 115
+  size: 268, 868
+  orig: 268, 868
+  offset: 0, 0
+  index: -1
