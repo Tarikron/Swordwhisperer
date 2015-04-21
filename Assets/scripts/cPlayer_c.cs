@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
+
 	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_DONE};
 	enum eAnimWalk{ANIM_NONE = 0,ANIM_WALK,ANIM_END};
 
@@ -17,6 +19,7 @@ public class cPlayer_c : MonoBehaviour
 	public float walkVelocity = 3.0f;
 	public float runVelocity = 6.0f;
 	public float gravity = 1.0f;
+	public int life = 20;
 
 	//animation stuff
 	cAnimationHandler animHandler;
@@ -28,6 +31,7 @@ public class cPlayer_c : MonoBehaviour
 	//gameplay related
 	// - movement and jump related
 	private bool bGrounded = false;
+	private int iGroundBridge = 0; //quick dirty solution
 	private int iJumpCounter = 0;
 	private float fTempTimeGravity = 0.0f;
 	private Vector2 movementDirection;
@@ -43,6 +47,15 @@ public class cPlayer_c : MonoBehaviour
 		public string sSword;
 	}
 	private stSword sword;
+
+
+	//interactible UI Stuff
+	[System.Serializable]
+	public struct uiIngame
+	{
+		public Text txtLife;
+	}
+	public uiIngame ui;
 
 	void handleSwordPickup()
 	{
@@ -148,7 +161,7 @@ public class cPlayer_c : MonoBehaviour
 					animationToPlay = "idle_"+sword.sSword;
 			}
 		}
-		
+
 		animHandler.addAnimation(animationToPlay,animLoop);
 		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
 		movementDirection.y = rb2D.velocity.y;
@@ -167,7 +180,7 @@ public class cPlayer_c : MonoBehaviour
 			if (iJumpCounter <= 2)
 			{
 				jumpDestHeight = rb2D.position.y+jumpHeight;
-	
+				fTempTimeGravity = 0.0f;
 
 				animHandler.addAnimation("jump_sword",false);
 
@@ -221,6 +234,8 @@ public class cPlayer_c : MonoBehaviour
 		animHandler = new cAnimationHandler(skeletonAnimation);
 		animHandler.delStart = startAnimListener;
 		animHandler.delEnd = endAnimListener;
+
+		ui.txtLife.text = life+" Life";
 	}
 
 	void FixedUpdate()
@@ -277,8 +292,10 @@ public class cPlayer_c : MonoBehaviour
 						fTempTimeGravity += gravity;
 						movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity)  * Time.deltaTime;
 					}
+					else
+						fTempTimeGravity = 0.0f;
 				}
-				
+
 				rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
 		}
@@ -289,9 +306,14 @@ public class cPlayer_c : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		bGrounded = true;
-		iJumpCounter = 0;
-		jumpDestHeight = -999.0f;
+		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
+		{
+			bGrounded = true;
+			iJumpCounter = 0;
+			jumpDestHeight = -999.0f;
+
+			iGroundBridge++;
+		}
 
 		if (collision.gameObject.name == "groundGameEnd")
 		{
@@ -301,8 +323,12 @@ public class cPlayer_c : MonoBehaviour
 
 	void OnCollisionExit2D(Collision2D collision)
 	{
-		bGrounded = false;
-		Debug.Log("exit");
+		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
+		{
+			iGroundBridge--;
+			if (iGroundBridge <= 0)
+				bGrounded = false;
+		}
 	}
 
 	//########################################
@@ -330,4 +356,17 @@ public class cPlayer_c : MonoBehaviour
 			
 
 	}
+
+	//########################################
+	//################# Receiver/Messages ###########
+	//########################################
+
+	void msg_hit()
+	{
+		if (life > 0)
+			life--;
+
+		ui.txtLife.text = life+" Life";
+	}
+
 }
