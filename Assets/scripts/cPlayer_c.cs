@@ -186,9 +186,9 @@ public class cPlayer_c : MonoBehaviour
 
 				cAnimation anim = animHandler.getCurrent();
 				if (anim == null)
-					animHandler.addToQueue("idle_"+sword.sSword,true);
+					animHandler.addToQueue("idle_"+sword.sSword,true,0.1f);
 				else
-					animHandler.addToQueue(anim);
+					animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);
 			
 			}
 		}
@@ -202,10 +202,11 @@ public class cPlayer_c : MonoBehaviour
 			bSkipMovementForAnim = true; //look after this one, just test
 			cAnimation anim = animHandler.getCurrent();
 			if (anim == null)
-				animHandler.addToQueue("idle_"+sword.sSword,true);
+				animHandler.addToQueue("idle_"+sword.sSword,true,0.1f);
 			else
-				animHandler.addToQueue(anim);
-
+			{
+				animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);
+			}
 			GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
 			
 			GameObject turtle = GameObject.Find("turtle");

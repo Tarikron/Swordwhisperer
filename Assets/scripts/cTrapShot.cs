@@ -31,9 +31,7 @@ public class cTrapShot : MonoBehaviour {
 			{
 				collision.gameObject.SendMessage("msg_hit",null,SendMessageOptions.RequireReceiver);
 			}
-
-			this.gameObject.SetActive(false);
-			Destroy(this);
+			Destroy(this.gameObject);
 		}
 	}
 }

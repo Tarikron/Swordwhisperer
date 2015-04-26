@@ -59,12 +59,12 @@ public class cAnimationHandler
 			animations.Enqueue(anim);
 	}
 
-	public void addToQueue(string anim, bool loop)
+	public void addToQueue(string anim, bool loop, float delay)
 	{
 		if (anim == "")
 			return;
 		
-		cAnimation cAnim = new cAnimation (loop,anim);
+		cAnimation cAnim = new cAnimation (loop,anim,delay);
 		if (animations.Contains(cAnim) == false)
 			animations.Enqueue(cAnim);
 	}
@@ -114,7 +114,7 @@ public class cAnimationHandler
 			for (int i = 0; i<count;i++)
 			{
 				cAnimation cAnim = this.removeAnimation();
-				this.skeletonAnimation.state.AddAnimation(0,cAnim.sAnimation,cAnim.bLoop,0);
+				this.skeletonAnimation.state.AddAnimation(0,cAnim.sAnimation,cAnim.bLoop,cAnim.fDelay);
 			}
 		}
 
