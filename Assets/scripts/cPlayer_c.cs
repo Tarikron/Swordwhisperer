@@ -2,17 +2,14 @@
 using System.Collections;
 using UnityEngine.UI;
 
-
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
 
-	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_DONE};
+	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_TAKESTART,ANIM_TAKEIDLE,ANIM_DONE};
 	enum eAnimWalk{ANIM_NONE = 0,ANIM_WALK,ANIM_END};
 
 	//settings via unity
-	public SkeletonAnimation skeletonAnimation;
-
 	public float jumpHeight = 300f;
 	public float jumpTime = 10.0f;
 	public float hurtVelocity = 3.0f;
@@ -27,6 +24,7 @@ public class cPlayer_c : MonoBehaviour
 	private bool sleepAnim = true;
 	private eAnimTakeSword iAnimTakeSword = 0;
 	private eAnimWalk iAnimWalk = 0;
+	private SkeletonAnimation skeletonAnimation;
 
 	//gameplay related
 	// - movement and jump related
@@ -57,9 +55,51 @@ public class cPlayer_c : MonoBehaviour
 	}
 	public uiIngame ui;
 
+	[System.Serializable]
+	public struct animPlayer
+	{
+		[SpineAnimation]
+		public string wakeup;
+
+		//walk
+		[SpineAnimation]
+		public string walk_start_nosword;
+		[SpineAnimation]
+		public string walk_nosword;
+		[SpineAnimation]
+		public string walk_end_nosword;
+		[SpineAnimation]
+		public string walk_start_sword;
+		[SpineAnimation]
+		public string walk_sword;
+		[SpineAnimation]
+		public string walk_end_sword;
+
+		[SpineAnimation]
+		public string idle_sword;
+		[SpineAnimation]
+		public string idle_nosword;
+
+		[SpineAnimation]
+		public string run_sword;
+		[SpineAnimation]
+		public string jump_sword;
+		[SpineAnimation]
+		public string attack;
+
+		[SpineAnimation]
+		public string swordtake_start;
+		[SpineAnimation]
+		public string swordtake_idle;
+		[SpineAnimation]
+		public string swordtake_end;
+
+	}
+	public animPlayer animations;
+
 	void handleSwordPickup()
 	{
-		if (Input.GetButtonDown("CtrlBButton"))
+		if (Input.GetButtonDown("CtrlBButton") && iAnimTakeSword == eAnimTakeSword.ANIM_NONE)
 		{
 			GameObject swTakePos = GameObject.Find("swordTakePosition");
 			Vector3 enemyPos = swTakePos.transform.position;
@@ -77,17 +117,27 @@ public class cPlayer_c : MonoBehaviour
 			{
 				sword.bCollectedSword = true;
 				sword.sSword = "sword";
-				GameObject vine = GameObject.Find("vine");
-				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"Idle_nosword",true);
 				bSkipMovementForAnim = true;
 				bCutscene = false;
 				iAnimTakeSword = eAnimTakeSword.ANIM_NONE;
-				animHandler.addAnimation("walkcycle_end_sword",false);
+				animHandler.addAnimation(animations.walk_end_sword,false);
 				break;
 			}
 			case eAnimTakeSword.ANIM_START:
 			{
 				iAnimTakeSword = eAnimTakeSword.ANIM_START;
+				break;
+			}
+			case eAnimTakeSword.ANIM_TAKESTART:
+			{
+				animHandler.addAnimation(animations.swordtake_idle,false);
+				break;
+			}
+			case eAnimTakeSword.ANIM_TAKEIDLE:
+			{
+				GameObject vine = GameObject.Find("vine");
+				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"idle_part2",true);
+				animHandler.addAnimation(animations.swordtake_end,false);
 				break;
 			}
 			case eAnimTakeSword.ANIM_WALK:
@@ -100,11 +150,16 @@ public class cPlayer_c : MonoBehaviour
 				if (transform.position == enemyPos)
 				{
 					iAnimTakeSword = eAnimTakeSword.ANIM_START;
-					animHandler.addAnimation("swordTake_QuicknDirty",false);
+					animHandler.addAnimation(animations.swordtake_start,false);
 					bCutscene = true;
 				}
 				else
-					animHandler.addAnimation("walkcycle_"+sword.sSword,true);
+				{
+					if (sword.bCollectedSword)
+						animHandler.addAnimation(animations.walk_sword,true);
+					else
+						animHandler.addAnimation(animations.walk_nosword,true);
+				}
 				break;
 			}
 		}
@@ -127,7 +182,7 @@ public class cPlayer_c : MonoBehaviour
 		
 		if  (absX > 0.7f && sword.bCollectedSword == true)
 		{
-			animHandler.addAnimation("runcycle_sword",true);
+			animHandler.addAnimation(animations.run_sword,true);
 			velocity = 1.3f * runVelocity;
 		}
 		else if (absX > 0) 
@@ -135,13 +190,19 @@ public class cPlayer_c : MonoBehaviour
 			if (iAnimWalk == eAnimWalk.ANIM_WALK)
 			{
 				velocity = walkVelocity;
-				animationToPlay = "walkcycle_"+sword.sSword;
+				if (sword.bCollectedSword)
+					animationToPlay = animations.walk_sword;
+				else
+					animationToPlay = animations.walk_nosword;
 				animLoop = true;
 			}
 			else
 			{
 				iAnimWalk = eAnimWalk.ANIM_NONE;
-				animationToPlay = "walkcycle_start_"+sword.sSword;
+				if (sword.bCollectedSword)
+					animationToPlay = animations.walk_start_sword;
+				else
+					animationToPlay = animations.walk_start_nosword;
 				animLoop = false;
 				velocity = 0.3f*walkVelocity;
 			}
@@ -149,16 +210,24 @@ public class cPlayer_c : MonoBehaviour
 		else
 		{
 			//Debug.Log ("current: " + currentAnimation);
-			if (anim.sAnimation == "walkcycle_"+sword.sSword || anim.sAnimation == "walkcycle_start_"+sword.sSword)
+			if (anim.sAnimation == animations.walk_sword || anim.sAnimation == animations.walk_start_sword ||
+			    anim.sAnimation == animations.walk_nosword || anim.sAnimation == animations.walk_start_nosword)
 			{
 				animLoop = false;
-				animationToPlay = "walkcycle_end_"+sword.sSword;
+				if (sword.bCollectedSword)
+					animationToPlay = animations.walk_end_sword;
+				else
+					animationToPlay = animations.walk_end_nosword;
+
 				velocity = 0.3f * walkVelocity;
 			}
 			else if (anim.sAnimation == "")
 			{
-					animLoop = true;
-					animationToPlay = "idle_"+sword.sSword;
+				animLoop = true;
+				if (sword.bCollectedSword)
+					animationToPlay = animations.idle_sword;
+				else
+					animationToPlay = animations.idle_nosword;
 			}
 		}
 
@@ -182,14 +251,18 @@ public class cPlayer_c : MonoBehaviour
 				jumpDestHeight = rb2D.position.y+jumpHeight;
 				fTempTimeGravity = 0.0f;
 
-				animHandler.addAnimation("jump_sword",false);
+				animHandler.addAnimation(animations.jump_sword,false);
 
 				cAnimation anim = animHandler.getCurrent();
 				if (anim == null)
-					animHandler.addToQueue("idle_"+sword.sSword,true,0.1f);
+				{
+					if (sword.bCollectedSword)
+						animHandler.addToQueue(animations.idle_sword,true,0.1f);
+					else
+						animHandler.addToQueue(animations.idle_nosword,true,0.1f);
+				}
 				else
 					animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);
-			
 			}
 		}
 	}
@@ -198,11 +271,16 @@ public class cPlayer_c : MonoBehaviour
 	{
 		if (Input.GetButtonDown ("attack")) 
 		{
-			animHandler.addAnimation("attack_kick",false);
+			animHandler.addAnimation(animations.attack,false);
 			bSkipMovementForAnim = true; //look after this one, just test
 			cAnimation anim = animHandler.getCurrent();
 			if (anim == null)
-				animHandler.addToQueue("idle_"+sword.sSword,true,0.1f);
+			{
+				if (sword.bCollectedSword)
+					animHandler.addToQueue(animations.idle_sword,true,0.1f);
+				else
+					animHandler.addToQueue(animations.idle_nosword,true,0.1f);
+			}
 			else
 			{
 				animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);
@@ -230,6 +308,8 @@ public class cPlayer_c : MonoBehaviour
 		jumpDestHeight = -999.0f;
 		sleepAnim = true;
 
+		skeletonAnimation = GetComponent<SkeletonAnimation>();
+
 		sword.bCollectedSword = false;
 		sword.sSword = "nosword";
 		animHandler = new cAnimationHandler(skeletonAnimation);
@@ -254,7 +334,7 @@ public class cPlayer_c : MonoBehaviour
 
 		if (sleepAnim)
 		{
-			animHandler.addAnimation("wakeup_nosword",false);
+			animHandler.addAnimation(animations.wakeup,false);
 			bCutscene = true;
 			sleepAnim = false;
 		}
@@ -341,20 +421,22 @@ public class cPlayer_c : MonoBehaviour
 	}
 	void endAnimListener (string animName)
 	{
-
-		if (animName == "wakeup_"+sword.sSword || 
-		    animName == "walkcycle_end_"+sword.sSword ||
-		    animName == "attack_kick")
+		if (animName == animations.wakeup || 
+		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
+		    animName == animations.attack)
 		{
 			bSkipMovementForAnim = false;
 			bCutscene = false; // for wakeup
 			iAnimWalk = eAnimWalk.ANIM_END;
 		}
-		else if (animName == "walkcycle_start_"+sword.sSword)
+		else if (animName == animations.walk_start_sword || animName == animations.walk_start_nosword)
 			iAnimWalk = eAnimWalk.ANIM_WALK;
-		else if (animName == "swordTake_QuicknDirty")
+		else if (animName == animations.swordtake_start)
+			iAnimTakeSword = eAnimTakeSword.ANIM_TAKESTART;
+		else if (animName == animations.swordtake_idle)
+			iAnimTakeSword = eAnimTakeSword.ANIM_TAKEIDLE;
+		else if (animName == animations.swordtake_end)
 			iAnimTakeSword = eAnimTakeSword.ANIM_DONE;
-			
 
 	}
 

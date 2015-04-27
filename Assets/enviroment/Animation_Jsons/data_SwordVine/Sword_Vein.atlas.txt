@@ -1,5 +1,5 @@
 
-Sword_Vein2.png
+Sword_Vein.png
 size: 4096,4096
 format: RGBA8888
 filter: Linear,Linear
@@ -47,7 +47,7 @@ RankeM2
   offset: 0, 0
   index: -1
 
-Sword_Vein22.png
+Sword_Vein2.png
 size: 4096,4096
 format: RGBA8888
 filter: Linear,Linear
@@ -74,7 +74,7 @@ RankeM3
   offset: 0, 0
   index: -1
 
-Sword_Vein23.png
+Sword_Vein3.png
 size: 4096,1024
 format: RGBA8888
 filter: Linear,Linear
