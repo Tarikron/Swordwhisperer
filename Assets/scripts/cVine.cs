@@ -3,28 +3,55 @@ using System.Collections;
 using Spine;
 public class cVine : MonoBehaviour {
 
-	public SkeletonAnimation skeletonAnimation;
+	private SkeletonAnimation skeletonAnimation;
+	private cAnimationHandler animHandler;
+
+	private bool bVineTookSword = false;
+	private bool bVineLoops = false;
 
 	// Use this for initialization
 	void Start () {
 
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
-		skeletonAnimation.state.Start += startAnimListener;
-		skeletonAnimation.state.End += endAnimListener;
+
+		animHandler = new cAnimationHandler(skeletonAnimation);
+		animHandler.delStart = startAnimListener;
+		animHandler.delEnd = endAnimListener;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
+		if (bVineLoops == false)
+		{
+			if (bVineTookSword == true)
+			{
+				animHandler.addAnimation("idle_nosword",true);
+				bVineLoops = true;
+			}
+
+			animHandler.playAnimation();
+		}
+
+	}
+
+	void msg_startanim()
+	{
+		if (bVineTookSword == false)
+			animHandler.addAnimation("idle_part2",false);
 	}
 
 	//events from skeletonAnimation
-	void startAnimListener(Spine.AnimationState state, int trackIndex)
+	void startAnimListener()
 	{
-		Debug.Log("start");
+		Debug.Log("start - " + Time.frameCount + "   " );
 	}
-	void endAnimListener (Spine.AnimationState state, int trackIndex)
+	void endAnimListener (string anim)
 	{
-		Debug.Log("end");
+
+		if (anim == "idle_part2")
+			bVineTookSword = true;
+
+		Debug.Log("end - " + Time.frameCount + "   ");
 	}
 }

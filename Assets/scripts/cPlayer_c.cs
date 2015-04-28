@@ -136,7 +136,7 @@ public class cPlayer_c : MonoBehaviour
 			case eAnimTakeSword.ANIM_TAKEIDLE:
 			{
 				GameObject vine = GameObject.Find("vine");
-				vine.GetComponent<SkeletonAnimation>().state.SetAnimation(0,"idle_part2",true);
+				vine.SendMessage("msg_startanim",null,SendMessageOptions.RequireReceiver);
 				animHandler.addAnimation(animations.swordtake_end,false);
 				break;
 			}
