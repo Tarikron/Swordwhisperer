@@ -13,7 +13,7 @@ public class cAnimationHandler
 	private cAnimation currentAnimation = null;
 	private cAnimation lastInList  = null;
 
-	public delegate void startAnim();
+	public delegate void startAnim(string animName);
 	public delegate void endAnim(string animName);
 
 	public startAnim delStart;
@@ -125,6 +125,7 @@ public class cAnimationHandler
 	void startAnimListener(Spine.AnimationState state, int trackIndex)
 	{
 		bIsPlaying = true;
+		delStart(state.GetCurrent (trackIndex).Animation.Name);
 
 		currentAnimation.sAnimation = state.GetCurrent (trackIndex).Animation.Name;
 		currentAnimation.bLoop = state.GetCurrent (trackIndex).loop;

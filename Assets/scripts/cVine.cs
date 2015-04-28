@@ -42,9 +42,9 @@ public class cVine : MonoBehaviour {
 	}
 
 	//events from skeletonAnimation
-	void startAnimListener()
+	void startAnimListener(string anim)
 	{
-		Debug.Log("start - " + Time.frameCount + "   " );
+		Debug.Log("start vine - frames:" + Time.frameCount + "   "  + anim);
 	}
 	void endAnimListener (string anim)
 	{
@@ -52,6 +52,6 @@ public class cVine : MonoBehaviour {
 		if (anim == "idle_part2")
 			bVineTookSword = true;
 
-		Debug.Log("end - " + Time.frameCount + "   ");
+		Debug.Log("end vine - frames:" + Time.frameCount + "   " + anim);
 	}
 }

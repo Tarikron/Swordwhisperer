@@ -416,11 +416,14 @@ public class cPlayer_c : MonoBehaviour
 	//################# Animation ################
 	//########################################
 
-	void startAnimListener()
+	void startAnimListener(string animName)
 	{
+		Debug.Log("start player - frames: " + Time.frameCount + "   " + animName );
 	}
 	void endAnimListener (string animName)
 	{
+		Debug.Log("end player - " + Time.frameCount + "   " + animName);
+
 		if (animName == animations.wakeup || 
 		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
 		    animName == animations.attack)
