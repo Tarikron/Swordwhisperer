@@ -8,6 +8,17 @@ public class cPlayer_c : MonoBehaviour
 
 	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_TAKESTART,ANIM_TAKEIDLE,ANIM_DONE};
 	enum eAnimWalk{ANIM_NONE = 0,ANIM_WALK,ANIM_END};
+	public enum eAnimAxis {pX=1,nX=-1,pY=1,nY=-1};
+
+	[System.Serializable]
+	public struct fadeCaveExit
+	{
+		public eAnimAxis fadeInAxis;
+		public eAnimAxis fadeOutAxis;
+		public float fadeDistance;
+	}
+	public fadeCaveExit _fadeCaveExit;
+
 
 	//settings via unity
 	public float jumpHeight = 300f;
@@ -28,6 +39,7 @@ public class cPlayer_c : MonoBehaviour
 
 	//gameplay related
 	// - movement and jump related
+	private bool bFalling = false;
 	private bool bGrounded = false;
 	private int iGroundBridge = 0; //quick dirty solution
 	private int iJumpCounter = 0;
@@ -93,6 +105,9 @@ public class cPlayer_c : MonoBehaviour
 		public string swordtake_idle;
 		[SpineAnimation]
 		public string swordtake_end;
+
+		[SpineAnimation]
+		public string jump_fall;
 
 	}
 	public animPlayer animations;
@@ -165,6 +180,34 @@ public class cPlayer_c : MonoBehaviour
 		}
 	}
 
+	//x - movement direction
+	void handleCaveExitFade(float x)
+	{
+		GameObject[] go_s = GameObject.FindGameObjectsWithTag("fadeCaveExit");
+
+		for (int i=0; i< go_s.Length; i++)
+		{
+			GameObject go = go_s[i];
+			float distance = Vector2.Distance (this.gameObject.transform.position,go.transform.position);
+			if (distance <= _fadeCaveExit.fadeDistance)
+			{
+				Color c = go.GetComponent<SpriteRenderer>().color;
+
+				if (x < 0)
+					c.a -= 0.05f;
+				else if (x > 0)
+					c.a += 0.05f;
+
+				if (c.a < 0.0f)
+					c.a = 0.0f;
+				if (c.a > 1.0f)
+					c.a = 1.0f;
+
+				go.GetComponent<SpriteRenderer>().color = c;
+					
+			}
+		}
+	}
 
 	void handleMovement(float x)
 	{
@@ -174,15 +217,11 @@ public class cPlayer_c : MonoBehaviour
 		cAnimation anim = animHandler.getCurrent();
 		bool animLoop = false;
 		string animationToPlay = "";
-		
-		if (x > 0)
-			skeletonAnimation.skeleton.FlipX = false;
-		else if (x < 0)
-			skeletonAnimation.skeleton.FlipX = true;
-		
+
 		if  (absX > 0.7f && sword.bCollectedSword == true)
 		{
-			animHandler.addAnimation(animations.run_sword,true);
+			animationToPlay = animations.run_sword;
+			animLoop = true;
 			velocity = 1.3f * runVelocity;
 		}
 		else if (absX > 0) 
@@ -230,10 +269,21 @@ public class cPlayer_c : MonoBehaviour
 					animationToPlay = animations.idle_nosword;
 			}
 		}
-
-		animHandler.addAnimation(animationToPlay,animLoop);
+		if (!bFalling)
+			animHandler.addAnimation(animationToPlay,animLoop);
+		
 		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
 		movementDirection.y = rb2D.velocity.y;
+
+		float xTemp = Input.GetAxisRaw("Horizontal");
+		Debug.Log (xTemp + "    " + transform.rotation.y);
+		if (xTemp < 0 && transform.eulerAngles.y < 0.1f)
+			transform.RotateAround(transform.position,Vector3.up,180);
+		else if (xTemp > 0 && transform.eulerAngles.y >= 180.0f)
+			transform.RotateAround(transform.position,Vector3.up,-180);
+		
+		handleCaveExitFade(x);
+
 	} //end - handleMovement
 
 	void handleJump(float x)
@@ -271,6 +321,7 @@ public class cPlayer_c : MonoBehaviour
 	{
 		if (Input.GetButtonDown ("attack")) 
 		{
+
 			animHandler.addAnimation(animations.attack,false);
 			bSkipMovementForAnim = true; //look after this one, just test
 			cAnimation anim = animHandler.getCurrent();
@@ -371,10 +422,16 @@ public class cPlayer_c : MonoBehaviour
 					if (bGrounded == false)
 					{
 						fTempTimeGravity += gravity;
-						movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity)  * Time.deltaTime;
+						movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
+						animHandler.addAnimation(animations.jump_fall,true);
+						bFalling = true;
 					}
 					else
+					{
+						bFalling = false;
+						//animHandler.addAnimation(animations.idle_sword,true);
 						fTempTimeGravity = 0.0f;
+					}
 				}
 
 				rb2D.MovePosition( rb2D.position  + movementDirection);
