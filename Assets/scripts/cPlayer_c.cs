@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-//Prototype extended test
+//Prototype extended test xxxxx
 
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
