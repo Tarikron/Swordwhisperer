@@ -39,6 +39,7 @@ public class cPlayer_c : MonoBehaviour
 
 	//gameplay related
 	// - movement and jump related
+	private bool bJumping = false;
 	private bool bFalling = false;
 	private bool bGrounded = false;
 	private int iGroundBridge = 0; //quick dirty solution
@@ -269,7 +270,7 @@ public class cPlayer_c : MonoBehaviour
 					animationToPlay = animations.idle_nosword;
 			}
 		}
-		if (!bFalling)
+		if (!bFalling && !bJumping)
 			animHandler.addAnimation(animationToPlay,animLoop);
 		
 		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
@@ -301,8 +302,9 @@ public class cPlayer_c : MonoBehaviour
 				jumpDestHeight = rb2D.position.y+jumpHeight;
 				fTempTimeGravity = 0.0f;
 
-				animHandler.addAnimation(animations.jump_sword,false);
-
+				bJumping = true;
+				animHandler.addAnimation(animations.jump_sword,true);
+				/*
 				cAnimation anim = animHandler.getCurrent();
 				if (anim == null)
 				{
@@ -312,7 +314,7 @@ public class cPlayer_c : MonoBehaviour
 						animHandler.addToQueue(animations.idle_nosword,true,0.1f);
 				}
 				else
-					animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);
+					animHandler.addToQueue(anim.sAnimation,anim.bLoop,0.1f);*/
 			}
 		}
 	}
@@ -418,6 +420,7 @@ public class cPlayer_c : MonoBehaviour
 				}
 				else
 				{
+					bJumping = false;
 					jumpDestHeight = -999.0f;
 					if (bGrounded == false)
 					{

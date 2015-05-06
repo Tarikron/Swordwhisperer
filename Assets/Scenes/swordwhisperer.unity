@@ -2034,7 +2034,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 271737984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.57999992, y: -4.34000015, z: 0}
+  m_LocalPosition: {x: 5.57999992, y: -4.36999989, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 113533821}
@@ -3996,7 +3996,7 @@ MonoBehaviour:
     idle_sword: idle_sword
     idle_nosword: idle_nosword
     run_sword: runcycle_sword
-    jump_sword: jump_sword
+    jump_sword: j_jump
     attack: attack_kick
     swordtake_start: xswordTake_part1_start
     swordtake_idle: xswordTake_part2_idle
