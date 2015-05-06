@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
+//test 1234
+
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
