@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+
+//conflict ??
+
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
