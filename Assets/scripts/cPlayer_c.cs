@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 //Prototype extended test xxxxx
 //test again
+
+//conflict ??
+
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
