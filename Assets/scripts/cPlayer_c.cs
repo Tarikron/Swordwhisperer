@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 //Prototype extended test xxxxx
-
+//test again
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cPlayer_c : MonoBehaviour 
 {
