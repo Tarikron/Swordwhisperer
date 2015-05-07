@@ -32,9 +32,9 @@ public class cAnimationHandler
 		}
 
 	}
-	public bool contains (string anim, bool loop)
+	public bool contains (string anim, bool loop, bool eventAnim = false)
 	{
-		cAnimation cAnim = new cAnimation (loop,anim);
+		cAnimation cAnim = new cAnimation (loop,anim,eventAnim);
 		return animations.Contains(cAnim);
 	}
 	public cAnimation getCurrent()
@@ -42,35 +42,35 @@ public class cAnimationHandler
 		return currentAnimation;
 	}
 
-	public void addAnimation(string anim, bool loop)
+	public void addAnimation(string anim, bool loop,bool eventAnim = false)
 	{
-		if (anim == "" || currentAnimation.sAnimation == anim)
+		if (anim == "" || currentAnimation.sAnimation == anim || currentAnimation.bEventAnimation == true)
 			return;
 
-		cAnimation cAnim = new cAnimation (loop,anim);
+		cAnimation cAnim = new cAnimation (loop,anim, eventAnim);
 		if (animations.Contains(cAnim) == false)
 			animations.Enqueue(cAnim);
 	}
 	public void addAnimation (cAnimation anim)
 	{
-		if (anim.sAnimation == "" || currentAnimation.sAnimation == anim.sAnimation)
+		if (anim.sAnimation == "" || currentAnimation.sAnimation == anim.sAnimation || currentAnimation.bEventAnimation == true)
 			return;
 		if (animations.Contains(anim) == false)
 			animations.Enqueue(anim);
 	}
 
-	public void addToQueue(string anim, bool loop, float delay)
+	public void addToQueue(string anim, bool loop, float delay, bool eventAnim = false)
 	{
-		if (anim == "")
+		if (anim == ""  || currentAnimation.bEventAnimation == true)
 			return;
 		
-		cAnimation cAnim = new cAnimation (loop,anim,delay);
+		cAnimation cAnim = new cAnimation (loop,anim,delay, eventAnim);
 		if (animations.Contains(cAnim) == false)
 			animations.Enqueue(cAnim);
 	}
 	public void addToQueue (cAnimation anim)
 	{
-		if (anim.sAnimation == "")
+		if (anim.sAnimation == ""  || currentAnimation.bEventAnimation == true)
 			return;
 
 		cAnimation cAnim = new cAnimation (anim.bLoop,anim.sAnimation);

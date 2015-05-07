@@ -3942,6 +3942,7 @@ GameObject:
   - 23: {fileID: 673814413}
   - 33: {fileID: 673814412}
   - 114: {fileID: 673814411}
+  - 114: {fileID: 673814414}
   m_Layer: 0
   m_Name: Player
   m_TagString: player
@@ -4053,7 +4054,7 @@ MonoBehaviour:
   submeshSeparators: []
   timeScale: 1
   loop: 0
-  _animationName: vvakeup_nosword
+  _animationName: sleep
 --- !u!33 &673814412
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4085,6 +4086,23 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1406139753
   m_SortingOrder: 33
+--- !u!114 &673814414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 673814406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f35fdca9c9d87884e81c0dcbf3862d3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  grounded: 0
+  movementStopped: 0
+  rb2D: {fileID: 0}
 --- !u!1 &713117982
 GameObject:
   m_ObjectHideFlags: 0

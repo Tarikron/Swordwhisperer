@@ -6,6 +6,7 @@ using UnityEngine.UI;
 //conflict ??
 
 [RequireComponent(typeof(SkeletonAnimation))]
+[RequireComponent(typeof(PlayerPhysics))]
 public class cPlayer_c : MonoBehaviour 
 {
 
@@ -42,14 +43,14 @@ public class cPlayer_c : MonoBehaviour
 
 	//gameplay related
 	// - movement and jump related
+	private PlayerPhysics playerPhysics;
+
 	private bool bJumping = false;
 	private bool bFalling = false;
-	private bool bGrounded = false;
 	private int iGroundBridge = 0; //quick dirty solution
 	private int iJumpCounter = 0;
 	private float fTempTimeGravity = 0.0f;
 	private Vector2 movementDirection;
-	private Rigidbody2D rb2D;
 	private float jumpDestHeight = 0.0f;
 	private bool bSkipMovementForAnim = false;
 
@@ -149,14 +150,14 @@ public class cPlayer_c : MonoBehaviour
 			}
 			case eAnimTakeSword.ANIM_TAKESTART:
 			{
-				animHandler.addAnimation(animations.swordtake_idle,false);
+				animHandler.addAnimation(animations.swordtake_idle,false,true);
 				break;
 			}
 			case eAnimTakeSword.ANIM_TAKEIDLE:
 			{
 				GameObject vine = GameObject.Find("vine");
 				vine.SendMessage("msg_startanim",null,SendMessageOptions.RequireReceiver);
-				animHandler.addAnimation(animations.swordtake_end,false);
+				animHandler.addAnimation(animations.swordtake_end,false,true);
 				break;
 			}
 			case eAnimTakeSword.ANIM_WALK:
@@ -169,15 +170,15 @@ public class cPlayer_c : MonoBehaviour
 				if (transform.position == enemyPos)
 				{
 					iAnimTakeSword = eAnimTakeSword.ANIM_START;
-					animHandler.addAnimation(animations.swordtake_start,false);
+					animHandler.addAnimation(animations.swordtake_start,false,true);
 					bCutscene = true;
 				}
 				else
 				{
 					if (sword.bCollectedSword)
-						animHandler.addAnimation(animations.walk_sword,true);
+						animHandler.addAnimation(animations.walk_sword,true,true);
 					else
-						animHandler.addAnimation(animations.walk_nosword,true);
+						animHandler.addAnimation(animations.walk_nosword,true,true);
 				}
 				break;
 			}
@@ -277,10 +278,9 @@ public class cPlayer_c : MonoBehaviour
 			animHandler.addAnimation(animationToPlay,animLoop);
 		
 		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
-		movementDirection.y = rb2D.velocity.y;
+		movementDirection.y = playerPhysics.rb2D.velocity.y;
 
 		float xTemp = Input.GetAxisRaw("Horizontal");
-		Debug.Log (xTemp + "    " + transform.rotation.y);
 		if (xTemp < 0 && transform.eulerAngles.y < 0.1f)
 			transform.RotateAround(transform.position,Vector3.up,180);
 		else if (xTemp > 0 && transform.eulerAngles.y >= 180.0f)
@@ -296,13 +296,13 @@ public class cPlayer_c : MonoBehaviour
 		{
 			float absX = Mathf.Abs(x);
 
-			if (bGrounded)
+			if (playerPhysics.grounded)
 				iJumpCounter = 0;
 
 			iJumpCounter++;
 			if (iJumpCounter <= 2)
 			{
-				jumpDestHeight = rb2D.position.y+jumpHeight;
+				jumpDestHeight = playerPhysics.rb2D.position.y+jumpHeight;
 				fTempTimeGravity = 0.0f;
 
 				bJumping = true;
@@ -359,12 +359,12 @@ public class cPlayer_c : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-
-		rb2D = GetComponent<Rigidbody2D>();
+		
 		jumpDestHeight = -999.0f;
 		sleepAnim = true;
 
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
+		playerPhysics = GetComponent<PlayerPhysics>();
 
 		sword.bCollectedSword = false;
 		sword.sSword = "nosword";
@@ -413,9 +413,10 @@ public class cPlayer_c : MonoBehaviour
 				if (sword.bCollectedSword)
 					handleJump (x);
 				handleMovement (x);
+
 				//jumps & gravitation
 				//jump chunk
-				if (rb2D.position.y <= jumpDestHeight)
+				if (playerPhysics.rb2D.position.y <= jumpDestHeight)
 				{
 					float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
 					float jumpChunk = jumpHeight/timePart;
@@ -423,24 +424,35 @@ public class cPlayer_c : MonoBehaviour
 				}
 				else
 				{
-					bJumping = false;
+
 					jumpDestHeight = -999.0f;
-					if (bGrounded == false)
+					if (playerPhysics.grounded == false)
 					{
 						fTempTimeGravity += gravity;
-						movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
-						animHandler.addAnimation(animations.jump_fall,true);
+						if (sword.bCollectedSword)
+							animHandler.addAnimation(animations.jump_fall,true);
 						bFalling = true;
 					}
 					else
 					{
+						if (bFalling && movementDirection.x == 0.0f)
+						{
+							if (sword.bCollectedSword)
+								animHandler.addAnimation(animations.idle_sword,false);
+							else
+								animHandler.addAnimation(animations.idle_nosword,false);
+						}
 						bFalling = false;
-						//animHandler.addAnimation(animations.idle_sword,true);
-						fTempTimeGravity = 0.0f;
+						fTempTimeGravity = gravity;
+						movementDirection.y = 0.0f;
+
 					}
+					bJumping = false;
 				}
 
-				rb2D.MovePosition( rb2D.position  + movementDirection);
+				movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
+				playerPhysics.Move (movementDirection);
+				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
 		}
 
@@ -452,7 +464,7 @@ public class cPlayer_c : MonoBehaviour
 	{
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
 		{
-			bGrounded = true;
+			//bGrounded = true;
 			iJumpCounter = 0;
 			jumpDestHeight = -999.0f;
 
@@ -471,7 +483,7 @@ public class cPlayer_c : MonoBehaviour
 		{
 			iGroundBridge--;
 			if (iGroundBridge <= 0)
-				bGrounded = false;
+				;//bGrounded = false;
 		}
 	}
 
