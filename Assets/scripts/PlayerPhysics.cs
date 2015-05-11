@@ -102,7 +102,7 @@ public class PlayerPhysics : MonoBehaviour
 		}
 
 		//slope right/left down detector
-		onSlope = false;
+		//onSlope = false;
 		/*if (grounded == true)
 		{
 			for (int i = 0; i <1; i++)
