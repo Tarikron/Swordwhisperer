@@ -414,6 +414,9 @@ public class cPlayer_c : MonoBehaviour
 					handleJump (x);
 				handleMovement (x);
 
+				//Debug.Log ("grounded: " + playerPhysics.grounded + "   slope: " + playerPhysics.onSlope);
+
+
 				//jumps & gravitation
 				//jump chunk
 				if (playerPhysics.rb2D.position.y <= jumpDestHeight)
@@ -438,9 +441,9 @@ public class cPlayer_c : MonoBehaviour
 						if (bFalling && movementDirection.x == 0.0f)
 						{
 							if (sword.bCollectedSword)
-								animHandler.addAnimation(animations.idle_sword,false);
+								animHandler.addAnimation(animations.idle_sword,true);
 							else
-								animHandler.addAnimation(animations.idle_nosword,false);
+								animHandler.addAnimation(animations.idle_nosword,true);
 						}
 						bFalling = false;
 						fTempTimeGravity = gravity;
@@ -450,6 +453,7 @@ public class cPlayer_c : MonoBehaviour
 					bJumping = false;
 				}
 
+				//if (playerPhysics.onSlope == false)
 				movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
 				playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
@@ -493,11 +497,11 @@ public class cPlayer_c : MonoBehaviour
 
 	void startAnimListener(string animName)
 	{
-		Debug.Log("start player - frames: " + Time.frameCount + "   " + animName );
+		//Debug.Log("start player - frames: " + Time.frameCount + "   " + animName );
 	}
 	void endAnimListener (string animName)
 	{
-		Debug.Log("end player - " + Time.frameCount + "   " + animName);
+		//Debug.Log("end player - " + Time.frameCount + "   " + animName);
 
 		if (animName == animations.wakeup || 
 		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||

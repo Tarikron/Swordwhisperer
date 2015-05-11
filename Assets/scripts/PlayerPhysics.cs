@@ -8,9 +8,13 @@ public class PlayerPhysics : MonoBehaviour
 	[HideInInspector]
 	public bool grounded;
 	[HideInInspector]
+	public bool onSlope;
+
+	[HideInInspector]
 	public bool movementStopped;
 
 	private BoxCollider2D _collider;
+	private CircleCollider2D _circleCollider;
 	private Vector3 size;
 	private Vector3 centre;
 
@@ -24,9 +28,23 @@ public class PlayerPhysics : MonoBehaviour
 	void Start()
 	{
 		_collider = GetComponent<BoxCollider2D>();
+	//	_circleCollider = GetComponent<CircleCollider2D>();
 		rb2D = GetComponent<Rigidbody2D>();
 		size = _collider.size;
-		centre = _collider.offset;
+
+		Vector3 vec3 = _collider.offset;
+		//vec3.y -= _circleCollider.radius*2; 
+
+		centre = vec3;
+	}
+
+	private void GoUpSlope()
+	{
+
+	}
+
+	private void GoDownSlope()
+	{
 	}
 
 	public void Move(Vector3 moveAmount)
@@ -59,27 +77,56 @@ public class PlayerPhysics : MonoBehaviour
 		}
 
 		movementStopped = false;
-		for (int i = 0; i <3; i++)
+		if (deltaX == 0.0f)
 		{
-			float dir = Mathf.Sign(deltaX);
-			float x = p.x + centre.x + size.x/2 * dir;
-			float y = p.y + centre.y - size.y/2 + size.y/2 * i;
-			
-			ray = new Ray(new Vector2(x,y), new Vector2 (dir, 0));
-			//Debug.DrawRay(ray.origin,ray.direction);
-			if ((hit = Physics2D.Raycast (new Vector2(x,y), new Vector2 (dir, 0),Mathf.Abs (deltaX) + skin,collisionMask)))
+			for (int i = 0; i <3; i++)
 			{
-				float dst = Vector3.Distance (ray.origin,hit.point);
+				float dir = Mathf.Sign(deltaX);
+				float x = p.x + centre.x + size.x/2 * dir;
+				float y = p.y + centre.y - size.y/2 + size.y/2 * i;
 				
-				if (dst > skin)
-					deltaX = dst * dir - skin * dir;
-				else
-					deltaX = 0;
+				ray = new Ray(new Vector2(x,y), new Vector2 (dir, 0));
+				//Debug.DrawRay(ray.origin,ray.direction);
+				if ((hit = Physics2D.Raycast (new Vector2(x,y), new Vector2 (dir, 0),Mathf.Abs (deltaX) + skin,collisionMask)))
+				{
+					float dst = Vector3.Distance (ray.origin,hit.point);
+					if (dst > skin)
+						deltaX = dst * dir - skin * dir;
+					else if (onSlope == false)
+						deltaX = 0; // if we have large slope cancel x
 
-				movementStopped = true;
-				break;
+					movementStopped = true;
+					break;
+				}
 			}
 		}
+
+		//slope right/left down detector
+		onSlope = false;
+		/*if (grounded == true)
+		{
+			for (int i = 0; i <1; i++)
+			{
+				float dir = -1;
+				float x = (p.x + centre.x - size.x/2) + size.x/2 * i;
+				float y = p.y + centre.y + size.y/2 * dir;
+				
+				ray = new Ray(new Vector2(x,y), new Vector2 (0, dir));
+				Debug.DrawRay(ray.origin,ray.direction);
+				if ((hit = Physics2D.Raycast (new Vector2(x,y), new Vector2 (0, dir),10.0f,collisionMask)))
+				{
+					float slope = Vector3.Angle(transform.up,hit.normal);
+					float slopeDirX = Mathf.Sign(hit.normal.x);
+					Debug.Log (slope);
+					if (slope > 1.0f && slope < 30.0f)
+					{
+						deltaY = Mathf.Tan (slope) * deltaX;
+						onSlope = true;
+					}
+					break;
+				}
+			}
+		}*/
 
 		if (!grounded && !movementStopped)
 		{
