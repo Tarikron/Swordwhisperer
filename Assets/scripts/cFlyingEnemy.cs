@@ -8,9 +8,9 @@ public class cFlyingEnemy : MonoBehaviour {
 	public enum eFlyingType {SINUS_RANDOM_STRAIGHT=0,SINUS_LOOP=1,SINUS_CIRCLE=2};
 	public eFlyingType flyingType = eFlyingType.SINUS_RANDOM_STRAIGHT;
 
+	public enum eAttackType {ATTACK_CHARGE=0,ATTACK_SHOT=1};
+	public eAttackType attackType = eAttackType.ATTACK_CHARGE;
 	public float circleSize = 2.0f;
-
-
 
 	private int xDirection;
 
@@ -27,6 +27,16 @@ public class cFlyingEnemy : MonoBehaviour {
 	//for circle
 	private float angleTemp = 0.0f;
 
+
+	//for attack
+	public float attackDistance = 2.0f;
+	public float attackSpeed = 7.0f;
+	public float flyingBackSpeed = 4.0f;
+	private Vector3 lastPlayerPos = Vector3.zero;
+	private Vector3 originBeforeAttackPos = Vector3.zero;
+	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
+	private eAttackState iAttackState;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -38,7 +48,7 @@ public class cFlyingEnemy : MonoBehaviour {
 		yOrigin = transform.position.y;
 	}
 	
-	void movementAirLoop()
+	private void movementAirLoop()
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
@@ -71,7 +81,7 @@ public class cFlyingEnemy : MonoBehaviour {
 		
 		transform.position = movement;
 	}
-	void movementAirCircle()
+	private void movementAirCircle()
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
@@ -90,7 +100,7 @@ public class cFlyingEnemy : MonoBehaviour {
 		transform.position = movement;
 
 	}
-	void movementAirRandomStraight()
+	private void movementAirRandomStraight()
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
@@ -120,6 +130,100 @@ public class cFlyingEnemy : MonoBehaviour {
 		transform.position = movement;
 	}
 
+	private void attackCharge(GameObject player, Vector3 target)
+	{
+		Vector3 enemyPos = transform.position;
+		if ( iAttackState == eAttackState.ATTACK_NONE && lastPlayerPos == Vector3.zero)
+		{
+			//we are in attack range
+			originBeforeAttackPos = transform.position;
+			lastPlayerPos = target;
+			lastPlayerPos.y += 0.5f;
+			iAttackState = eAttackState.ATTACK_STAGE1;
+		}
+		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
+		{
+			transform.position = Vector3.MoveTowards(transform.position,lastPlayerPos,attackSpeed*Time.deltaTime);
+
+			//charged to latest player pos
+			if (transform.position == lastPlayerPos)
+			{
+				lastPlayerPos = Vector3.zero;
+				iAttackState = eAttackState.ATTACK_STAGE2;
+			}
+		}
+		else if (iAttackState == eAttackState.ATTACK_STAGE2)
+		{
+			//flying back a bit for new charge
+			transform.position = Vector3.MoveTowards(transform.position,originBeforeAttackPos,flyingBackSpeed*Time.deltaTime);
+			if (transform.position == originBeforeAttackPos)
+			{
+				iAttackState = eAttackState.ATTACK_NONE;
+				originBeforeAttackPos = Vector3.zero;
+			}
+		}
+	}
+
+	private void attackShot(GameObject player, Vector3 target)
+	{
+		Vector3 enemyPos = transform.position;
+		Vector3 heading = target - enemyPos;
+
+		GameObject shot = GameObject.FindGameObjectWithTag("enemyShot");
+
+		
+		if ( iAttackState == eAttackState.ATTACK_NONE && lastPlayerPos == Vector3.zero)
+		{
+			//we are in attack range
+			lastPlayerPos = target;
+			lastPlayerPos.y += 0.5f;
+			iAttackState = eAttackState.ATTACK_STAGE1;
+			shot.transform.position = transform.position + (heading.normalized * 2);
+
+			GameObject shotClone = GameObject.Instantiate(shot);
+			shotClone.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+			//shotClone.transform.lossyScale = shot.transform.localScale;
+			shotClone.GetComponent<SpriteRenderer>().enabled = true;
+			shotClone.GetComponent<BoxCollider2D>().enabled = true;
+
+
+		}
+		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
+		{
+			shot.transform.position = Vector3.MoveTowards(shot.transform.position,lastPlayerPos,attackSpeed*Time.deltaTime);
+			
+			//charged to latest player pos
+			if (shot.transform.position == lastPlayerPos)
+			{
+				lastPlayerPos = Vector3.zero;
+				iAttackState = eAttackState.ATTACK_NONE;
+			}
+		}		
+	}
+
+	private void manageAttack()
+	{
+		GameObject player = GameObject.Find("Player");
+		Vector3 playerPos = player.gameObject.transform.position;
+		Vector3 enemyPos = transform.position;
+		
+		float distance = Vector3.Distance(enemyPos,playerPos);
+		
+		//if get in range trigger attack
+		if (distance <= attackDistance)
+		{
+			switch (attackType)
+			{
+				case eAttackType.ATTACK_CHARGE:
+					attackCharge(player,playerPos);
+					break;
+				case eAttackType.ATTACK_SHOT:
+					attackShot (player,playerPos);
+					break;
+			}
+		}
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -134,6 +238,18 @@ public class cFlyingEnemy : MonoBehaviour {
 			case eFlyingType.SINUS_CIRCLE:
 				movementAirCircle();
 				break;
+		}
+
+		manageAttack();
+		
+	}
+
+	//collsions
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "player")
+		{
+			collision.gameObject.SendMessage("msg_hit",null,SendMessageOptions.RequireReceiver);
 		}
 	}
 }

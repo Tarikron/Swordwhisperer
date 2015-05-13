@@ -8,6 +8,8 @@ TagManager:
   - trapShooter
   - player
   - fadeCaveExit
+  - enemyShot
+  - enemyFlying
   layers:
   - Default
   - TransparentFX
