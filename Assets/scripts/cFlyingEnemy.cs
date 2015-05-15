@@ -3,6 +3,7 @@ using System.Collections;
 
 public class cFlyingEnemy : MonoBehaviour {
 
+	public float shotInterval = 2.0f;
 	public float speed = 2.0f;
 	public float xLengthTurning = 20.0f;
 	public enum eFlyingType {SINUS_RANDOM_STRAIGHT=0,SINUS_LOOP=1,SINUS_CIRCLE=2};
@@ -36,6 +37,8 @@ public class cFlyingEnemy : MonoBehaviour {
 	private Vector3 originBeforeAttackPos = Vector3.zero;
 	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
 	private eAttackState iAttackState;
+	private float intervalTimer = 0.0f;
+	private bool isCharge = false;
 
 	// Use this for initialization
 	void Start () 
@@ -138,8 +141,9 @@ public class cFlyingEnemy : MonoBehaviour {
 			//we are in attack range
 			originBeforeAttackPos = transform.position;
 			lastPlayerPos = target;
-			lastPlayerPos.y += 0.5f;
+			lastPlayerPos.y += (player.GetComponent<BoxCollider2D>().size.y - player.GetComponent<BoxCollider2D>().size.y/3);
 			iAttackState = eAttackState.ATTACK_STAGE1;
+			isCharge = true;
 		}
 		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
 		{
@@ -160,6 +164,7 @@ public class cFlyingEnemy : MonoBehaviour {
 			{
 				iAttackState = eAttackState.ATTACK_NONE;
 				originBeforeAttackPos = Vector3.zero;
+				isCharge = false;
 			}
 		}
 	}
@@ -171,34 +176,26 @@ public class cFlyingEnemy : MonoBehaviour {
 
 		GameObject shot = GameObject.FindGameObjectWithTag("enemyShot");
 
+		intervalTimer += Time.deltaTime;
 		
-		if ( iAttackState == eAttackState.ATTACK_NONE && lastPlayerPos == Vector3.zero)
+		if (intervalTimer >= shotInterval)
 		{
+			intervalTimer = 0.0f;
 			//we are in attack range
 			lastPlayerPos = target;
 			lastPlayerPos.y += 0.5f;
-			iAttackState = eAttackState.ATTACK_STAGE1;
 			shot.transform.position = transform.position + (heading.normalized * 2);
 
 			GameObject shotClone = GameObject.Instantiate(shot);
-			shotClone.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+			shotClone.SendMessage("msg_shotfired",heading.normalized,SendMessageOptions.RequireReceiver);
+			shotClone.transform.localScale = shot.transform.lossyScale;
+			shotClone.transform.position = shot.transform.position;
 			//shotClone.transform.lossyScale = shot.transform.localScale;
 			shotClone.GetComponent<SpriteRenderer>().enabled = true;
 			shotClone.GetComponent<BoxCollider2D>().enabled = true;
 
 
 		}
-		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
-		{
-			shot.transform.position = Vector3.MoveTowards(shot.transform.position,lastPlayerPos,attackSpeed*Time.deltaTime);
-			
-			//charged to latest player pos
-			if (shot.transform.position == lastPlayerPos)
-			{
-				lastPlayerPos = Vector3.zero;
-				iAttackState = eAttackState.ATTACK_NONE;
-			}
-		}		
 	}
 
 	private void manageAttack()
@@ -227,21 +224,26 @@ public class cFlyingEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		switch (flyingType)
-		{
-			case eFlyingType.SINUS_RANDOM_STRAIGHT:
-				movementAirRandomStraight();
-				break;
-			case eFlyingType.SINUS_LOOP:
-				movementAirLoop();
-				break;
-			case eFlyingType.SINUS_CIRCLE:
-				movementAirCircle();
-				break;
-		}
 
 		manageAttack();
-		
+
+		//we are charging to player or flying back.. so no need for movement calculation
+		if (!isCharge)
+		{
+			switch (flyingType)
+			{
+				case eFlyingType.SINUS_RANDOM_STRAIGHT:
+					movementAirRandomStraight();
+					break;
+				case eFlyingType.SINUS_LOOP:
+					movementAirLoop();
+					break;
+				case eFlyingType.SINUS_CIRCLE:
+					movementAirCircle();
+					break;
+			}
+		}
+
 	}
 
 	//collsions
@@ -249,6 +251,8 @@ public class cFlyingEnemy : MonoBehaviour {
 	{
 		if (collision.gameObject.tag == "player")
 		{
+			lastPlayerPos = Vector3.zero;
+			iAttackState = eAttackState.ATTACK_STAGE2;
 			collision.gameObject.SendMessage("msg_hit",null,SendMessageOptions.RequireReceiver);
 		}
 	}

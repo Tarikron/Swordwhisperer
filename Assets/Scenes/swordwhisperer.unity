@@ -3881,7 +3881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fadeCaveExit:
     fadeInAxis: 1
-    fadeOutAxis: 0
+    fadeOutAxis: -1
     fadeDistance: 8
   jumpHeight: 6
   jumpTime: 10
@@ -6251,6 +6251,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
+      propertyPath: attackDistance
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
   m_IsPrefabParent: 0
@@ -6946,7 +6950,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: attackDistance
-      value: 1
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
+      propertyPath: speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
+      propertyPath: attackType
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
