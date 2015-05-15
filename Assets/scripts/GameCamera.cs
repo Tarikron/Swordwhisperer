@@ -23,7 +23,8 @@ public class GameCamera : MonoBehaviour {
 		{
 			float x = IncrementTowards(transform.position.x,target.position.x+offset.x,trackSpeed);
 			float y = IncrementTowards(transform.position.y,target.position.y+offset.y,trackSpeed);
-			transform.position = new Vector3(x,y,transform.position.z);
+			if (x >= -9.11)
+				transform.position = new Vector3(x,y,transform.position.z);
 		}
 	}
 

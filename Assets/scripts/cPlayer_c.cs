@@ -233,22 +233,32 @@ public class cPlayer_c : MonoBehaviour
 		{
 			if (iAnimWalk == eAnimWalk.ANIM_WALK)
 			{
-				velocity = walkVelocity;
 				if (sword.bCollectedSword)
+				{
 					animationToPlay = animations.walk_sword;
+					velocity = walkVelocity;
+				}
 				else
+				{
+					velocity = hurtVelocity;
 					animationToPlay = animations.walk_nosword;
+				}
 				animLoop = true;
 			}
 			else
 			{
 				iAnimWalk = eAnimWalk.ANIM_NONE;
 				if (sword.bCollectedSword)
+				{
 					animationToPlay = animations.walk_start_sword;
+					velocity = 0.3f*walkVelocity;
+				}
 				else
+				{
+					velocity = 0.3f*hurtVelocity;
 					animationToPlay = animations.walk_start_nosword;
+				}
 				animLoop = false;
-				velocity = 0.3f*walkVelocity;
 			}
 		}
 		else
