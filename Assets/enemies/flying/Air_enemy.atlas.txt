@@ -1,0 +1,75 @@
+
+Air_enemy.png
+size: 4096,4096
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer1
+  rotate: false
+  xy: 2030, 1181
+  size: 1495, 1354
+  orig: 1495, 1354
+  offset: 0, 0
+  index: -1
+Layer2
+  rotate: true
+  xy: 1852, 2
+  size: 1177, 1464
+  orig: 1177, 1464
+  offset: 0, 0
+  index: -1
+Layer4
+  rotate: false
+  xy: 2030, 2537
+  size: 1462, 1409
+  orig: 1462, 1409
+  offset: 0, 0
+  index: -1
+Layer5
+  rotate: false
+  xy: 2, 389
+  size: 1848, 1712
+  orig: 1848, 1712
+  offset: 0, 0
+  index: -1
+Layer7
+  rotate: false
+  xy: 3494, 3689
+  size: 500, 257
+  orig: 500, 257
+  offset: 0, 0
+  index: -1
+flat
+  rotate: false
+  xy: 2, 2103
+  size: 2026, 1843
+  orig: 2026, 1843
+  offset: 0, 0
+  index: -1
+
+Air_enemy2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer12
+  rotate: false
+  xy: 2, 2
+  size: 939, 830
+  orig: 939, 830
+  offset: 0, 0
+  index: -1
+Layer13
+  rotate: false
+  xy: 2, 834
+  size: 1192, 1083
+  orig: 1192, 1083
+  offset: 0, 0
+  index: -1
+Layer3
+  rotate: true
+  xy: 1196, 1048
+  size: 869, 789
+  orig: 869, 789
+  offset: 0, 0
+  index: -1
