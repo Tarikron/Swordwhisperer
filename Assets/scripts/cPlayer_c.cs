@@ -27,6 +27,7 @@ public class cPlayer_c : MonoBehaviour
 	//settings via unity
 	public float jumpHeight = 300f;
 	public float jumpTime = 10.0f;
+	public float acceleration = 10.0f;
 	public float hurtVelocity = 3.0f;
 	public float walkVelocity = 3.0f;
 	public float runVelocity = 6.0f;
@@ -44,7 +45,9 @@ public class cPlayer_c : MonoBehaviour
 	//gameplay related
 	// - movement and jump related
 	private PlayerPhysics playerPhysics;
-
+	private float currentSpeed;
+	private float targetSpeed;
+	private bool bCanJump = false;
 	private bool bJumping = false;
 	private bool bFalling = false;
 	private int iGroundBridge = 0; //quick dirty solution
@@ -208,6 +211,12 @@ public class cPlayer_c : MonoBehaviour
 				if (c.a > 1.0f)
 					c.a = 1.0f;
 
+
+				if (c.a  >= 1.0f)
+					bCanJump = true;
+				else
+					bCanJump = false;
+
 				go.GetComponent<SpriteRenderer>().color = c;
 					
 			}
@@ -227,7 +236,7 @@ public class cPlayer_c : MonoBehaviour
 		{
 			animationToPlay = animations.run_sword;
 			animLoop = true;
-			velocity = 1.3f * runVelocity;
+			velocity = runVelocity;
 		}
 		else if (absX > 0) 
 		{
@@ -251,11 +260,11 @@ public class cPlayer_c : MonoBehaviour
 				if (sword.bCollectedSword)
 				{
 					animationToPlay = animations.walk_start_sword;
-					velocity = 0.3f*walkVelocity;
+					velocity = walkVelocity;
 				}
 				else
 				{
-					velocity = 0.3f*hurtVelocity;
+					velocity = hurtVelocity;
 					animationToPlay = animations.walk_start_nosword;
 				}
 				animLoop = false;
@@ -269,11 +278,16 @@ public class cPlayer_c : MonoBehaviour
 			{
 				animLoop = false;
 				if (sword.bCollectedSword)
+				{
 					animationToPlay = animations.walk_end_sword;
+					velocity = walkVelocity;
+				}
 				else
+				{
 					animationToPlay = animations.walk_end_nosword;
+					velocity = hurtVelocity;
+				}
 
-				velocity = 0.3f * walkVelocity;
 			}
 			else if (anim.sAnimation == "")
 			{
@@ -286,16 +300,26 @@ public class cPlayer_c : MonoBehaviour
 		}
 		if (!bFalling && !bJumping)
 			animHandler.addAnimation(animationToPlay,animLoop);
-		
-		movementDirection.x = velocity * Mathf.Sign(x) * Time.deltaTime;
-		movementDirection.y = playerPhysics.rb2D.velocity.y;
 
-		float xTemp = Input.GetAxisRaw("Horizontal");
-		if (xTemp < 0 && transform.eulerAngles.y < 0.1f)
+		float xAxis = Input.GetAxisRaw("Horizontal");
+		if (xAxis < 0 && transform.eulerAngles.y < 0.1f)
 			transform.RotateAround(transform.position,Vector3.up,180);
-		else if (xTemp > 0 && transform.eulerAngles.y >= 180.0f)
+		else if (xAxis > 0 && transform.eulerAngles.y >= 180.0f)
+		{
 			transform.RotateAround(transform.position,Vector3.up,-180);
-		
+		}
+
+		if (transform.eulerAngles.y >= 180.0f)
+			xAxis *= -1;
+
+		targetSpeed = xAxis * velocity;
+		currentSpeed = IncrementTowards(currentSpeed, targetSpeed, acceleration);
+
+		//Debug.Log (currentSpeed + "    " + targetSpeed);
+
+		movementDirection.x = currentSpeed * Time.deltaTime;
+		movementDirection.y = 0.0f;
+
 		handleCaveExitFade(x);
 
 	} //end - handleMovement
@@ -369,7 +393,7 @@ public class cPlayer_c : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-		
+
 		jumpDestHeight = -999.0f;
 		sleepAnim = true;
 
@@ -383,6 +407,10 @@ public class cPlayer_c : MonoBehaviour
 		animHandler.delEnd = endAnimListener;
 
 		ui.txtLife.text = life+" Life";
+
+
+		bCanJump = true;
+		sword.bCollectedSword = true;
 	}
 
 	void FixedUpdate()
@@ -420,12 +448,13 @@ public class cPlayer_c : MonoBehaviour
 			if (!bSkipMovementForAnim)
 			{
 				//movement
-				if (sword.bCollectedSword)
+				if (bCanJump && sword.bCollectedSword)
 					handleJump (x);
 				handleMovement (x);
 
 				//Debug.Log ("grounded: " + playerPhysics.grounded + "   slope: " + playerPhysics.onSlope);
 
+				//Debug.Log (playerPhysics.grounded + "    " + playerPhysics.onSlope);
 
 				//jumps & gravitation
 				//jump chunk
@@ -439,7 +468,7 @@ public class cPlayer_c : MonoBehaviour
 				{
 
 					jumpDestHeight = -999.0f;
-					if (playerPhysics.grounded == false)
+					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
 					{
 						fTempTimeGravity += gravity;
 						if (sword.bCollectedSword)
@@ -458,13 +487,12 @@ public class cPlayer_c : MonoBehaviour
 						bFalling = false;
 						fTempTimeGravity = gravity;
 						movementDirection.y = 0.0f;
-
 					}
 					bJumping = false;
-				}
 
-				//if (playerPhysics.onSlope == false)
+				}
 				movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
+
 				playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
@@ -543,5 +571,18 @@ public class cPlayer_c : MonoBehaviour
 
 		ui.txtLife.text = life+" Life";
 	}
-
+	private float IncrementTowards(float n, float target, float a)
+	{
+		if (n == target)
+			return n;
+		else
+		{
+			float dir = Mathf.Sign(target - n);
+			if(transform.eulerAngles.y >= 180.0f)
+				dir = -1;
+			n += a * Time.deltaTime * dir;
+			return (dir == Mathf.Sign (target-n))? n : target;
+		}
+		
+	}
 }
