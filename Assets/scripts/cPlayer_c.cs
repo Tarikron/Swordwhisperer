@@ -408,9 +408,6 @@ public class cPlayer_c : MonoBehaviour
 
 		ui.txtLife.text = life+" Life";
 
-
-		bCanJump = true;
-		sword.bCollectedSword = true;
 	}
 
 	void FixedUpdate()
