@@ -25,13 +25,14 @@ public class cPlayer_c : MonoBehaviour
 
 
 	//settings via unity
-	public float jumpHeight = 300f;
-	public float jumpTime = 10.0f;
-	public float acceleration = 10.0f;
+	public float jumpHeight = 8.0f;
+	public float jumpTime = 2.0f;
+	public float accelerationY = 10.0f;
+	
+	public float accelerationX = 10.0f;
 	public float hurtVelocity = 3.0f;
 	public float walkVelocity = 3.0f;
 	public float runVelocity = 6.0f;
-	public float gravity = 1.0f;
 	public int life = 20;
 
 	//animation stuff
@@ -45,8 +46,11 @@ public class cPlayer_c : MonoBehaviour
 	//gameplay related
 	// - movement and jump related
 	private PlayerPhysics playerPhysics;
-	private float currentSpeed;
-	private float targetSpeed;
+	private float currentSpeedX;
+	private float targetSpeedX;
+	
+	private float currentSpeedY;
+	private float targetSpeedY;
 	private bool bCanJump = false;
 	private bool bJumping = false;
 	private bool bFalling = false;
@@ -312,12 +316,12 @@ public class cPlayer_c : MonoBehaviour
 		if (transform.eulerAngles.y >= 180.0f)
 			xAxis *= -1;
 
-		targetSpeed = xAxis * velocity;
-		currentSpeed = IncrementTowards(currentSpeed, targetSpeed, acceleration);
+		targetSpeedX = xAxis * velocity;
+		currentSpeedX = IncrementTowards(currentSpeedX, targetSpeedX, accelerationX);
 
 		//Debug.Log (currentSpeed + "    " + targetSpeed);
 
-		movementDirection.x = currentSpeed * Time.deltaTime;
+		movementDirection.x = currentSpeedX * Time.deltaTime;
 		movementDirection.y = 0.0f;
 
 		handleCaveExitFade(x);
@@ -329,16 +333,14 @@ public class cPlayer_c : MonoBehaviour
 		if (Input.GetButtonDown ("jump"))
 		{
 			float absX = Mathf.Abs(x);
-
+			
 			if (playerPhysics.grounded)
 				iJumpCounter = 0;
 
 			iJumpCounter++;
 			if (iJumpCounter <= 2)
 			{
-				jumpDestHeight = playerPhysics.rb2D.position.y+jumpHeight;
-				fTempTimeGravity = 0.0f;
-
+				currentSpeedY = targetSpeedY;
 				bJumping = true;
 				animHandler.addAnimation(animations.jump_sword,true);
 				/*
@@ -408,6 +410,8 @@ public class cPlayer_c : MonoBehaviour
 
 		ui.txtLife.text = life+" Life";
 
+		//--> velocity = m/s 
+		targetSpeedY = jumpHeight/jumpTime;
 	}
 
 	void FixedUpdate()
@@ -454,23 +458,19 @@ public class cPlayer_c : MonoBehaviour
 				//Debug.Log (playerPhysics.grounded + "    " + playerPhysics.onSlope);
 
 				//jumps & gravitation
-				//jump chunk
-				if (playerPhysics.rb2D.position.y <= jumpDestHeight)
-				{
-					float  timePart = (jumpTime/1000.0f)/Time.deltaTime;
-					float jumpChunk = jumpHeight/timePart;
-					movementDirection.y += jumpChunk * Time.deltaTime;
-				}
+				//we start with jumpVelocity, now we decrease it
+				if (currentSpeedY > 0.0f)
+					currentSpeedY -= accelerationY * Time.deltaTime; 
 				else
 				{
-
-					jumpDestHeight = -999.0f;
 					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
 					{
-						fTempTimeGravity += gravity;
+						//we are falling if we have negative speedY and we are not grounded
 						if (sword.bCollectedSword)
 							animHandler.addAnimation(animations.jump_fall,true);
 						bFalling = true;
+						//we want to gain speed if we are falling
+						currentSpeedY -= accelerationY * Time.deltaTime; 
 					}
 					else
 					{
@@ -482,14 +482,15 @@ public class cPlayer_c : MonoBehaviour
 								animHandler.addAnimation(animations.idle_nosword,true);
 						}
 						bFalling = false;
-						fTempTimeGravity = gravity;
 						movementDirection.y = 0.0f;
+						//reset to normal gravity 
+						currentSpeedY = -accelerationY * Time.deltaTime; 
 					}
 					bJumping = false;
-
 				}
-				movementDirection.y -= (9.80665f/2)*(fTempTimeGravity*fTempTimeGravity) * Time.deltaTime;
-
+				
+				movementDirection.y = currentSpeedY * Time.deltaTime;
+				Debug.Log(movementDirection.y);
 				playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
@@ -580,6 +581,6 @@ public class cPlayer_c : MonoBehaviour
 			n += a * Time.deltaTime * dir;
 			return (dir == Mathf.Sign (target-n))? n : target;
 		}
-		
 	}
+	
 }
