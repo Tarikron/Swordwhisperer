@@ -2,7 +2,7 @@
 	<lang lang="de">
 		<dialog eventTrigger="sword_take">
 			<person uid="me123" order="1">
-				<text>Hello, How are you?</text> <!-- required -->
+				<text>Help! Please someone rescue me from this misery!</text> <!-- required -->
 				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
 				<fade_in>10</fade_in> <!--  sec -->
 				<fade_out>10</fade_out> <!--  sec -->

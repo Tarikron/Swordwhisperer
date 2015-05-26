@@ -2,32 +2,18 @@
 	<lang lang="de">
 		<dialog eventTrigger="sword_take">
 			<person uid="me123" order="1">
-				<text>Hello, How are you?</text>
+				<text>Help! Please someone rescue me from this misery!</text>
 				<soundfile>talk_me123.mp3</soundfile>
-				<fade_in>10</fade_in>
-				<fade_out>10</fade_out>
-				<click_away>1</click_away>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<click_away>0</click_away>
 			</person>
 			<person uid="you123" order="2">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
+				<text> Press 'A' to take the talking sword.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>1</fade_in>
+				<fade_out>1</fade_out>
 				<click_away>1</click_away>
-			</person>
-			<person uid="me123" order="3">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
-			</person>
-			<person uid="you123" order="4">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away> <!-- default 1 -->
 			</person>
 		</dialog>
 		<dialog eventTrigger="enter_boss1">

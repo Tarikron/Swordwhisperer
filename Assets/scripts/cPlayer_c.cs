@@ -25,6 +25,8 @@ public class cPlayer_c : cUnit
 
 
 	//settings via unity
+	public Canvas dialog;
+
 	public float jumpHeight = 8.0f;
 	public float jumpTime = 2.0f;
 	public float accelerationY = 10.0f;
@@ -45,6 +47,7 @@ public class cPlayer_c : cUnit
 
 	//gameplay related
 	// - movement and jump related
+	[HideInInspector]
 	public PlayerPhysics playerPhysics;
 	private bool bCanJump = false;
 	private bool bJumping = false;
@@ -121,18 +124,21 @@ public class cPlayer_c : cUnit
 
 	void handleSwordPickup()
 	{
-		if (Input.GetButtonDown("CtrlBButton") && iAnimTakeSword == eAnimTakeSword.ANIM_NONE)
+		GameObject swTakePos = GameObject.Find("swordTakePosition");
+		Vector3 enemyPos = swTakePos.transform.position;
+		Vector3 playerPos = this.gameObject.transform.position;
+		
+		float distance = Vector2.Distance (playerPos,enemyPos);
+		if (distance <= 4) 
 		{
-			GameObject swTakePos = GameObject.Find("swordTakePosition");
-			Vector3 enemyPos = swTakePos.transform.position;
-			Vector3 playerPos = this.gameObject.transform.position;
-			
-			float distance = Vector2.Distance (playerPos,enemyPos);
-			if (distance <= 3) 
-			{
+			dialog.SendMessage("msg_eventTrigger","sword_take",SendMessageOptions.RequireReceiver);
+
+			if (Input.GetButtonDown("CtrlBButton") && iAnimTakeSword == eAnimTakeSword.ANIM_NONE)
 				iAnimTakeSword = eAnimTakeSword.ANIM_WALK;
-			}
 		}
+		else
+			dialog.SendMessage("msg_eventTriggerEnd",null,SendMessageOptions.RequireReceiver);
+
 		switch (iAnimTakeSword)
 		{
 			case eAnimTakeSword.ANIM_DONE:
@@ -164,9 +170,8 @@ public class cPlayer_c : cUnit
 			}
 			case eAnimTakeSword.ANIM_WALK:
 			{
-				GameObject swTakePos = GameObject.Find("swordTakePosition");
-				Vector3 enemyPos = swTakePos.transform.position;
-				Vector3 playerPos = this.gameObject.transform.position;
+				dialog.SendMessage("msg_eventTriggerEnd",null,SendMessageOptions.RequireReceiver);
+
 				transform.position = Vector3.MoveTowards(playerPos,enemyPos,Time.deltaTime * walkVelocity);
 				
 				if (transform.position == enemyPos)
@@ -180,7 +185,9 @@ public class cPlayer_c : cUnit
 					if (sword.bCollectedSword)
 						animHandler.addAnimation(animations.walk_sword,true,true);
 					else
+					{
 						animHandler.addAnimation(animations.walk_nosword,true,true);
+					}
 				}
 				break;
 			}
@@ -420,6 +427,8 @@ public class cPlayer_c : cUnit
 			Application.LoadLevel ("swordwhisperer");
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.Quit();
+
+
 
 		if (sleepAnim)
 		{
