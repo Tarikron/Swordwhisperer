@@ -3,7 +3,7 @@ using System.Collections;
 using Spine;
 
 [RequireComponent(typeof(SkeletonAnimation))]
-public class cTurtle : MonoBehaviour {
+public class cTurtle : cEnemy {
 
 	enum eTurtleMovement {ANIM_IDLE,ANIM_MOVE};
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(SkeletonAnimation))]
 [RequireComponent(typeof(PlayerPhysics))]
-public class cPlayer_c : MonoBehaviour 
+public class cPlayer_c : cUnit 
 {
 
 	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_TAKESTART,ANIM_TAKEIDLE,ANIM_DONE};
@@ -45,12 +45,7 @@ public class cPlayer_c : MonoBehaviour
 
 	//gameplay related
 	// - movement and jump related
-	private PlayerPhysics playerPhysics;
-	private float currentSpeedX;
-	private float targetSpeedX;
-	
-	private float currentSpeedY;
-	private float targetSpeedY;
+	public PlayerPhysics playerPhysics;
 	private bool bCanJump = false;
 	private bool bJumping = false;
 	private bool bFalling = false;
@@ -316,12 +311,12 @@ public class cPlayer_c : MonoBehaviour
 		if (transform.eulerAngles.y >= 180.0f)
 			xAxis *= -1;
 
-		targetSpeedX = xAxis * velocity;
-		currentSpeedX = IncrementTowards(currentSpeedX, targetSpeedX, accelerationX);
+		targetSpeed.x = xAxis * velocity;
+		currentSpeed.x = IncrementTowards(currentSpeed.x, targetSpeed.x, accelerationX);
 
 		//Debug.Log (currentSpeed + "    " + targetSpeed);
 
-		movementDirection.x = currentSpeedX * Time.deltaTime;
+		movementDirection.x = currentSpeed.x * Time.deltaTime;
 		movementDirection.y = 0.0f;
 
 		handleCaveExitFade(x);
@@ -340,9 +335,10 @@ public class cPlayer_c : MonoBehaviour
 			iJumpCounter++;
 			if (iJumpCounter <= 2)
 			{
-				currentSpeedY = targetSpeedY;
 				bJumping = true;
 				animHandler.addAnimation(animations.jump_sword,true);
+				currentSpeed.y = jumpHeight/jumpTime;
+
 				/*
 				cAnimation anim = animHandler.getCurrent();
 				if (anim == null)
@@ -410,8 +406,6 @@ public class cPlayer_c : MonoBehaviour
 
 		ui.txtLife.text = life+" Life";
 
-		//--> velocity = m/s 
-		targetSpeedY = jumpHeight/jumpTime;
 	}
 
 	void FixedUpdate()
@@ -459,8 +453,8 @@ public class cPlayer_c : MonoBehaviour
 
 				//jumps & gravitation
 				//we start with jumpVelocity, now we decrease it
-				if (currentSpeedY > 0.0f)
-					currentSpeedY -= accelerationY * Time.deltaTime; 
+				if (currentSpeed.y > 0.0f)
+					currentSpeed.y -= accelerationY * Time.deltaTime; 
 				else
 				{
 					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
@@ -470,7 +464,7 @@ public class cPlayer_c : MonoBehaviour
 							animHandler.addAnimation(animations.jump_fall,true);
 						bFalling = true;
 						//we want to gain speed if we are falling
-						currentSpeedY -= accelerationY * Time.deltaTime; 
+						currentSpeed.y -= accelerationY * Time.deltaTime; 
 					}
 					else
 					{
@@ -484,13 +478,12 @@ public class cPlayer_c : MonoBehaviour
 						bFalling = false;
 						movementDirection.y = 0.0f;
 						//reset to normal gravity 
-						currentSpeedY = -accelerationY * Time.deltaTime; 
+						currentSpeed.y = -accelerationY * Time.deltaTime; 
 					}
 					bJumping = false;
 				}
-				
-				movementDirection.y = currentSpeedY * Time.deltaTime;
-				Debug.Log(movementDirection.y);
+				//Debug.Log("jump speed: " + currentSpeedY);
+				movementDirection.y = currentSpeed.y * Time.deltaTime;
 				playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
@@ -499,7 +492,10 @@ public class cPlayer_c : MonoBehaviour
 		animHandler.playAnimation();
 
 	}
-
+	public Vector2 GetCurrentSpeed()
+	{
+		return currentSpeed;
+	}
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
@@ -569,18 +565,5 @@ public class cPlayer_c : MonoBehaviour
 
 		ui.txtLife.text = life+" Life";
 	}
-	private float IncrementTowards(float n, float target, float a)
-	{
-		if (n == target)
-			return n;
-		else
-		{
-			float dir = Mathf.Sign(target - n);
-			if(transform.eulerAngles.y >= 180.0f)
-				dir = -1;
-			n += a * Time.deltaTime * dir;
-			return (dir == Mathf.Sign (target-n))? n : target;
-		}
-	}
-	
+		
 }

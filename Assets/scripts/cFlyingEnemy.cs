@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class cFlyingEnemy : MonoBehaviour {
+public class cFlyingEnemy : cEnemy {
 
 	public float shotInterval = 2.0f;
 	public float speed = 2.0f;
@@ -45,10 +45,12 @@ public class cFlyingEnemy : MonoBehaviour {
 	{
 		xTurningTemp = 0.0f;
 		xDirection = 1;
-		ampH = 2.0f;
+		ampH = 1.0f;
 		yCurrentDir = 1;
 
 		yOrigin = transform.position.y;
+
+
 	}
 	
 	private void movementAirLoop()
@@ -122,7 +124,7 @@ public class cFlyingEnemy : MonoBehaviour {
 		if (sign != yCurrentDir)
 		{
 			yCurrentDir = sign;
-			ampH = Random.Range (0.1f,2.0f);
+			ampH = Random.Range (0.2f,1.0f);
 		}
 		y += yInc;
 		x += (speed * xDirection) * Time.deltaTime;
@@ -218,6 +220,11 @@ public class cFlyingEnemy : MonoBehaviour {
 					attackShot (player,playerPos);
 					break;
 			}
+		}
+		else
+		{
+			isCharge = false;
+			iAttackState = eAttackState.ATTACK_NONE;
 		}
 	}
 
