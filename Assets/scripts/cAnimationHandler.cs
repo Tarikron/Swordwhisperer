@@ -19,6 +19,8 @@ public class cAnimationHandler
 	public startAnim delStart;
 	public endAnim delEnd;
 
+	public float timescale = 1.0f;
+
 	public cAnimationHandler (SkeletonAnimation skeletonAnim)
 	{
 		animations = new Queue<cAnimation>();
@@ -103,6 +105,8 @@ public class cAnimationHandler
 		//Works like fifo, first in, first out
 		cAnimation anim = this.removeAnimation();
 
+		skeletonAnimation.timeScale = timescale;
+
 		if (anim.sAnimation != "")
 			skeletonAnimation.state.SetAnimation(0,anim.sAnimation,anim.bLoop);
 		if (bAdd == true)
@@ -136,8 +140,9 @@ public class cAnimationHandler
 	void endAnimListener (Spine.AnimationState state, int trackIndex)
 	{
 		bIsPlaying = false;
-		delEnd(state.GetCurrent (trackIndex).Animation.Name);
 		currentAnimation.sAnimation = "";
+		delEnd(state.GetCurrent (trackIndex).Animation.Name);
+
 	}
 
 
