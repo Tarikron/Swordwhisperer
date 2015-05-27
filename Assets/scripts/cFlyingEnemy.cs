@@ -49,8 +49,7 @@ public class cFlyingEnemy : cEnemy {
 		yCurrentDir = 1;
 
 		yOrigin = transform.position.y;
-
-
+		
 	}
 	
 	private void movementAirLoop()
@@ -251,6 +250,11 @@ public class cFlyingEnemy : cEnemy {
 			}
 		}
 
+	}
+
+	void msg_die()
+	{
+		die();
 	}
 
 	//collsions

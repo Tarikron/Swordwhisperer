@@ -20,6 +20,11 @@ public class cUnit : MonoBehaviour
 	{
 	}
 
+	protected void die()
+	{
+		gameObject.SetActive(false);
+	}
+
 	//todo: decrease method
 	protected float IncrementTowards(float n, float target, float a)
 	{

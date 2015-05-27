@@ -1,0 +1,48 @@
+
+FieldGrass.png
+size: 4096,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+gras2
+  rotate: true
+  xy: 2395, 21
+  size: 405, 501
+  orig: 405, 501
+  offset: 0, 0
+  index: -1
+gras3
+  rotate: false
+  xy: 2898, 82
+  size: 455, 344
+  orig: 455, 344
+  offset: 0, 0
+  index: -1
+gras4
+  rotate: true
+  xy: 3355, 179
+  size: 247, 398
+  orig: 247, 398
+  offset: 0, 0
+  index: -1
+grass
+  rotate: true
+  xy: 2, 2
+  size: 424, 872
+  orig: 424, 872
+  offset: 0, 0
+  index: -1
+grass2
+  rotate: true
+  xy: 876, 124
+  size: 302, 865
+  orig: 302, 865
+  offset: 0, 0
+  index: -1
+grass3
+  rotate: true
+  xy: 1743, 134
+  size: 292, 650
+  orig: 292, 650
+  offset: 0, 0
+  index: -1

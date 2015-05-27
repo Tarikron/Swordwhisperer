@@ -160,10 +160,10 @@ public class cPlayer_c : cUnit
 			{
 				sword.bCollectedSword = true;
 				sword.sSword = "sword";
-				bSkipMovementForAnim = true;
+				bSkipMovementForAnim = false;
 				bCutscene = false;
 				iAnimTakeSword = eAnimTakeSword.ANIM_NONE;
-				animHandler.addAnimation(animations.walk_end_sword,false);
+				//animHandler.addAnimation(animations.walk_end_sword,false);
 				break;
 			}
 			case eAnimTakeSword.ANIM_START:
@@ -396,14 +396,15 @@ public class cPlayer_c : cUnit
 				attackNext = true;
 			}
 			attackResetCurrent = 0.0f;
+			attackDelayCounter = 0.0f;
 		}
 
 		if (attackResetCurrent >= attackResetTime)
 		{
-			Debug.Log ("reset: " + attackResetCurrent);
 			attackCounter = 0;
 			attackState = eAttackType.ATTACK_NONE;
 			attackResetCurrent = 0.0f;
+			attackDelayCounter = 0.0f;
 			attackNext = false;
 		}
 		else if (attackCounter > 0)
@@ -440,8 +441,29 @@ public class cPlayer_c : cUnit
 		}
 		if (attackNext && attackAnim != "")
 		{
-			animHandler.timescale = 0.7f;
-			animHandler.addAnimation(attackAnim,false);
+			attackDelayCounter += Time.deltaTime;
+			if (attackDelay <= attackDelayCounter)
+			{
+				//if enemy near by
+				GameObject[] flyingEnemys = GameObject.FindGameObjectsWithTag("enemyFlying");
+				foreach (GameObject flyingEnemy in flyingEnemys)
+				{
+					if (flyingEnemy == null)
+						continue;
+					Vector3 enemyPos = flyingEnemy.transform.position;
+					Vector3 playerPos = this.gameObject.transform.position;
+					
+					float distance = Vector2.Distance (playerPos,enemyPos);
+					if (distance <= 4) 
+					{
+						flyingEnemy.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+					}
+				}
+				bSkipMovementForAnim = true;
+				attackDelayCounter = 0.0f;
+				animHandler.timescale = 0.7f;
+				animHandler.addAnimation(attackAnim,false);
+			}
 		}
 		attackNext = false;
 	}
@@ -463,7 +485,7 @@ public class cPlayer_c : cUnit
 
 		ui.txtLife.text = life+" Life";
 
-		sword.bCollectedSword = true;
+		//sword.bCollectedSword = true;
 
 	}
 
@@ -613,6 +635,7 @@ public class cPlayer_c : cUnit
 				animHandler.timescale = 1.0f;
 				attackNext = true;
 				attackState = eAttackType.ATTACK_2;
+				bSkipMovementForAnim = false;
 			}
 
 		}
@@ -623,6 +646,7 @@ public class cPlayer_c : cUnit
 				animHandler.timescale = 1.0f;
 				attackNext = true;
 				attackState = eAttackType.ATTACK_3;
+				bSkipMovementForAnim = false;
 			}
 
 		}
@@ -632,6 +656,7 @@ public class cPlayer_c : cUnit
 			attackNext = false;
 			attackState = eAttackType.ATTACK_NONE;
 			attackCounter = 0;
+			bSkipMovementForAnim = false;
 		}
 		Debug.Log ("end:" + animName + "  " + attackCounter);
 		
