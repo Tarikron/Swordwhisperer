@@ -3746,7 +3746,8 @@ MonoBehaviour:
   runVelocity: 8
   life: 20
   playerPhysics: {fileID: 0}
-  attackResetTime: 1.5
+  attackDelay: .100000001
+  attackResetTime: .5
   ui:
     txtLife: {fileID: 1508485870}
   animations:
@@ -3838,25 +3839,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: 018a33972eecdd040a0a4dd54f305604, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: 018a33972eecdd040a0a4dd54f305604, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: 018a33972eecdd040a0a4dd54f305604, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
-  - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
-  - {fileID: 2100000, guid: fb7c2a4a9e7740b4d81255432a874af4, type: 2}
   - {fileID: 2100000, guid: e5d9d2ea5ac5ea447a0340c7ba365269, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}

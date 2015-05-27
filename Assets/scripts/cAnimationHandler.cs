@@ -44,12 +44,12 @@ public class cAnimationHandler
 		return currentAnimation;
 	}
 
-	public void addAnimation(string anim, bool loop,bool eventAnim = false)
+	public void addAnimation(string anim, bool loop, float delay = 0.0f, bool eventAnim = false)
 	{
 		if (anim == "" || currentAnimation.sAnimation == anim || currentAnimation.bEventAnimation == true)
 			return;
 
-		cAnimation cAnim = new cAnimation (loop,anim, eventAnim);
+		cAnimation cAnim = new cAnimation (loop,anim,delay , eventAnim);
 		if (animations.Contains(cAnim) == false)
 			animations.Enqueue(cAnim);
 	}
@@ -91,7 +91,7 @@ public class cAnimationHandler
 		animations.Clear();
 	}
 
-	public void playAnimation()
+	public void playAnimation(float deltaTime = 0.0f)
 	{
 		if (skeletonAnimation == null || lastInList != null)
 			return;
@@ -108,7 +108,9 @@ public class cAnimationHandler
 		skeletonAnimation.timeScale = timescale;
 
 		if (anim.sAnimation != "")
+		{
 			skeletonAnimation.state.SetAnimation(0,anim.sAnimation,anim.bLoop);
+		}
 		if (bAdd == true)
 		{
 			int count = animations.Count;

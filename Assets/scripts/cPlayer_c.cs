@@ -60,12 +60,14 @@ public class cPlayer_c : cUnit
 	private float jumpDestHeight = 0.0f;
 	private bool bSkipMovementForAnim = false;
 
+	private float attackDelayCounter = 0.0f;
+	public float attackDelay = 0.1f;
 	private bool attackNext = false;
 	private bool attackCombo = false;
 	private eAttackType attackState = 0;
 	private int attackCounter = 0;
 	private float attackResetCurrent = 0.0f;
-	public float attackResetTime = 1.5f;
+	public float attackResetTime = 0.2f;
 
 	//sword
 	private struct stSword
@@ -171,14 +173,14 @@ public class cPlayer_c : cUnit
 			}
 			case eAnimTakeSword.ANIM_TAKESTART:
 			{
-				animHandler.addAnimation(animations.swordtake_idle,false,true);
+				animHandler.addAnimation(animations.swordtake_idle,false,0.0f,true);
 				break;
 			}
 			case eAnimTakeSword.ANIM_TAKEIDLE:
 			{
 				GameObject vine = GameObject.Find("vine");
 				vine.SendMessage("msg_startanim",null,SendMessageOptions.RequireReceiver);
-				animHandler.addAnimation(animations.swordtake_end,false,true);
+				animHandler.addAnimation(animations.swordtake_end,false,0.0f,true);
 				break;
 			}
 			case eAnimTakeSword.ANIM_WALK:
@@ -190,16 +192,16 @@ public class cPlayer_c : cUnit
 				if (transform.position == enemyPos)
 				{
 					iAnimTakeSword = eAnimTakeSword.ANIM_START;
-					animHandler.addAnimation(animations.swordtake_start,false,true);
+					animHandler.addAnimation(animations.swordtake_start,false,0.0f,true);
 					bCutscene = true;
 				}
 				else
 				{
 					if (sword.bCollectedSword)
-						animHandler.addAnimation(animations.walk_sword,true,true);
+						animHandler.addAnimation(animations.walk_sword,true,0.0f,true);
 					else
 					{
-						animHandler.addAnimation(animations.walk_nosword,true,true);
+						animHandler.addAnimation(animations.walk_nosword,true,0.0f,true);
 					}
 				}
 				break;
@@ -378,29 +380,36 @@ public class cPlayer_c : cUnit
 
 	void handleAttack()
 	{
+
+		/**/
+
 		attackResetCurrent += Time.deltaTime;
+		if (Input.GetButtonDown ("attack")) 
+		{
+			Debug.Log ("attack: " + attackResetCurrent);
+
+			if (attackCounter < 3)
+				attackCounter++;
+			if (attackCounter == 1)
+			{
+				attackState = eAttackType.ATTACK_1;
+				attackNext = true;
+			}
+			attackResetCurrent = 0.0f;
+		}
+
 		if (attackResetCurrent >= attackResetTime)
 		{
+			Debug.Log ("reset: " + attackResetCurrent);
 			attackCounter = 0;
 			attackState = eAttackType.ATTACK_NONE;
 			attackResetCurrent = 0.0f;
-			attackCombo = false;
 			attackNext = false;
 		}
-		if (Input.GetButtonDown ("attack")) 
-		{
-			if (attackCombo == false && attackCounter < 3)
-				attackCounter++;
-
-			Debug.Log ("attackNext: " + attackNext + "   " + "attackCounter: " + attackCounter);
-
-			attackState = eAttackType.ATTACK_1;
+		else if (attackCounter > 0)
 			attackNext = true;
 
-			attackResetCurrent = 0.0f;
-		}
-		if (!((int)attackState == attackCounter))
-			attackState = eAttackType.ATTACK_NONE;
+
 		string attackAnim = "";
 		switch (attackState)
 		{
@@ -408,10 +417,22 @@ public class cPlayer_c : cUnit
 				attackAnim = animations.attack1;
 				break;
 			case eAttackType.ATTACK_2:
-				attackAnim = animations.attack2;
+			{
+				if (attackCounter <= 1)
+				{
+					attackAnim = "";
+				}
+				else	
+					attackAnim = animations.attack2;
 				break;
+			}
 			case eAttackType.ATTACK_3:
-				attackAnim = animations.attack3;
+				if (attackCounter <= 2)
+				{
+					attackAnim = "";
+				}
+				else
+					attackAnim = animations.attack3;
 				break;
 			default:
 				attackAnim = "";
@@ -419,12 +440,10 @@ public class cPlayer_c : cUnit
 		}
 		if (attackNext && attackAnim != "")
 		{
-			Debug.Log ("attackAnim: " + attackAnim);
-			attackNext = false;
-
 			animHandler.timescale = 0.7f;
 			animHandler.addAnimation(attackAnim,false);
 		}
+		attackNext = false;
 	}
 
 	// Use this for initialization
@@ -461,8 +480,6 @@ public class cPlayer_c : cUnit
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.Quit();
 
-
-
 		if (sleepAnim)
 		{
 			animHandler.addAnimation(animations.wakeup,false);
@@ -470,8 +487,7 @@ public class cPlayer_c : cUnit
 			sleepAnim = false;
 		}
 		handleSwordPickup();
-
-
+		
 		//skip all related input/movement/loop animation for cutscene
 		if (bCutscene == false)
 		{
@@ -489,10 +505,6 @@ public class cPlayer_c : cUnit
 				if (bCanJump && sword.bCollectedSword)
 					handleJump (x);
 				handleMovement (x);
-
-				//Debug.Log ("grounded: " + playerPhysics.grounded + "   slope: " + playerPhysics.onSlope);
-
-				//Debug.Log (playerPhysics.grounded + "    " + playerPhysics.onSlope);
 
 				//jumps & gravitation
 				//we start with jumpVelocity, now we decrease it
@@ -596,17 +608,22 @@ public class cPlayer_c : cUnit
 			iAnimTakeSword = eAnimTakeSword.ANIM_DONE;
 		else if (animName == animations.attack1)
 		{
-			animHandler.timescale = 1.0f;
-			attackNext = true;
-			attackState = eAttackType.ATTACK_2;
-		
+			if (attackState != eAttackType.ATTACK_NONE)
+			{
+				animHandler.timescale = 1.0f;
+				attackNext = true;
+				attackState = eAttackType.ATTACK_2;
+			}
 
 		}
 		else if (animName == animations.attack2)
 		{
-			animHandler.timescale = 1.0f;
-			attackNext = true;
-			attackState = eAttackType.ATTACK_3;
+			if (attackState != eAttackType.ATTACK_NONE)
+			{
+				animHandler.timescale = 1.0f;
+				attackNext = true;
+				attackState = eAttackType.ATTACK_3;
+			}
 
 		}
 		else if (animName == animations.attack3)
