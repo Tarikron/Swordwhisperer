@@ -101,3 +101,83 @@ InputManager:
     type: 0
     axis: 0
     joyNum: 0
+  - serializedVersion: 3
+    m_Name: cancel
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: escape
+    positiveButton: 
+    altNegativeButton: joystick button 7
+    altPositiveButton: 
+    gravity: 3
+    dead: .00100000005
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: submit
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: enter
+    positiveButton: 
+    altNegativeButton: joystick button 0
+    altPositiveButton: 
+    gravity: 3
+    dead: .00100000005
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: menuVert
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: down
+    positiveButton: up
+    altNegativeButton: f
+    altPositiveButton: 
+    gravity: 3
+    dead: .00100000005
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: menuVert
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: f
+    altPositiveButton: 
+    gravity: 3
+    dead: .100000001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: menuVert
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: f
+    altPositiveButton: 
+    gravity: 3
+    dead: .100000001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 6
+    joyNum: 0
