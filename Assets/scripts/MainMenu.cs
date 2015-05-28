@@ -1,8 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour 
 {
+	public GameObject optionPanel;
+	public GameObject creditsPanel;
+
+	private CanvasGroup optionPanelGroup = null;
+	private CanvasGroup creditsPanelGroup = null;
+
+	void Start()
+	{
+		optionPanelGroup = optionPanel.GetComponent<CanvasGroup>();
+		creditsPanelGroup = creditsPanel.GetComponent<CanvasGroup>();
+	}
 
 	public void Play()
 	{
@@ -11,10 +23,12 @@ public class MainMenu : MonoBehaviour
 
 	public void Options()
 	{
+		optionPanelGroup.alpha = 1.0f;
 	}
 
 	public void Credits()
 	{
+		creditsPanelGroup.alpha = 1.0f;
 	}
 
 	public void Exit()
@@ -22,5 +36,11 @@ public class MainMenu : MonoBehaviour
 		Application.Quit();
 	}
 
+
+	private void hideAll()
+	{
+		optionPanelGroup.alpha = 0.0f;
+		creditsPanelGroup.alpha = 0.0f;
+	}
 
 }
