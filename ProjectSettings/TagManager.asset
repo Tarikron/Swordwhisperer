@@ -10,6 +10,7 @@ TagManager:
   - fadeCaveExit
   - enemyShot
   - enemyFlying
+  - heroTurtle
   layers:
   - Default
   - TransparentFX

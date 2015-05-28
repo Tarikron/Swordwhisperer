@@ -36,7 +36,7 @@ public class cPlayer_c : cUnit
 	public float hurtVelocity = 3.0f;
 	public float walkVelocity = 3.0f;
 	public float runVelocity = 6.0f;
-	public int life = 20;
+
 
 	//animation stuff
 	cAnimationHandler animHandler;
@@ -457,6 +457,20 @@ public class cPlayer_c : cUnit
 					if (distance <= 4) 
 					{
 						flyingEnemy.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+					}
+				}
+				GameObject[] turtles = GameObject.FindGameObjectsWithTag("heroTurtle");
+				foreach (GameObject turtle in turtles)
+				{
+					if (turtle == null)
+						continue;
+					Vector3 enemyPos = turtle.transform.position;
+					Vector3 playerPos = this.gameObject.transform.position;
+					
+					float distance = Vector2.Distance (playerPos,enemyPos);
+					if (distance <= 6) 
+					{
+						turtle.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
 					}
 				}
 				bSkipMovementForAnim = true;

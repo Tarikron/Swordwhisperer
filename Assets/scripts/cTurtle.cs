@@ -11,12 +11,30 @@ public class cTurtle : cEnemy {
 	public float triggerDistance = 0.0f;
 	public float triggerAttack = 0.0f;
 
-	public int life = 3;
-
 	private string currentAnimation = "";
 	private string animationToPlay = "";
 	private bool animLoop = false;
 	private float currentTimeScale = 1.0f;
+
+	[System.Serializable]
+	public struct animTurtle
+	{
+		[SpineAnimation]
+		public string sleep;
+		[SpineAnimation]
+		public string wakeup;
+		[SpineAnimation]
+		public string idle;
+		[SpineAnimation]
+		public string death;
+		[SpineAnimation]
+		public string walk;
+		[SpineAnimation]
+		public string recieved_hit;
+		[SpineAnimation]
+		public string attack;
+	}
+	public animTurtle turtleAnimations;
 
 	// Use this for initialization
 	void Start () 
@@ -96,5 +114,15 @@ public class cTurtle : cEnemy {
 			animationToPlay = "death";
 			animLoop = false;
 		}
+	}
+	void msg_die()
+	{
+		die();
+	}
+	void die()
+	{
+		life = 0;
+		
+		SetAnimation (turtleAnimations.death, false);
 	}
 }
