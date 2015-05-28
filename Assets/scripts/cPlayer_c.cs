@@ -500,7 +500,7 @@ public class cPlayer_c : cUnit
 		if (Input.GetKeyDown(KeyCode.F2))
 			Application.LoadLevel ("swordwhisperer");
 		else if (Input.GetKeyDown (KeyCode.Escape))
-			Application.Quit();
+			Application.LoadLevel("menu");
 
 		if (sleepAnim)
 		{
