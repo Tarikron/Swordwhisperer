@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 
+
 //conflict ??
 
 [RequireComponent(typeof(SkeletonAnimation))]
@@ -136,6 +137,25 @@ public class cPlayer_c : cUnit
 
 	}
 	public animPlayer animations;
+
+	public List<AudioClip> audioClipsSteps;
+	public List<AudioClip> audioClipsRun;
+	public AudioSource audioSourceSteps;
+
+	[System.Serializable]
+	public struct audioSFX
+	{
+		public AudioClip attack1;
+		public AudioClip attack2;
+		public AudioClip attack3;
+
+		public AudioClip attackVoice1;
+		public AudioClip attackVoice2;
+		public AudioClip attackVoice3;
+	}
+	public audioSFX audioClipsSFX;
+	public AudioSource audioSourceSFX;
+	public AudioSource audioSourceSFX2;
 
 	void handleSwordPickup()
 	{
@@ -320,9 +340,25 @@ public class cPlayer_c : cUnit
 					animationToPlay = animations.idle_nosword;
 			}
 		}
-		if (!bFalling && !bJumping)
-			animHandler.addAnimation(animationToPlay,animLoop);
-
+		if (!bFalling && !bJumping) 
+		{
+			if (!audioSourceSteps.isPlaying)
+			{
+				if (animationToPlay == animations.run_sword)
+				{
+					int i = Random.Range(0,audioClipsRun.Count-1);
+					audioSourceSteps.clip = audioClipsRun[i];
+					audioSourceSteps.Play();
+				}
+				else if (animationToPlay == animations.walk_sword || animationToPlay == animations.walk_nosword)
+				{
+					int i = Random.Range(0,audioClipsSteps.Count-1);
+					audioSourceSteps.clip = audioClipsSteps[i];
+					audioSourceSteps.Play();
+				}
+			}
+			animHandler.addAnimation (animationToPlay, animLoop);
+		}
 		float xAxis = Input.GetAxisRaw("Horizontal");
 		if (xAxis < 0 && transform.eulerAngles.y < 0.1f)
 			transform.RotateAround(transform.position,Vector3.up,180);
@@ -337,9 +373,7 @@ public class cPlayer_c : cUnit
 			
 		targetSpeed.x = velocity;
 		currentSpeed.x = IncrementTowards(currentSpeed.x, targetSpeed.x, accelerationX);
-
-		//Debug.Log (currentSpeed + "    " + targetSpeed);
-
+		
 		movementDirection.x = currentSpeed.x * Time.deltaTime;
 		movementDirection.y = 0.0f;
 
@@ -380,9 +414,10 @@ public class cPlayer_c : cUnit
 
 	void handleAttack()
 	{
+		AudioClip attack = null;
+		AudioClip attackVoice = null;
 
 		/**/
-
 		attackResetCurrent += Time.deltaTime;
 		if (Input.GetButtonDown ("attack")) 
 		{
@@ -416,6 +451,8 @@ public class cPlayer_c : cUnit
 		{
 			case eAttackType.ATTACK_1:
 				attackAnim = animations.attack1;
+				attack = audioClipsSFX.attack1;
+				attackVoice = audioClipsSFX.attackVoice1;
 				break;
 			case eAttackType.ATTACK_2:
 			{
@@ -424,7 +461,11 @@ public class cPlayer_c : cUnit
 					attackAnim = "";
 				}
 				else	
+				{
 					attackAnim = animations.attack2;
+					attack = audioClipsSFX.attack2;
+					attackVoice = audioClipsSFX.attackVoice2;
+				}
 				break;
 			}
 			case eAttackType.ATTACK_3:
@@ -433,7 +474,11 @@ public class cPlayer_c : cUnit
 					attackAnim = "";
 				}
 				else
+				{
 					attackAnim = animations.attack3;
+					attack = audioClipsSFX.attack3;
+					attackVoice = audioClipsSFX.attackVoice3;
+				}
 				break;
 			default:
 				attackAnim = "";
@@ -476,6 +521,19 @@ public class cPlayer_c : cUnit
 				bSkipMovementForAnim = true;
 				attackDelayCounter = 0.0f;
 				animHandler.timescale = 0.7f;
+				if (!audioSourceSFX.isPlaying)
+				{
+					if (attack != null)
+					{
+						audioSourceSFX.clip = attack;
+						audioSourceSFX.Play();
+					}
+					if (attackVoice != null)
+					{
+						audioSourceSFX2.clip = attackVoice;
+						audioSourceSFX2.Play();
+					}
+				}
 				animHandler.addAnimation(attackAnim,false);
 			}
 		}
@@ -579,7 +637,7 @@ public class cPlayer_c : cUnit
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
 		}
-
+		
 		animHandler.playAnimation();
 
 	}
