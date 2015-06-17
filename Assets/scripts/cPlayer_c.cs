@@ -60,6 +60,7 @@ public class cPlayer_c : cUnit
 	private Vector2 movementDirection;
 	private float jumpDestHeight = 0.0f;
 	private bool bSkipMovementForAnim = false;
+	private bool bSkipAnimForAttack = false;
 
 	private float attackDelayCounter = 0.0f;
 	public float attackDelay = 0.1f;
@@ -357,7 +358,8 @@ public class cPlayer_c : cUnit
 					audioSourceSteps.Play();
 				}
 			}
-			animHandler.addAnimation (animationToPlay, animLoop);
+			if (!bSkipAnimForAttack)
+				animHandler.addAnimation (animationToPlay, animLoop);
 		}
 		float xAxis = Input.GetAxisRaw("Horizontal");
 		if (xAxis < 0 && transform.eulerAngles.y < 0.1f)
@@ -394,7 +396,8 @@ public class cPlayer_c : cUnit
 			if (iJumpCounter <= 2)
 			{
 				bJumping = true;
-				animHandler.addAnimation(animations.jump_sword,true);
+				if (!bSkipAnimForAttack)
+					animHandler.addAnimation(animations.jump_sword,true);
 				currentSpeed.y = jumpHeight/jumpTime;
 
 				/*
@@ -518,7 +521,7 @@ public class cPlayer_c : cUnit
 						turtle.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
 					}
 				}
-				bSkipMovementForAnim = true;
+				bSkipAnimForAttack = true;
 				attackDelayCounter = 0.0f;
 				animHandler.timescale = 0.7f;
 				if (!audioSourceSFX.isPlaying)
@@ -537,6 +540,8 @@ public class cPlayer_c : cUnit
 				animHandler.addAnimation(attackAnim,false);
 			}
 		}
+		else
+			bSkipAnimForAttack = false;
 		attackNext = false;
 	}
 
@@ -557,7 +562,7 @@ public class cPlayer_c : cUnit
 
 		ui.txtLife.text = life+" Life";
 
-		//sword.bCollectedSword = true;
+		sword.bCollectedSword = true;
 
 	}
 
@@ -595,6 +600,7 @@ public class cPlayer_c : cUnit
 
 			if (!bSkipMovementForAnim)
 			{
+				bCanJump = true;
 				//movement
 				if (bCanJump && sword.bCollectedSword)
 					handleJump (x);
@@ -706,9 +712,9 @@ public class cPlayer_c : cUnit
 			{
 				animHandler.timescale = 1.0f;
 				attackNext = true;
-				attackState = eAttackType.ATTACK_2;
-				bSkipMovementForAnim = false;
+				attackState = eAttackType.ATTACK_2;;
 			}
+
 
 		}
 		else if (animName == animations.attack2)
@@ -718,7 +724,6 @@ public class cPlayer_c : cUnit
 				animHandler.timescale = 1.0f;
 				attackNext = true;
 				attackState = eAttackType.ATTACK_3;
-				bSkipMovementForAnim = false;
 			}
 
 		}
@@ -728,7 +733,7 @@ public class cPlayer_c : cUnit
 			attackNext = false;
 			attackState = eAttackType.ATTACK_NONE;
 			attackCounter = 0;
-			bSkipMovementForAnim = false;
+			bSkipAnimForAttack = false;
 		}
 		Debug.Log ("end:" + animName + "  " + attackCounter);
 		

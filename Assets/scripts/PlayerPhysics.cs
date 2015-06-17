@@ -60,7 +60,6 @@ public class PlayerPhysics : MonoBehaviour
 	{
 		float deltaY = moveAmount.y;
 		float deltaX = moveAmount.x;
-
 		Vector2 p = transform.position;
 
 		grounded = false;
@@ -110,14 +109,10 @@ public class PlayerPhysics : MonoBehaviour
 				}
 			}
 		}*/
-
-		//slope right/left down detector
-
 		//todo right detector
 		onSlope = false;
 		if (grounded)
 		{
-			float dir = Mathf.Sign(deltaY);
 			float yDir = -1;
 			float xDir = Mathf.Sign(deltaX);
 			if (transform.eulerAngles.y >= 180.0f)
@@ -126,56 +121,42 @@ public class PlayerPhysics : MonoBehaviour
 			float x2 = p.x + centre.x - size.x/2;
 			float y = p.y + centre.y + size.y/2 * yDir;
 
-			//Debug.Log (xDir + "   " + dir);
 
-			if (xDir < 0)
+			Ray ray_left= new Ray(new Vector2(x2,y), new Vector2 (0, yDir));
+			Ray ray_right = new Ray(new Vector2(x1,y), new Vector2 (0, yDir));
+
+			RaycastHit2D hit_left = Physics2D.Raycast (new Vector2(x2,y), new Vector2 (0, yDir),float.PositiveInfinity,collisionMask);
+			RaycastHit2D hit_right = Physics2D.Raycast (new Vector2(x1,y), new Vector2 (0, yDir),float.PositiveInfinity,collisionMask);
+
+			float slopeL = Vector3.Angle(transform.up,hit_left.normal);
+			float slopeR = Vector3.Angle(transform.up,hit_right.normal);
+
+			Debug.DrawRay(ray_left.origin,ray_left.direction);
+			Debug.DrawRay(ray_right.origin,ray_right.direction);
+
+			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
+			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
+			Debug.Log("left: " + slopeL + " right: " + slopeR);
+
+			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
 			{
-				//if we move to the left and down, we want the right ray
-				if (dir < 0)
-					x2 = x1; //feels a little bit dirty
-				Ray ray_left= new Ray(new Vector2(x2,y), new Vector2 (0, yDir));
-				Debug.DrawRay(ray_left.origin,ray_left.direction);
-				RaycastHit2D hit_left = Physics2D.Raycast (new Vector2(x2,y), new Vector2 (0, yDir),Mathf.Abs (deltaY) + skin,collisionMask);
-				if (hit_left)
+				if ( slopeL < 90.0f)
 				{
-					float slopeL = Vector3.Angle(transform.up,hit_left.normal);
-					//Debug.Log (dir + " " + slopeL);
-					//float dst = Vector3.Distance (ray_left.origin,hit_left.point);
-					if (slopeL > 1.0f && slopeL < 30.0f)
-					{
-						deltaY = Mathf.Tan ((slopeL * Mathf.PI)/180.0f) * deltaX * xDir;
-						onSlope = true;
-						Debug.Log (deltaX + "   " + deltaY);
-						ray = new Ray(new Vector2(transform.position.x,transform.position.y), (new Vector2 (deltaX*xDir, deltaY)));
-						Debug.DrawRay(ray.origin,ray.direction*10.0f);
-					}
+					deltaY = Mathf.Tan ((slopeL * Mathf.PI)/180.0f) * deltaX * xDir;
+					onSlope = true;
+				}
+				else if (slopeR < 90.0f)
+				{
+					deltaY = Mathf.Tan ((slopeR * Mathf.PI)/180.0f) * deltaX * xDir;
+					onSlope = true;
 				}
 			}
-			else if (xDir > 0)
-			{
-				//if we move to the right and down, we want the left ray
-				if (dir < 0)
-					x1 = x2;//feels a little bit dirty
-				Ray ray_right = new Ray(new Vector2(x1,y), new Vector2 (0, yDir));
-				Debug.DrawRay(ray_right.origin,ray_right.direction);
-				RaycastHit2D hit_right = Physics2D.Raycast (new Vector2(x1,y), new Vector2 (0, yDir),Mathf.Abs (deltaY) + skin,collisionMask);
-				if (hit_right)
-				{
-					
-					float slopeR = Vector3.Angle(transform.up,hit_right.normal);
-					//Debug.Log (dir + " " + slopeR);
-					//float dst = Vector3.Distance (ray_right.origin,hit_right.point);
-					if (slopeR > 1.0f && slopeR < 30.0f)
-					{
-						deltaY = Mathf.Tan ((slopeR * Mathf.PI)/180.0f) * deltaX * dir;
-						onSlope = true;
-						
-						ray = new Ray(new Vector2(transform.position.x,transform.position.y), (new Vector2 (deltaX, deltaY)));
-						Debug.DrawRay(ray.origin,ray.direction*10.0f);
-					}
-				}
-			}
+	
+			ray = new Ray(new Vector2(transform.position.x,transform.position.y), (new Vector2 (deltaX*xDir, deltaY)));
+			Debug.DrawRay(ray.origin,ray.direction*10.0f);
+
 		}
+
 
 		if (!grounded && !movementStopped)
 		{
@@ -190,8 +171,9 @@ public class PlayerPhysics : MonoBehaviour
 			}
 		}
 
-		Vector2 finalTransform = new Vector2(deltaX,deltaY);
-		transform.Translate(finalTransform);
+		Vector3 finalTransform = new Vector3(deltaX,deltaY,0.0f);
+		transform.Translate (finalTransform);
+	
 		//rb2D.MovePosition(rb2D.position + finalTransform);
 	}
 }

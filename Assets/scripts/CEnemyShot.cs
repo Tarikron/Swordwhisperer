@@ -30,7 +30,7 @@ public class CEnemyShot : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag != "enemyShot" && collision.gameObject.tag != "enemyFlying" )
+		if (collision.gameObject.tag != "enemyShot" && collision.gameObject.tag != "enemyFlying"  && collision.gameObject.tag != "boss1"   && collision.gameObject.tag != "bossMinion" )
 		{
 			if (collision.gameObject.tag == "player")
 			{

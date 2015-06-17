@@ -50,14 +50,14 @@ public class cAnimationHandler
 			return;
 
 		cAnimation cAnim = new cAnimation (loop,anim,delay , eventAnim);
-		if (animations.Contains(cAnim) == false)
+		if (animations.Count < 1 && animations.Contains(cAnim) == false)
 			animations.Enqueue(cAnim);
 	}
 	public void addAnimation (cAnimation anim)
 	{
 		if (anim.sAnimation == "" || currentAnimation.sAnimation == anim.sAnimation || currentAnimation.bEventAnimation == true)
 			return;
-		if (animations.Contains(anim) == false)
+		if (animations.Count < 1 && animations.Contains(anim) == false)
 			animations.Enqueue(anim);
 	}
 

@@ -11,6 +11,8 @@ TagManager:
   - enemyShot
   - enemyFlying
   - heroTurtle
+  - boss1
+  - bossMinion
   layers:
   - Default
   - TransparentFX

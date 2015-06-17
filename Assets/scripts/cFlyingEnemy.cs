@@ -3,7 +3,6 @@ using System.Collections;
 
 public class cFlyingEnemy : cEnemy {
 
-	public float shotInterval = 2.0f;
 	public float speed = 2.0f;
 	public float xLengthTurning = 20.0f;
 	public enum eFlyingType {SINUS_RANDOM_STRAIGHT=0,SINUS_LOOP=1,SINUS_CIRCLE=2};
@@ -30,14 +29,11 @@ public class cFlyingEnemy : cEnemy {
 
 
 	//for attack
-	public float attackDistance = 2.0f;
 	public float attackSpeed = 7.0f;
 	public float flyingBackSpeed = 4.0f;
-	private Vector3 lastPlayerPos = Vector3.zero;
 	private Vector3 originBeforeAttackPos = Vector3.zero;
 	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
 	private eAttackState iAttackState;
-	private float intervalTimer = 0.0f;
 	private bool isCharge = false;
 
 	// Use this for initialization
@@ -167,35 +163,6 @@ public class cFlyingEnemy : cEnemy {
 				originBeforeAttackPos = Vector3.zero;
 				isCharge = false;
 			}
-		}
-	}
-
-	private void attackShot(GameObject player, Vector3 target)
-	{
-		Vector3 enemyPos = transform.position;
-		Vector3 heading = target - enemyPos;
-
-		GameObject shot = GameObject.FindGameObjectWithTag("enemyShot");
-
-		intervalTimer += Time.deltaTime;
-		
-		if (intervalTimer >= shotInterval)
-		{
-			intervalTimer = 0.0f;
-			//we are in attack range
-			lastPlayerPos = target;
-			lastPlayerPos.y += 0.5f;
-			shot.transform.position = transform.position + (heading.normalized * 2);
-
-			GameObject shotClone = GameObject.Instantiate(shot);
-			shotClone.SendMessage("msg_shotfired",heading.normalized,SendMessageOptions.RequireReceiver);
-			shotClone.transform.localScale = shot.transform.lossyScale;
-			shotClone.transform.position = shot.transform.position;
-			//shotClone.transform.lossyScale = shot.transform.localScale;
-			shotClone.GetComponent<SpriteRenderer>().enabled = true;
-			shotClone.GetComponent<BoxCollider2D>().enabled = true;
-
-
 		}
 	}
 
