@@ -12313,6 +12313,56 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73ff544a13f2f47eb86ae1e42bade1b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &595765239
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 154.600006
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 13.7799997
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 403632, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358928, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 118248, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &600928842
 GameObject:
   m_ObjectHideFlags: 0
@@ -14322,7 +14372,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: minions.radiusToBossCenter
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6137928, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_Enabled
@@ -14349,7 +14399,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &888708174
 Transform:
   m_ObjectHideFlags: 0

@@ -91,8 +91,8 @@ public class cFlyingEnemy : cEnemy {
 		if (angleTemp >= 360.0f )
 			angleTemp = 0.0f;
 
-		y += circleSize * Mathf.Sin (angleTemp) * Time.deltaTime;
-		x += circleSize * Mathf.Cos (angleTemp) * Time.deltaTime;
+		y += circleSize * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
+		x += circleSize * Mathf.Cos (angleTemp * Mathf.PI/180) * Time.deltaTime;
 
 		movement.x = x;
 		movement.y = y;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +28,8 @@ public class cEnemyBoss1 : cEnemy
 	private Vector2 _centre;
 
 	private float bossAlpha = 0.0f;
+	private bossMinion bossMinion;
+
 
 	public void Start()
 	{
@@ -79,7 +80,11 @@ public class cEnemyBoss1 : cEnemy
 		for (int i = 0; i<minionCount; i++)
 		{
 			GameObject _minion = lMinions[i];
-			float alpha = _minion.GetComponent<bossMinion>().alpha;
+			bossMinion = _minion.GetComponent<bossMinion>();
+			float alpha = bossMinion.alpha;
+
+
+			//Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180)
 
 			currentAngleSpeed = IncrementTowards(currentAngleSpeed,minions.rotationSpeedAngle,minions.acceleration);
 			alpha += currentAngleSpeed * Mathf.Sign (minions.rotationDirection);
@@ -89,15 +94,17 @@ public class cEnemyBoss1 : cEnemy
 				alpha = 360.0f;
 
 			float radius = minions.radiusToBossCenter;
-
+			if (radius > 0.0f)
+				radius += bossMinion.radius;
+			bossMinion.radius = -1.0f;
 			movement.x = _centre.x + radius * Mathf.Cos (alpha * Mathf.PI/180);
 			movement.y = _centre.y + radius * Mathf.Sin (alpha * Mathf.PI/180);
 			movement.z = 1.0f;
 
 			_minion.transform.position = movement;
-			_minion.GetComponent<bossMinion>().alpha = alpha;
+			bossMinion.alpha = alpha;
 
-			if (alpha < 270.0f && alpha > 90.0f)
+			if (alpha < 180.0f && alpha > 90.0f)
 			{
 				//minions shot
 				_minion.SendMessage("msg_shot",null,SendMessageOptions.RequireReceiver);

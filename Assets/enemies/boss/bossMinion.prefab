@@ -191,7 +191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35bd6ee869b856349856c912d5c8172a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotSpeed: 4
+  shotSpeed: 8
+  gravity: -9.81000042
 --- !u!114 &11491968
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -205,8 +206,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life: 1
   shotInterval: 2
-  attackDistance: 20
+  attackDistance: 140
   alpha: 0
+  radius: -1
 --- !u!212 &21202170
 SpriteRenderer:
   m_ObjectHideFlags: 1

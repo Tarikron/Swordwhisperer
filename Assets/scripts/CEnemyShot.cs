@@ -4,11 +4,14 @@ using System.Collections;
 public class CEnemyShot : MonoBehaviour {
 
 	public float shotSpeed;
+	private float shotSpeedY = 0.0f;
+	public float gravity = 1.0f;
 	private Vector3 headingTo = Vector3.zero;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+	{
+		shotSpeedY = shotSpeed;
 	}
 	
 	// Update is called once per frame
@@ -16,8 +19,11 @@ public class CEnemyShot : MonoBehaviour {
 	{
 		if (this.GetComponent<BoxCollider2D>().enabled == true && headingTo != Vector3.zero)
 		{
+			//calculate to better values
 			Vector3 vec3 = this.gameObject.transform.position;
-			vec3 += Time.deltaTime * shotSpeed * headingTo;
+			vec3.x += Time.deltaTime * shotSpeed * Mathf.Sign (headingTo.x);
+			shotSpeedY += Time.deltaTime * gravity;
+			vec3.y +=  shotSpeedY * Time.deltaTime;
 			this.gameObject.transform.position = vec3;
 		}
 	}
