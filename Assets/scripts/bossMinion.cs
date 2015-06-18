@@ -8,6 +8,7 @@ public class bossMinion : cEnemy {
 	[HideInInspector]
 	public float radius = -1.0f;
 
+	public float amplitude = 2.0f;
 	private float minionAlpha = 0.0f;
 
 	// Use this for initialization
@@ -27,7 +28,7 @@ public class bossMinion : cEnemy {
 		if (minionAlpha < 0.0f)
 			minionAlpha = 360.0f;
 
-		radius = Mathf.Sin( minionAlpha * Mathf.PI/180)/0.5f;
+		radius = Mathf.Sin( minionAlpha * Mathf.PI/180)/amplitude;
 
 	}
 

@@ -4,7 +4,12 @@ using System.Collections;
 public class cFlyingEnemy : cEnemy {
 
 	public float speed = 2.0f;
+	private float speedY = 0.0f;
 	public float xLengthTurning = 20.0f;
+
+	private enum eDieState {DIE_NONE = 0, DIE_START = 1,DIE_DONE = 2};
+	private eDieState iDieState = eDieState.DIE_NONE;
+
 	public enum eFlyingType {SINUS_RANDOM_STRAIGHT=0,SINUS_LOOP=1,SINUS_CIRCLE=2};
 	public eFlyingType flyingType = eFlyingType.SINUS_RANDOM_STRAIGHT;
 
@@ -36,6 +41,8 @@ public class cFlyingEnemy : cEnemy {
 	private eAttackState iAttackState;
 	private bool isCharge = false;
 
+
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -45,6 +52,8 @@ public class cFlyingEnemy : cEnemy {
 		yCurrentDir = 1;
 
 		yOrigin = transform.position.y;
+
+		speedY = speed;
 		
 	}
 	
@@ -198,6 +207,32 @@ public class cFlyingEnemy : cEnemy {
 	void Update () 
 	{
 
+		switch (iDieState)
+		{	
+			case eDieState.DIE_START:
+			{
+				Vector3 scale = transform.localScale;
+				Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
+				scale -= vec;
+				if (scale.x < 0.0f)
+					scale.x = 0.0f;
+				if (scale.y < 0.0f)
+					scale.y = 0.0f;
+				transform.localScale = scale;
+				speedY += -9.81f * Time.deltaTime;
+				transform.position += new Vector3(0.2f,speedY * Time.deltaTime,0.0f);
+
+				if (scale.x <= 0.0f)
+					iDieState = eDieState.DIE_DONE;
+
+				return;
+				break;
+			}
+			case eDieState.DIE_DONE:
+				die ();
+				return;
+				break;
+		}
 		manageAttack();
 
 		//we are charging to player or flying back.. so no need for movement calculation
@@ -221,7 +256,9 @@ public class cFlyingEnemy : cEnemy {
 
 	void msg_die()
 	{
-		die();
+		GetComponent<BoxCollider2D>().enabled = false;
+		iDieState = eDieState.DIE_START;
+		//die();
 	}
 
 	//collsions

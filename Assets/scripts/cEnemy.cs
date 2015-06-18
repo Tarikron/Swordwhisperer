@@ -12,8 +12,10 @@ public class cEnemy : cUnit
 	{
 		Vector3 enemyPos = transform.position;
 		Vector3 heading = target - enemyPos;
-		
-		GameObject shot = GameObject.FindGameObjectWithTag("enemyShot");
+
+		Transform t = transform.GetChild(0);
+		Debug.Log (t.gameObject.tag);
+		GameObject shot = t.gameObject;
 		
 		intervalTimer += Time.deltaTime;
 		

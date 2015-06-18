@@ -44,8 +44,8 @@ public class cEnemyBoss1 : cEnemy
 		_colliderSize = collider2d.size;
 		_colliderOffset = collider2d.offset;
 
-		_centre.x = transform.position.x + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
-		_centre.y = transform.position.y + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
+		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
+		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
 
 		float minionX = 0.0f;
 		float minionY = 0.0f;
@@ -74,8 +74,10 @@ public class cEnemyBoss1 : cEnemy
 		if (bossAlpha > 360.0f)
 			bossAlpha = 0.0f;
 
-		_centre.x = transform.position.x + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
-		_centre.y = transform.position.y + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
+		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
+		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
+
+		MeshRenderer renderer = GetComponent<MeshRenderer>();
 
 		for (int i = 0; i<minionCount; i++)
 		{

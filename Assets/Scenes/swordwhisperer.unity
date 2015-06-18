@@ -10378,11 +10378,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: loop
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: _animationName
-      value: 
+      value: Idle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -10934,11 +10934,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: loop
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: _animationName
-      value: 
+      value: Idle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -12717,7 +12717,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 673814406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 98.4599991, y: -4.30000019, z: 0}
+  m_LocalPosition: {x: 47, y: -4.30000019, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1032439608}
@@ -13241,11 +13241,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: loop
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: _animationName
-      value: 
+      value: Idle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -13888,11 +13888,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: loop
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: _animationName
-      value: 
+      value: Idle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -14324,7 +14324,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 10.1099997
+      value: 9.39999962
       objectReference: {fileID: 0}
     - target: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_LocalPosition.z
@@ -14360,7 +14360,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: minions.rotationSpeedAngle
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: minions.acceleration
@@ -14372,7 +14372,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: minions.radiusToBossCenter
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6137928, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_Enabled
@@ -14381,6 +14381,22 @@ Prefab:
     - target: {fileID: 184836, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_TagString
       value: boss1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137928, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137928, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
@@ -15596,11 +15612,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: loop
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11469230, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: _animationName
-      value: 
+      value: Idle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
