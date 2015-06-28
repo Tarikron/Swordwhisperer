@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &110186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 422090}
+  - 114: {fileID: 11422902}
+  - 61: {fileID: 6105144}
+  m_Layer: 10
+  m_Name: hurtBox
+  m_TagString: enemyFlyingHurtBox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &146066
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,11 +26,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 408758}
   - 114: {fileID: 11446330}
-  - 61: {fileID: 6127572}
-  - 50: {fileID: 5074658}
   - 33: {fileID: 3356654}
   - 23: {fileID: 2323808}
   - 114: {fileID: 11469230}
+  - 50: {fileID: 5014770}
+  - 61: {fileID: 6145210}
   m_Layer: 0
   m_Name: enemy1
   m_TagString: enemyFlying
@@ -47,12 +64,25 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 146066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.4500008, y: 2.43000007, z: 0}
+  m_LocalPosition: {x: 67.4000015, y: 19.2999992, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 494530}
+  - {fileID: 422090}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &422090
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110186}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 408758}
+  m_RootOrder: 1
 --- !u!4 &494530
 Transform:
   m_ObjectHideFlags: 1
@@ -80,6 +110,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
   - {fileID: 2100000, guid: 310f9a52e94dcb844a8c96a65b1c5854, type: 2}
   - {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
+  - {fileID: 2100000, guid: 0ec34f8d42f420641b1568ee5a628ea1, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -100,6 +131,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 146066}
   m_Mesh: {fileID: 0}
+--- !u!50 &5014770
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146066}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_FixedAngle: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!50 &5032768
 Rigidbody2D:
   m_ObjectHideFlags: 1
@@ -115,22 +161,20 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
---- !u!50 &5074658
-Rigidbody2D:
+--- !u!61 &6105144
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 146066}
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_FixedAngle: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
---- !u!61 &6127572
+  m_GameObject: {fileID: 110186}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+--- !u!61 &6145210
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -140,9 +184,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: .982040405, y: 1.01271987}
+  m_Offset: {x: .0118350387, y: -.0237800181}
   serializedVersion: 2
-  m_Size: {x: 1.2310859, y: 1.24952364}
+  m_Size: {x: 1.90613008, y: 1.80265999}
 --- !u!61 &6170510
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -156,6 +200,17 @@ BoxCollider2D:
   m_Offset: {x: -1.90734863e-06, y: 0}
   serializedVersion: 2
   m_Size: {x: .429999948, y: .670000017}
+--- !u!114 &11422902
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f960236498490439b0fd89de28843b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11446330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -169,12 +224,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life: 20
   shotInterval: 2
+  attackDistance: 20
   speed: 2
   xLengthTurning: 20
-  flyingType: 0
+  flyingType: 1
   attackType: 0
   circleSize: 20
-  attackDistance: 20
   attackSpeed: 5
   flyingBackSpeed: 4
 --- !u!114 &11469230
@@ -199,8 +254,8 @@ MonoBehaviour:
   logErrors: 0
   submeshSeparators: []
   timeScale: 1
-  loop: 1
-  _animationName: Idle
+  loop: 0
+  _animationName: 
 --- !u!114 &11475350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -213,6 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotSpeed: 10
+  gravity: 1
 --- !u!212 &21212036
 SpriteRenderer:
   m_ObjectHideFlags: 1

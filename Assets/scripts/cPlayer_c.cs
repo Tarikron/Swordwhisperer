@@ -71,6 +71,13 @@ public class cPlayer_c : cUnit
 	private float attackResetCurrent = 0.0f;
 	public float attackResetTime = 0.2f;
 
+	private struct stHitBoxes
+	{
+		public BoxCollider2D hitBox_attack_123;
+		public BoxCollider2D hitBox_attack_3;
+	}
+	private stHitBoxes hitBoxes;
+
 	//sword
 	private struct stSword
 	{
@@ -456,6 +463,7 @@ public class cPlayer_c : cUnit
 				attackAnim = animations.attack1;
 				attack = audioClipsSFX.attack1;
 				attackVoice = audioClipsSFX.attackVoice1;
+				hitBoxes.hitBox_attack_123.enabled = true;
 				break;
 			case eAttackType.ATTACK_2:
 			{
@@ -468,6 +476,7 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack2;
 					attack = audioClipsSFX.attack2;
 					attackVoice = audioClipsSFX.attackVoice2;
+					hitBoxes.hitBox_attack_123.enabled = true;
 				}
 				break;
 			}
@@ -481,10 +490,14 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack3;
 					attack = audioClipsSFX.attack3;
 					attackVoice = audioClipsSFX.attackVoice3;
+					hitBoxes.hitBox_attack_123.enabled = true;
+					hitBoxes.hitBox_attack_3.enabled = true;
 				}
 				break;
 			default:
 				attackAnim = "";
+				hitBoxes.hitBox_attack_123.enabled = false;
+				hitBoxes.hitBox_attack_3.enabled = false;
 				break;
 		}
 		if (attackNext && attackAnim != "")
@@ -492,35 +505,6 @@ public class cPlayer_c : cUnit
 			attackDelayCounter += Time.deltaTime;
 			if (attackDelay <= attackDelayCounter)
 			{
-				//if enemy near by
-				GameObject[] flyingEnemys = GameObject.FindGameObjectsWithTag("enemyFlying");
-				foreach (GameObject flyingEnemy in flyingEnemys)
-				{
-					if (flyingEnemy == null)
-						continue;
-					Vector3 enemyPos = flyingEnemy.transform.position;
-					Vector3 playerPos = this.gameObject.transform.position;
-					
-					float distance = Vector2.Distance (playerPos,enemyPos);
-					if (distance <= 4) 
-					{
-						flyingEnemy.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
-					}
-				}
-				GameObject[] turtles = GameObject.FindGameObjectsWithTag("heroTurtle");
-				foreach (GameObject turtle in turtles)
-				{
-					if (turtle == null)
-						continue;
-					Vector3 enemyPos = turtle.transform.position;
-					Vector3 playerPos = this.gameObject.transform.position;
-					
-					float distance = Vector2.Distance (playerPos,enemyPos);
-					if (distance <= 6) 
-					{
-						turtle.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
-					}
-				}
 				bSkipAnimForAttack = true;
 				attackDelayCounter = 0.0f;
 				animHandler.timescale = 0.7f;
@@ -561,6 +545,10 @@ public class cPlayer_c : cUnit
 		animHandler.delEnd = endAnimListener;
 
 		ui.txtLife.text = life+" Life";
+
+
+		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
+		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
 		sword.bCollectedSword = true;
 
@@ -651,15 +639,20 @@ public class cPlayer_c : cUnit
 	{
 		return currentSpeed;
 	}
+	void OnTriggerEnter2D (Collider2D collider)
+	{
+		Debug.Log("player trigger: " + collider.gameObject.tag);
+		collider.gameObject.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+	}
+
 	void OnCollisionEnter2D(Collision2D collision)
 	{
+
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
 		{
-			//bGrounded = true;
 			iJumpCounter = 0;
 			jumpDestHeight = -999.0f;
 
-			iGroundBridge++;
 		}
 
 		if (collision.gameObject.name == "groundGameEnd")
@@ -668,15 +661,9 @@ public class cPlayer_c : cUnit
 		}
 	}
 
-	void OnCollisionExit2D(Collision2D collision)
-	{
-		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
-		{
-			iGroundBridge--;
-			if (iGroundBridge <= 0)
-				;//bGrounded = false;
-		}
-	}
+
+
+
 
 	//########################################
 	//################# Animation ################

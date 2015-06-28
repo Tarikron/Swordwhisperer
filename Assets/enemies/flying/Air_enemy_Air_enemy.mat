@@ -26,4 +26,12 @@ Material:
         first:
           name: _Cutoff
         second: .100000001
-    m_Colors: {}
+      data:
+        first:
+          name: _FlashAmount
+        second: .532999992
+    m_Colors:
+      data:
+        first:
+          name: _FlashColor
+        second: {r: 1, g: 1, b: 1, a: 1}

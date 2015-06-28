@@ -13,6 +13,8 @@ TagManager:
   - heroTurtle
   - boss1
   - bossMinion
+  - playerHitBox
+  - enemyFlyingHurtBox
   layers:
   - Default
   - TransparentFX
@@ -23,10 +25,10 @@ TagManager:
   - 
   - 
   - ground
-  - 
-  - 
-  - 
-  - 
+  - playerHit
+  - enemyHurt
+  - playerHurt
+  - enemyHit
   - 
   - 
   - 

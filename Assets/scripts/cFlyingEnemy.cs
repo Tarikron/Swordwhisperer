@@ -61,7 +61,7 @@ public class cFlyingEnemy : cEnemy {
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
-		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
+		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
 
 		//checks if we got some distance between last check
 		if (yMarkCheck != 0.0f && (  cFunction.xor( ((yMarkCheck + 0.5f) > y) , ((yMarkCheck - 0.5f) < y)  )  ))
@@ -94,7 +94,7 @@ public class cFlyingEnemy : cEnemy {
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
-		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
+		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
 
 		angleTemp += speed;
 		if (angleTemp >= 360.0f )
@@ -113,7 +113,7 @@ public class cFlyingEnemy : cEnemy {
 	{
 		float x = transform.position.x;
 		float y = transform.position.y;
-		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
+		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
 		
 		xTurningTemp += speed * Time.deltaTime;
 		if (xTurningTemp >= xLengthTurning)
@@ -263,7 +263,7 @@ public class cFlyingEnemy : cEnemy {
 
 	//collsions
 	void OnCollisionEnter2D(Collision2D collision)
-	{
+	{				
 		if (collision.gameObject.tag == "player")
 		{
 			lastPlayerPos = Vector3.zero;

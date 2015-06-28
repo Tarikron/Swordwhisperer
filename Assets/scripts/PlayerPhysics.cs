@@ -14,7 +14,6 @@ public class PlayerPhysics : MonoBehaviour
 	public bool movementStopped;
 
 	private BoxCollider2D _collider;
-	private CircleCollider2D _circleCollider;
 	private Vector3 size;
 	private Vector3 centre;
 
@@ -22,19 +21,13 @@ public class PlayerPhysics : MonoBehaviour
 
 	private Ray ray;
 	private RaycastHit2D hit;
-	[HideInInspector]
-	public Rigidbody2D rb2D;
 
 	void Start()
 	{
 		_collider = GetComponent<BoxCollider2D>();
-	//	_circleCollider = GetComponent<CircleCollider2D>();
-		rb2D = GetComponent<Rigidbody2D>();
 		size = _collider.size;
 
 		Vector3 vec3 = _collider.offset;
-		//vec3.y -= _circleCollider.radius*2; 
-
 		centre = vec3;
 	}
 
@@ -136,7 +129,7 @@ public class PlayerPhysics : MonoBehaviour
 
 			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
 			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
-			Debug.Log("left: " + slopeL + " right: " + slopeR);
+			//Debug.Log("left: " + slopeL + " right: " + slopeR);
 
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
 			{
@@ -173,7 +166,6 @@ public class PlayerPhysics : MonoBehaviour
 
 		Vector3 finalTransform = new Vector3(deltaX,deltaY,0.0f);
 		transform.Translate (finalTransform);
-	
-		//rb2D.MovePosition(rb2D.position + finalTransform);
+
 	}
 }
