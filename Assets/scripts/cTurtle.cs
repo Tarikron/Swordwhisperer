@@ -101,14 +101,14 @@ public class cTurtle : cEnemy {
 
 	void receive_hit()
 	{
-		if (life > 0)
+		if (currentLife > 0)
 		{
 			currentTimeScale = 1.0f;
 			animationToPlay = "recieved_hit";
 			animLoop = false;
-			life--;
+			currentLife--;
 		}
-		else if (life <= 0)
+		else if (currentLife <= 0)
 		{
 			currentTimeScale = 1.0f;
 			animationToPlay = "death";
@@ -121,7 +121,7 @@ public class cTurtle : cEnemy {
 	}
 	void die()
 	{
-		life = 0;
+		currentLife = 0;
 		
 		SetAnimation (turtleAnimations.death, false);
 	}

@@ -544,7 +544,7 @@ public class cPlayer_c : cUnit
 		animHandler.delStart = startAnimListener;
 		animHandler.delEnd = endAnimListener;
 
-		ui.txtLife.text = life+" Life";
+		ui.txtLife.text = currentLife+" Life";
 
 
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
@@ -732,10 +732,10 @@ public class cPlayer_c : cUnit
 
 	void msg_hit()
 	{
-		if (life > 0)
-			life--;
+		if (currentLife > 0)
+			currentLife--;
 
-		ui.txtLife.text = life+" Life";
+		ui.txtLife.text = currentLife+" Life";
 	}
 		
 }

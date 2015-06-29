@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: shader_test
-  m_Shader: {fileID: 4800000, guid: 7e414d6110e7f054691ffa8628f96acf, type: 3}
+  m_Shader: {fileID: 4800000, guid: 7f6b96cb6ee3be04699f8db0a616a6d0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -18,7 +18,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: 974e274e3e33a4b4cb4d685de2b7c4da, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -96,6 +96,10 @@ Material:
         second: 0
       data:
         first:
+          name: _FlashAmount
+        second: .532999992
+      data:
+        first:
           name: _Parallax
         second: .0199999996
       data:
@@ -105,7 +109,7 @@ Material:
       data:
         first:
           name: _Glossiness
-        second: .5
+        second: .493999988
       data:
         first:
           name: _BumpScale
@@ -133,11 +137,7 @@ Material:
       data:
         first:
           name: _Metallic
-        second: 0
-      data:
-        first:
-          name: _FlashAmount
-        second: .532999992
+        second: .120999999
     m_Colors:
       data:
         first:
@@ -149,9 +149,9 @@ Material:
         second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
-          name: _EmissionColorUI
+          name: _FlashColor
         second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
-          name: _FlashColor
+          name: _EmissionColorUI
         second: {r: 1, g: 1, b: 1, a: 1}

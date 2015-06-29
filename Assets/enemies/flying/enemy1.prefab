@@ -110,7 +110,6 @@ MeshRenderer:
   - {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
   - {fileID: 2100000, guid: 310f9a52e94dcb844a8c96a65b1c5854, type: 2}
   - {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
-  - {fileID: 2100000, guid: 0ec34f8d42f420641b1568ee5a628ea1, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1

@@ -25,7 +25,7 @@ Material:
       data:
         first:
           name: _Cutoff
-        second: .0939999968
+        second: 1
       data:
         first:
           name: _FlashAmount

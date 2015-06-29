@@ -11,14 +11,22 @@ using System;
 using UnityEngine;
 public class cUnit : MonoBehaviour
 {
-	public int life = 1;
+	public int startLife = 1;
+	public int currentLife = 1;
 	protected Vector2 targetSpeed = Vector2.zero;
 	protected Vector2 currentSpeed = Vector2.zero;
 	protected Vector2 acceleration = Vector2.zero;
 
 	public cUnit ()
 	{
+
 	}
+
+	public void  Start()
+	{
+		currentLife = startLife;
+	}
+
 
 	protected void die()
 	{
