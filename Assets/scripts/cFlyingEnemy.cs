@@ -3,10 +3,6 @@ using System.Collections;
 
 public class cFlyingEnemy : cEnemy {
 
-	public float speed = 2.0f;
-	private float speedY = 0.0f;
-	public float xLengthTurning = 20.0f;
-
 	private enum eDieState {DIE_NONE = 0, DIE_START = 1,DIE_DONE = 2};
 	private eDieState iDieState = eDieState.DIE_NONE;
 
@@ -15,23 +11,6 @@ public class cFlyingEnemy : cEnemy {
 
 	public enum eAttackType {ATTACK_CHARGE=0,ATTACK_SHOT=1};
 	public eAttackType attackType = eAttackType.ATTACK_CHARGE;
-	public float circleSize = 2.0f;
-
-	private int xDirection;
-
-	//for random straight
-	private float xTurningTemp;
-	private float ampH;
-	private float yCurrentDir;
-
-	//for looping
-	private float yOrigin;
-	private int originCounter = 0;
-	private float yMarkCheck = 0.0f;
-
-	//for circle
-	private float angleTemp = 0.0f;
-
 
 	//for attack
 	public float attackSpeed = 7.0f;
@@ -43,52 +22,36 @@ public class cFlyingEnemy : cEnemy {
 
 
 
+	public float circleSize = 2.0f;
+	public float xLengthTurning = 20.0f;
+	public float speedX = 0.0f;
+	public float accelerationX = 0.0f;
+	public float angleSpeed = 20.0f;
+	private float currentAngleSpeed = 0.0f;
+	public float angleAcceleration = 5.0f;
+
+	private float xTurningTemp = 0.0f;
+	private float angleTemp = 0.0f;
+	private float xDirection = 1.0f;
+
+	private Vector3 origin = Vector3.zero;
+
+	private bool bDecreasingSpeed = false;
+
 	// Use this for initialization
 	void Start () 
 	{
-		xTurningTemp = 0.0f;
 		xDirection = 1;
-		ampH = 1.0f;
-		yCurrentDir = 1;
 
-		yOrigin = transform.position.y;
+		targetSpeed.x = speedX;
+		acceleration.x = accelerationX;
 
-		speedY = speed;
-		
+		origin = transform.position;
 	}
 	
 	private void movementAirLoop()
 	{
-		float x = transform.position.x;
-		float y = transform.position.y;
-		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
 
-		//checks if we got some distance between last check
-		if (yMarkCheck != 0.0f && (  cFunction.xor( ((yMarkCheck + 0.5f) > y) , ((yMarkCheck - 0.5f) < y)  )  ))
-		{
-			yMarkCheck = 0.0f;
-		}
-
-		if (yMarkCheck == 0.0f && y <= yOrigin+0.15f && y >= yOrigin-0.15f)
-		{
-			//turning point
-			yMarkCheck = y;
-			originCounter++;
-			if (originCounter >= 3)
-			{
-				originCounter = 0;
-				xDirection *= -1;
-			}
-		}
-
-		float yInc = Mathf.Sin (x)/0.2f * Time.deltaTime;
-		y += yInc;
-		x += (speed * xDirection) * Time.deltaTime;
-
-		movement.x = x;
-		movement.y = y;
-		
-		transform.position = movement;
 	}
 	private void movementAirCircle()
 	{
@@ -96,7 +59,8 @@ public class cFlyingEnemy : cEnemy {
 		float y = transform.position.y;
 		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
 
-		angleTemp += speed;
+		currentAngleSpeed += IncrementTowards(currentAngleSpeed,angleSpeed,angleAcceleration);
+		angleTemp += currentAngleSpeed;
 		if (angleTemp >= 360.0f )
 			angleTemp = 0.0f;
 
@@ -114,28 +78,38 @@ public class cFlyingEnemy : cEnemy {
 		float x = transform.position.x;
 		float y = transform.position.y;
 		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
-		
-		xTurningTemp += speed * Time.deltaTime;
-		if (xTurningTemp >= xLengthTurning)
+
+		if (bDecreasingSpeed)
+		{
+			currentSpeed.x = IncrementTowards(currentSpeed.x, 0, acceleration.x);
+			if (currentSpeed.x <= 0.1f)
+			{
+				bDecreasingSpeed = false;
+				xDirection *= -1;
+				xTurningTemp = 0.0f;
+			}
+		}
+		else
+			currentSpeed.x = IncrementTowards(currentSpeed.x, targetSpeed.x, acceleration.x);
+		movement.x = (currentSpeed.x  * xDirection) * Time.deltaTime;
+
+		xTurningTemp += Mathf.Abs (movement.x);
+		if (bDecreasingSpeed == false && xTurningTemp >= xLengthTurning)
 		{
 			//turning point
-			xDirection *= -1;
-			xTurningTemp = 0.0f;
+			bDecreasingSpeed = true;
 		}
-		float yInc = Mathf.Sin (2*x)/ampH * Time.deltaTime;
-		float sign = Mathf.Sign (yInc);
-		
-		if (sign != yCurrentDir)
-		{
-			yCurrentDir = sign;
-			ampH = Random.Range (0.2f,1.0f);
-		}
-		y += yInc;
-		x += (speed * xDirection) * Time.deltaTime;
-		
-		movement.x = x;
-		movement.y = y;
-		
+
+		currentAngleSpeed = IncrementTowards(currentAngleSpeed,angleSpeed,angleAcceleration);
+		angleTemp += currentAngleSpeed;
+		if (angleTemp > 360.0f )
+			angleTemp = angleTemp - 360.0f;
+		else if (angleTemp < 0.0f)
+			angleTemp = 360.0f-angleTemp;
+
+		float yInc = origin.y + (circleSize) * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
+		movement.x += x;
+		movement.y = yInc;
 		transform.position = movement;
 	}
 
@@ -219,8 +193,8 @@ public class cFlyingEnemy : cEnemy {
 				if (scale.y < 0.0f)
 					scale.y = 0.0f;
 				transform.localScale = scale;
-				speedY += -9.81f * Time.deltaTime;
-				transform.position += new Vector3(0.2f,speedY * Time.deltaTime,0.0f);
+				currentSpeed.y += -9.81f * Time.deltaTime;
+				transform.position += new Vector3(0.2f,currentSpeed.y * Time.deltaTime,0.0f);
 
 				if (scale.x <= 0.0f)
 					iDieState = eDieState.DIE_DONE;
@@ -238,6 +212,8 @@ public class cFlyingEnemy : cEnemy {
 		//we are charging to player or flying back.. so no need for movement calculation
 		if (!isCharge)
 		{
+			targetSpeed.x = speedX;
+			acceleration.x = accelerationX;
 			switch (flyingType)
 			{
 				case eFlyingType.SINUS_RANDOM_STRAIGHT:

@@ -7,7 +7,8 @@ public class cEnemy : cUnit
 	protected float intervalTimer = 0.0f;
 	protected Vector3 lastPlayerPos = Vector3.zero;
 	public float attackDistance = 2.0f;
-	
+
+
 	protected void attackShot(GameObject player, Vector3 target)
 	{
 		Vector3 enemyPos = transform.position;
