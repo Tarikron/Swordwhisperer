@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-
+using XInputDotNetPure;
 
 
 //conflict ??
@@ -379,7 +379,9 @@ public class cPlayer_c : cUnit
 		if (transform.eulerAngles.y >= 180.0f)
 			xAxis *= -1;
 
-			
+
+
+
 		targetSpeed.x = velocity;
 		currentSpeed.x = IncrementTowards(currentSpeed.x, targetSpeed.x, accelerationX);
 		
@@ -521,6 +523,7 @@ public class cPlayer_c : cUnit
 						audioSourceSFX2.Play();
 					}
 				}
+				GamePad.SetVibration(0,0.2f,0.2f);
 				animHandler.addAnimation(attackAnim,false);
 			}
 		}
@@ -641,8 +644,11 @@ public class cPlayer_c : cUnit
 	}
 	void OnTriggerEnter2D (Collider2D collider)
 	{
-		Debug.Log("player trigger: " + collider.gameObject.tag);
-		collider.gameObject.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+		if (collider.gameObject.tag == "enemyFlyingHurtBox")
+		{
+			collider.gameObject.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+			GamePad.SetVibration(0,1.0f,1.0f);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
@@ -695,6 +701,7 @@ public class cPlayer_c : cUnit
 			iAnimTakeSword = eAnimTakeSword.ANIM_DONE;
 		else if (animName == animations.attack1)
 		{
+			GamePad.SetVibration(0,0.0f,0.0f);
 			if (attackState != eAttackType.ATTACK_NONE)
 			{
 				animHandler.timescale = 1.0f;
@@ -706,6 +713,7 @@ public class cPlayer_c : cUnit
 		}
 		else if (animName == animations.attack2)
 		{
+			GamePad.SetVibration(0,0.0f,0.0f);
 			if (attackState != eAttackType.ATTACK_NONE)
 			{
 				animHandler.timescale = 1.0f;
@@ -716,6 +724,7 @@ public class cPlayer_c : cUnit
 		}
 		else if (animName == animations.attack3)
 		{
+			GamePad.SetVibration(0,0.0f,0.0f);
 			animHandler.timescale = 1.0f;
 			attackNext = false;
 			attackState = eAttackType.ATTACK_NONE;
