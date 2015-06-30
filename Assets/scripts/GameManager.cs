@@ -7,9 +7,7 @@ public class GameManager : MonoBehaviour {
 	private GameCamera cam;
 	private float minY = float.PositiveInfinity;
 	private float maxY = -1.0f;
-	private bool stopCam = false;
 	private bool offsetSet = false;
-	private float distanceToGround = 0.0f;
 	private float distancePlayerCamBottom = 0.0f;
 	private float oldYOffset = 0.0f;
 	void Start () 
@@ -22,8 +20,7 @@ public class GameManager : MonoBehaviour {
 		cam.SetOffset(new Vector3(0.0f,player.transform.position.y*-1.0f ,0.0f));
 		oldYOffset = player.transform.position.y*-1.0f;
 		offsetSet = false;
-
-		distanceToGround = GetDistanceToGround(cPlayer);
+		
 		Camera c = GetComponent<Camera>();
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
 		distancePlayerCamBottom = Mathf.Abs (p2.y) - Mathf.Abs (player.transform.position.y);

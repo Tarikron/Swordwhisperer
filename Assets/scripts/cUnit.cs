@@ -11,8 +11,9 @@ using System;
 using UnityEngine;
 public class cUnit : MonoBehaviour
 {
-	public int startLife = 1;
-	public int currentLife = 1;
+	public float startLife = 1.0f;
+	public float currentLife = 1.0f;
+
 	protected Vector2 targetSpeed = Vector2.zero;
 	protected Vector2 currentSpeed = Vector2.zero;
 	protected Vector2 acceleration = Vector2.zero;
@@ -22,13 +23,25 @@ public class cUnit : MonoBehaviour
 
 	}
 
-	public void  Start()
+	public virtual void Start()
 	{
 		currentLife = startLife;
 	}
 
+	protected bool isDead()
+	{
+		if (currentLife <= 0)
+			return true;
+		return false;
+	}
 
-	protected void die()
+	protected bool takeDmg(float dmg)
+	{
+		currentLife -= dmg;
+		return isDead();
+	}
+
+	protected virtual void die()
 	{
 		gameObject.SetActive(false);
 	}

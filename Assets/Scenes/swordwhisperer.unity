@@ -215,7 +215,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.03999996
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -10108,7 +10108,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: .25
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -10674,7 +10674,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: .360000014
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -12126,6 +12126,7 @@ MonoBehaviour:
   playerPhysics: {fileID: 0}
   attackDelay: .100000001
   attackResetTime: .600000024
+  attackDmg: 1
   ui:
     txtLife: {fileID: 1508485870}
   animations:
@@ -12586,7 +12587,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.03999996
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -13079,7 +13080,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: .409999996
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -13216,6 +13217,10 @@ Prefab:
     - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: xLengthTurning
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 146066, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -13886,6 +13891,7 @@ MonoBehaviour:
   currentLife: 1
   shotInterval: 2
   attackDistance: 2
+  attackCollideDmg: 1
   skeletonAnimation: {fileID: 0}
   triggerDistance: 9
   triggerAttack: 6

@@ -7,7 +7,6 @@ using System.IO;
 public class DialogLoadXml : MonoBehaviour {
 
 	private string xmlPath;
-	private Hashtable Strings;
 	private string lang = "de";
 	private Dialog dlg;
 
@@ -24,8 +23,7 @@ public class DialogLoadXml : MonoBehaviour {
 		Dictionary<string,Dialog> dialogs  = new Dictionary<string, Dialog>();
 		XmlDocument xml = new XmlDocument();
 		xml.Load(xmlPath);
-
-		Strings = new Hashtable();
+		
 		XmlElement rootElement = xml.DocumentElement;
 
 		if (rootElement.HasChildNodes)

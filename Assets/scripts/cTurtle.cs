@@ -37,8 +37,10 @@ public class cTurtle : cEnemy {
 	public animTurtle turtleAnimations;
 
 	// Use this for initialization
-	void Start () 
+	public override void Start () 
 	{
+		base.Start();
+
 		skeletonAnimation.state.Start += startAnimListener;
 		skeletonAnimation.state.End += endAnimListener;
 	}
@@ -119,7 +121,7 @@ public class cTurtle : cEnemy {
 	{
 		die();
 	}
-	void die()
+	protected override void die()
 	{
 		currentLife = 0;
 		

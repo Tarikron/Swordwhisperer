@@ -3,8 +3,8 @@ using System.Collections;
 
 public class cFlyingEnemy : cEnemy {
 
-	private enum eDieState {DIE_NONE = 0, DIE_START = 1,DIE_DONE = 2};
-	private eDieState iDieState = eDieState.DIE_NONE;
+	private enum eDefaultCollideType {COLLIDE_NONE = 0, COLLIDE_MOVE=1, COLLIDE_STOP=2, COLLIDE_DONE=3};
+	private eDefaultCollideType iDefaultCollide = eDefaultCollideType.COLLIDE_NONE;
 
 	public enum eFlyingType {SINUS_RANDOM_STRAIGHT=0,SINUS_LOOP=1,SINUS_CIRCLE=2};
 	public eFlyingType flyingType = eFlyingType.SINUS_RANDOM_STRAIGHT;
@@ -19,7 +19,7 @@ public class cFlyingEnemy : cEnemy {
 	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
 	private eAttackState iAttackState;
 	private bool isCharge = false;
-
+	public float attackChargeDmg = 1.0f;
 
 
 	public float circleSize = 2.0f;
@@ -37,10 +37,18 @@ public class cFlyingEnemy : cEnemy {
 	private Vector3 origin = Vector3.zero;
 
 	private bool bDecreasingSpeed = false;
+	private Vector3 last_direction = Vector3.zero;
+	private int pauseMovement = 30;
+	private int pauseCounter = 0;
+
+	private int backMovement = 20;
+	private int backCounter = 0;
 
 	// Use this for initialization
-	void Start () 
+	public override void Start () 
 	{
+		base.Start();
+
 		xDirection = 1;
 
 		targetSpeed.x = speedX;
@@ -76,8 +84,7 @@ public class cFlyingEnemy : cEnemy {
 	private void movementAirRandomStraight()
 	{
 		float x = transform.position.x;
-		float y = transform.position.y;
-		Vector3 movement = new Vector3(0.0f,0.0f,transform.position.z);
+		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
 
 		if (bDecreasingSpeed)
 		{
@@ -107,19 +114,28 @@ public class cFlyingEnemy : cEnemy {
 		else if (angleTemp < 0.0f)
 			angleTemp = 360.0f-angleTemp;
 
+		Debug.Log ("running: " + angleTemp);
+
 		float yInc = origin.y + (circleSize) * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
-		movement.x += x;
+
 		movement.y = yInc;
+
+		last_direction.x = movement.x;
+		last_direction.y = movement.y - origin.y;
+
+		movement.x += x;
+		movement.z = transform.position.z;
 		transform.position = movement;
+		
 	}
 
 	private void attackCharge(GameObject player, Vector3 target)
 	{
-		Vector3 enemyPos = transform.position;
 		if ( iAttackState == eAttackState.ATTACK_NONE && lastPlayerPos == Vector3.zero)
 		{
 			//we are in attack range
 			originBeforeAttackPos = transform.position;
+			origin = transform.position;
 			lastPlayerPos = target;
 			lastPlayerPos.y += (player.GetComponent<BoxCollider2D>().size.y - player.GetComponent<BoxCollider2D>().size.y/3);
 			iAttackState = eAttackState.ATTACK_STAGE1;
@@ -128,6 +144,8 @@ public class cFlyingEnemy : cEnemy {
 		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
 		{
 			transform.position = Vector3.MoveTowards(transform.position,lastPlayerPos,attackSpeed*Time.deltaTime);
+
+			last_direction = lastPlayerPos - transform.position;
 
 			//charged to latest player pos
 			if (transform.position == lastPlayerPos)
@@ -144,6 +162,7 @@ public class cFlyingEnemy : cEnemy {
 			{
 				iAttackState = eAttackState.ATTACK_NONE;
 				originBeforeAttackPos = Vector3.zero;
+				origin = transform.position;
 				isCharge = false;
 			}
 		}
@@ -158,7 +177,7 @@ public class cFlyingEnemy : cEnemy {
 		float distance = Vector3.Distance(enemyPos,playerPos);
 		
 		//if get in range trigger attack
-		if (distance <= attackDistance)
+		if (iAttackState != eAttackState.ATTACK_NONE || distance <= attackDistance)
 		{
 			switch (attackType)
 			{
@@ -177,35 +196,73 @@ public class cFlyingEnemy : cEnemy {
 		}
 	}
 
+	private void manageMovementAfterCollide()
+	{
+		switch (iDefaultCollide)
+		{
+			case eDefaultCollideType.COLLIDE_MOVE: //go back in oppsite direction
+				backCounter++;
+				if (backMovement >= backCounter)
+					transform.Translate(-last_direction.normalized * Time.deltaTime);
+				else
+				{
+					currentAngleSpeed = 0.0f;
+					iDefaultCollide = eDefaultCollideType.COLLIDE_STOP;
+					backCounter = 0;
+					origin = transform.position;
+					angleTemp = 0.0f;
+				}
+				break;
+			case eDefaultCollideType.COLLIDE_STOP: //then stop for a while
+				pauseCounter++;
+
+				currentAngleSpeed = IncrementTowards(currentAngleSpeed,20.0f,5.0f);
+				angleTemp += currentAngleSpeed;
+				if (angleTemp > 360.0f )
+					angleTemp = angleTemp - 360.0f;
+				else if (angleTemp < 0.0f)
+					angleTemp = 360.0f-angleTemp;
+
+				Vector3 movement = Vector3.zero;
+				float y = transform.position.y;
+
+				Debug.Log ("pausing: " + angleTemp);
+				y = origin.y + circleSize * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
+				movement.x = transform.position.x;
+				movement.y = y;
+				movement.z = transform.position.z;
+
+				transform.position = movement;
+
+				if (pauseCounter >= pauseMovement)
+				{
+					currentAngleSpeed = 0;
+					angleTemp = 0;
+					iDefaultCollide = eDefaultCollideType.COLLIDE_DONE;
+					pauseCounter = 0;
+				}
+				break;
+			case eDefaultCollideType.COLLIDE_DONE:
+				origin = transform.position;
+				iAttackState = eAttackState.ATTACK_NONE;
+				iDefaultCollide = eDefaultCollideType.COLLIDE_NONE;
+				if (last_direction.x > 0.0f)
+					xDirection = Mathf.Sign(last_direction.x)*-1.0f;
+				break;
+		}
+		
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
 
-		switch (iDieState)
-		{	
-			case eDieState.DIE_START:
-			{
-				Vector3 scale = transform.localScale;
-				Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
-				scale -= vec;
-				if (scale.x < 0.0f)
-					scale.x = 0.0f;
-				if (scale.y < 0.0f)
-					scale.y = 0.0f;
-				transform.localScale = scale;
-				currentSpeed.y += -9.81f * Time.deltaTime;
-				transform.position += new Vector3(0.2f,currentSpeed.y * Time.deltaTime,0.0f);
-
-				if (scale.x <= 0.0f)
-					iDieState = eDieState.DIE_DONE;
-
-				return;
-				break;
-			}
-			case eDieState.DIE_DONE:
-				die ();
-				return;
-				break;
+		if (defaultDeath()) //if we are dead, no need for others
+			return;
+		if (iDefaultCollide != eDefaultCollideType.COLLIDE_NONE)
+		{
+			manageMovementAfterCollide();
+			return; 
 		}
 		manageAttack();
 
@@ -230,11 +287,15 @@ public class cFlyingEnemy : cEnemy {
 
 	}
 
-	void msg_die()
+	void msg_damage(float dmg)
 	{
-		GetComponent<BoxCollider2D>().enabled = false;
-		iDieState = eDieState.DIE_START;
-		//die();
+		takeDmg(dmg);
+
+		if (isDead())
+		{
+			GetComponent<BoxCollider2D>().enabled = false;
+			iDieState = eDieState.DIE_START;
+		}
 	}
 
 	//collsions
@@ -242,9 +303,19 @@ public class cFlyingEnemy : cEnemy {
 	{				
 		if (collision.gameObject.tag == "player")
 		{
-			lastPlayerPos = Vector3.zero;
-			iAttackState = eAttackState.ATTACK_STAGE2;
-			collision.gameObject.SendMessage("msg_hit",null,SendMessageOptions.RequireReceiver);
+			if (eAttackType.ATTACK_CHARGE == attackType)
+			{
+				lastPlayerPos = Vector3.zero;
+				iAttackState = eAttackState.ATTACK_STAGE2;
+				collision.gameObject.SendMessage("msg_hit",attackChargeDmg,SendMessageOptions.RequireReceiver);
+			}
+			else
+			{
+				collision.gameObject.SendMessage("msg_hit",attackCollideDmg,SendMessageOptions.RequireReceiver);
+				iDefaultCollide = eDefaultCollideType.COLLIDE_MOVE;
+			}
 		}
+		else
+			iDefaultCollide = eDefaultCollideType.COLLIDE_MOVE;
 	}
 }

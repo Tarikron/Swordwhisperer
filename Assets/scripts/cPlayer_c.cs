@@ -54,27 +54,26 @@ public class cPlayer_c : cUnit
 	private bool bCanJump = false;
 	private bool bJumping = false;
 	private bool bFalling = false;
-	private int iGroundBridge = 0; //quick dirty solution
 	private int iJumpCounter = 0;
-	private float fTempTimeGravity = 0.0f;
 	private Vector2 movementDirection;
-	private float jumpDestHeight = 0.0f;
 	private bool bSkipMovementForAnim = false;
 	private bool bSkipAnimForAttack = false;
 
 	private float attackDelayCounter = 0.0f;
 	public float attackDelay = 0.1f;
 	private bool attackNext = false;
-	private bool attackCombo = false;
 	private eAttackType attackState = 0;
 	private int attackCounter = 0;
 	private float attackResetCurrent = 0.0f;
 	public float attackResetTime = 0.2f;
+	public float attackDmg = 1.0f;
 
 	private struct stHitBoxes
 	{
 		public BoxCollider2D hitBox_attack_123;
 		public BoxCollider2D hitBox_attack_3;
+		public int maxDelay;
+		public int current;
 	}
 	private stHitBoxes hitBoxes;
 
@@ -396,8 +395,6 @@ public class cPlayer_c : cUnit
 	{
 		if (Input.GetButtonDown ("jump"))
 		{
-			float absX = Mathf.Abs(x);
-			
 			if (playerPhysics.grounded)
 				iJumpCounter = 0;
 
@@ -426,6 +423,17 @@ public class cPlayer_c : cUnit
 
 	void handleAttack()
 	{
+		//enable collider after delay
+		if (hitBoxes.current >= hitBoxes.maxDelay)
+		{
+			hitBoxes.current = 0;
+			hitBoxes.hitBox_attack_123.enabled = true;
+			if (attackState == eAttackType.ATTACK_3)
+				hitBoxes.hitBox_attack_3.enabled = true;
+
+		}
+		hitBoxes.current++;
+		
 		AudioClip attack = null;
 		AudioClip attackVoice = null;
 
@@ -433,8 +441,6 @@ public class cPlayer_c : cUnit
 		attackResetCurrent += Time.deltaTime;
 		if (Input.GetButtonDown ("attack")) 
 		{
-			Debug.Log ("attack: " + attackResetCurrent);
-
 			if (attackCounter < 3)
 				attackCounter++;
 			if (attackCounter == 1)
@@ -465,7 +471,6 @@ public class cPlayer_c : cUnit
 				attackAnim = animations.attack1;
 				attack = audioClipsSFX.attack1;
 				attackVoice = audioClipsSFX.attackVoice1;
-				hitBoxes.hitBox_attack_123.enabled = true;
 				break;
 			case eAttackType.ATTACK_2:
 			{
@@ -478,7 +483,6 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack2;
 					attack = audioClipsSFX.attack2;
 					attackVoice = audioClipsSFX.attackVoice2;
-					hitBoxes.hitBox_attack_123.enabled = true;
 				}
 				break;
 			}
@@ -492,8 +496,6 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack3;
 					attack = audioClipsSFX.attack3;
 					attackVoice = audioClipsSFX.attackVoice3;
-					hitBoxes.hitBox_attack_123.enabled = true;
-					hitBoxes.hitBox_attack_3.enabled = true;
 				}
 				break;
 			default:
@@ -533,9 +535,10 @@ public class cPlayer_c : cUnit
 	}
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () 
+	{
+		base.Start ();
 
-		jumpDestHeight = -999.0f;
 		sleepAnim = true;
 
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
@@ -554,6 +557,9 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
 		sword.bCollectedSword = true;
+
+		hitBoxes.current = 0;
+		hitBoxes.maxDelay = 5;
 
 	}
 
@@ -646,7 +652,7 @@ public class cPlayer_c : cUnit
 	{
 		if (collider.gameObject.tag == "enemyFlyingHurtBox")
 		{
-			collider.gameObject.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+			collider.gameObject.SendMessage("msg_damage",attackDmg,SendMessageOptions.RequireReceiver);
 			GamePad.SetVibration(0,1.0f,1.0f);
 		}
 	}
@@ -657,8 +663,6 @@ public class cPlayer_c : cUnit
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
 		{
 			iJumpCounter = 0;
-			jumpDestHeight = -999.0f;
-
 		}
 
 		if (collision.gameObject.name == "groundGameEnd")
@@ -731,7 +735,8 @@ public class cPlayer_c : cUnit
 			attackCounter = 0;
 			bSkipAnimForAttack = false;
 		}
-		Debug.Log ("end:" + animName + "  " + attackCounter);
+		//Debug.Log ("end:" + animName + "  " + attackCounter);
+
 		
 	}
 
@@ -739,11 +744,9 @@ public class cPlayer_c : cUnit
 	//################# Receiver/Messages ###########
 	//########################################
 
-	void msg_hit()
+	void msg_hit(float dmg)
 	{
-		if (currentLife > 0)
-			currentLife--;
-
+		takeDmg(dmg);
 		ui.txtLife.text = currentLife+" Life";
 	}
 		

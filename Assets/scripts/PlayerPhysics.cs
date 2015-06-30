@@ -127,8 +127,8 @@ public class PlayerPhysics : MonoBehaviour
 			Debug.DrawRay(ray_left.origin,ray_left.direction);
 			Debug.DrawRay(ray_right.origin,ray_right.direction);
 
-			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
-			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
+			//float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
+			//float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
 			//Debug.Log("left: " + slopeL + " right: " + slopeR);
 
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )

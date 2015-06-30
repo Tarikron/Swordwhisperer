@@ -21,6 +21,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &122138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 416190}
+  - 61: {fileID: 6133602}
+  - 114: {fileID: 11441586}
+  m_Layer: 10
+  m_Name: hurtBox
+  m_TagString: enemyFlyingHurtBox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &178688
 GameObject:
   m_ObjectHideFlags: 0
@@ -51,8 +68,21 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 437074}
+  - {fileID: 416190}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &416190
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 122138}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 403632}
+  m_RootOrder: 1
 --- !u!4 &437074
 Transform:
   m_ObjectHideFlags: 1
@@ -130,6 +160,19 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
+--- !u!61 &6133602
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 122138}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!61 &6143402
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -156,6 +199,17 @@ BoxCollider2D:
   m_Offset: {x: -1.90734863e-06, y: 0}
   serializedVersion: 2
   m_Size: {x: .429999948, y: .670000017}
+--- !u!114 &11441586
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 122138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f960236498490439b0fd89de28843b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11445590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,11 +258,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50bc776860685742aa07cc183fe9913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 1
+  startLife: 1
+  currentLife: 1
   shotInterval: 2
   attackDistance: 140
+  attackCollideDmg: 1
   alpha: 0
   radius: -1
+  amplitude: 2
 --- !u!212 &21202170
 SpriteRenderer:
   m_ObjectHideFlags: 1

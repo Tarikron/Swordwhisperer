@@ -7,7 +7,7 @@ public class cHurtScreenMgr : MonoBehaviour {
 
 	public float hurtpercentage = 25.0f;
 	private cPlayer_c player = null;
-	private int currentLife = 0;
+	private float currentLife = 0;
 
 	public int alphaFadeInFrames = 5;
 	public List<Image> hurtScreens;
@@ -26,7 +26,7 @@ public class cHurtScreenMgr : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		currentLife = player.currentLife;
-		int startLife = player.startLife;
+		float startLife = player.startLife;
 		Color col;
 
 		skip++;
