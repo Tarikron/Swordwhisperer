@@ -238,7 +238,6 @@ public class cFlyingEnemy : cEnemy {
 				Vector3 movement = Vector3.zero;
 				float y = transform.position.y;
 
-				Debug.Log ("pausing: " + angleTemp);
 				y = origin.y + circleSize * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
 				movement.x = transform.position.x;
 				movement.y = y;

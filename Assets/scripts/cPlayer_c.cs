@@ -164,6 +164,14 @@ public class cPlayer_c : cUnit
 	public AudioSource audioSourceSFX;
 	public AudioSource audioSourceSFX2;
 
+	private bool tookDamage = false;
+	private int delayFrames = 3;
+	private int frameCounter = 0;
+	private bool flyingBack = false;
+
+	private Vector3 lastDirection = Vector3.zero;
+	private float angleToFlyback = 0.0f;
+
 	void handleSwordPickup()
 	{
 		GameObject swTakePos = GameObject.Find("swordTakePosition");
@@ -577,6 +585,56 @@ public class cPlayer_c : cUnit
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.LoadLevel("menu");
 
+		if (tookDamage)
+		{
+			if (delayFrames < frameCounter)
+			{
+				skeletonAnimation.skeleton.r = 1.0f;
+				skeletonAnimation.skeleton.b = 1.0f;
+				skeletonAnimation.skeleton.g = 1.0f;
+				skeletonAnimation.skeleton.a = 1.0f;
+
+				frameCounter = 0;
+				tookDamage = false;
+			}
+			frameCounter++;
+		}
+		if (false)
+		{
+			movementDirection.x = 0.0f;
+			movementDirection.y = 0.0f;
+			//falling back 
+			if (angleToFlyback > 0 && angleToFlyback < 90)
+			{
+				//initialize values
+
+				if (currentSpeed.x == 0.0f)
+					currentSpeed.x = -20.0f;
+				else
+				{
+					currentSpeed.x *= -1.0f;
+				}
+			}
+
+			currentSpeed.x = currentSpeed.x * Mathf.Cos(angleToFlyback * Mathf.PI/180);
+			currentSpeed.y = -accelerationY * Time.deltaTime + currentSpeed.y * Mathf.Sin(angleToFlyback * Mathf.PI/180);
+
+			movementDirection.x = currentSpeed.x * Time.deltaTime;
+			float newSX = transform.position.x + movementDirection.x;
+			movementDirection.y = (-accelerationY * newSX*newSX);
+			movementDirection.y /= (2 * (currentSpeed.x * currentSpeed.x));
+			movementDirection.y += Mathf.Tan (angleToFlyback * Mathf.PI/180)*newSX;
+
+			lastDirection = playerPhysics.Move (movementDirection);
+
+			if (playerPhysics.grounded)
+				flyingBack = false;
+
+			return;
+
+		}
+		
+
 		if (sleepAnim)
 		{
 			animHandler.addAnimation(animations.wakeup,false);
@@ -637,7 +695,7 @@ public class cPlayer_c : cUnit
 				}
 				//Debug.Log("jump speed: " + currentSpeedY);
 				movementDirection.y = currentSpeed.y * Time.deltaTime;
-				playerPhysics.Move (movementDirection);
+				lastDirection = playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
 		}
@@ -748,7 +806,18 @@ public class cPlayer_c : cUnit
 	void msg_hit(float dmg)
 	{
 		takeDmg(dmg);
+
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 0.3f;
+		skeletonAnimation.skeleton.g = 0.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
+
 		ui.txtLife.text = currentLife+" Life";
+	
+		angleToFlyback = Vector3.Angle(lastDirection,new Vector3(1.0f,0.0f,0.0f) );
+		Debug.Log (angleToFlyback);
+		tookDamage = true;
+		flyingBack = true;
 	}
 		
 }

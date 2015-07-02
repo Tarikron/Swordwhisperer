@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour {
 			float height = player.GetComponent<MeshRenderer>().bounds.size.y;
 			maxY = GetDistanceWithVelocityZero(cPlayer)+Mathf.Abs (player.transform.position.y+height) + Mathf.Abs (p.y);
 			minY = p2.y;
-			Debug.Log ("set minY: " + minY);
 		}
 		else if (currentSpeed.y < 0.0f)
 		{
@@ -49,7 +48,6 @@ public class GameManager : MonoBehaviour {
 			if (minY != float.PositiveInfinity && distance != float.PositiveInfinity)
 			{
 				minY = player.transform.position.y - (distance + distancePlayerCamBottom);
-				Debug.Log ("calculated minY: " + minY);
 			}
 
 			if (cam.stopCam)
