@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class GameManager : MonoBehaviour {
 
@@ -12,6 +14,13 @@ public class GameManager : MonoBehaviour {
 	private float distanceToGround = 0.0f;
 	private float distancePlayerCamBottom = 0.0f;
 	private float oldYOffset = 0.0f;
+
+	public GameObject[] prefab_levels;
+	private GameObject[] levels;
+	private int currentIndex = 0;
+
+	private int[] indexToRemove;
+
 	void Start () 
 	{
 		cam = GetComponent<GameCamera>();
@@ -27,6 +36,34 @@ public class GameManager : MonoBehaviour {
 		Camera c = GetComponent<Camera>();
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
 		distancePlayerCamBottom = Mathf.Abs (p2.y) - Mathf.Abs (player.transform.position.y);
+
+
+		//load all levels
+
+		Vector3 p = c.ViewportToWorldPoint(new Vector3(1, 1, Mathf.Abs(transform.position.z)));
+		levels = new GameObject[32];
+		indexToRemove = new int[32];
+
+		for (int i =0; i < prefab_levels.Length; i++)
+		{
+			GameObject prefab = prefab_levels[i];
+
+
+			float xLeft = prefab.transform.position.x + prefab.GetComponent<BoxCollider2D>().offset.x - prefab.GetComponent<BoxCollider2D>().size.x/2;
+			float xRight = xLeft + prefab.GetComponent<BoxCollider2D>().size.x;
+
+			bool case1 = p.x >= xRight &&  p2.x <= xRight || p.x >= xLeft && p2.x <= xLeft;
+			bool case2 = xLeft <= p2.x && xRight >= p2.x && xLeft <= p.x && xRight >= p.x;
+
+			indexToRemove[i] = 1;
+			if (cFunction.xor(case1,case2))
+			{
+				GameObject go = GameObject.Instantiate(prefab);
+				levels[i] = go;
+				indexToRemove[i] = -1;
+			}
+		}
+
 	}
 	
 	void Update()
@@ -37,6 +74,44 @@ public class GameManager : MonoBehaviour {
 		Camera c = GetComponent<Camera>();
 		Vector3 p = c.ViewportToWorldPoint(new Vector3(1, 1, Mathf.Abs(transform.position.z)));
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
+
+		for (int i =0; i < prefab_levels.Length; i++)
+		{
+			GameObject prefab = prefab_levels[i];
+			
+			
+			float xLeft = prefab.transform.position.x + prefab.GetComponent<BoxCollider2D>().offset.x - prefab.GetComponent<BoxCollider2D>().size.x/2;
+			float xRight = xLeft + prefab.GetComponent<BoxCollider2D>().size.x;
+			
+			bool case1 = p.x >= xRight &&  p2.x <= xRight || p.x >= xLeft && p2.x <= xLeft;
+			bool case2 = xLeft <= p2.x && xRight >= p2.x && xLeft <= p.x && xRight >= p.x;
+
+			if (cFunction.xor(case1,case2))
+			{
+				if (indexToRemove[i] == 1)
+				{
+					GameObject go = GameObject.Instantiate(prefab);
+					levels[i] = go;
+					indexToRemove[i] = -1;
+				}
+			}
+			else
+				indexToRemove[i] = 1;
+		}
+		for (int i = 0; i < indexToRemove.Length; i++)
+		{
+			if (indexToRemove[i] == 1)
+			{
+				GameObject go = levels[i];
+				if (go != null)
+				{
+					Destroy (go);
+					levels[i] = null;
+				}
+			}
+		}
+
+
 		//Get max cam height
 		//first calculate how height we will jump(physics), then take current player y position  + current top y position
 		if (currentSpeed.y > 0.0f && maxY < 0.0f)
