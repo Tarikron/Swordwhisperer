@@ -23,27 +23,22 @@ public class cEnemyBoss1 : cEnemy
 	private List<GameObject> lMinions;
 	private float currentAngleSpeed = 0.0f;      
 
-	private Vector2 _colliderSize;
-	private Vector2 _colliderOffset;
 	private Vector2 _centre;
 
 	private float bossAlpha = 0.0f;
 	private bossMinion bossMinion;
 
 
-	public void Start()
+	public override void Start()
 	{
+		base.Start();
+
 		lMinions = new List<GameObject>();
 
 		int minionsCount = minions.count;
-		float radius = minions.radiusToBossCenter;
 		float alpha = 0.0f;
 		float angleDistance = 360.0f/(float)minionsCount;
-
-		BoxCollider2D collider2d = GetComponent<BoxCollider2D>();
-		_colliderSize = collider2d.size;
-		_colliderOffset = collider2d.offset;
-
+		
 		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
 		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
 
@@ -76,13 +71,14 @@ public class cEnemyBoss1 : cEnemy
 
 		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
 		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
-
-		MeshRenderer renderer = GetComponent<MeshRenderer>();
-
+		
 		for (int i = 0; i<minionCount; i++)
 		{
 			GameObject _minion = lMinions[i];
 			bossMinion = _minion.GetComponent<bossMinion>();
+			if ( !_minion.activeSelf || bossMinion == null)
+				continue;
+
 			float alpha = bossMinion.alpha;
 
 

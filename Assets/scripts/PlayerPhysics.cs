@@ -31,8 +31,6 @@ public class PlayerPhysics : MonoBehaviour
 		centre = vec3;
 	}
 
-
-
 	public float GetDistanceToGround()
 	{
 		Vector2 p = transform.position;
@@ -49,7 +47,7 @@ public class PlayerPhysics : MonoBehaviour
 		return float.PositiveInfinity;
 	}
 
-	public void Move(Vector3 moveAmount)
+	public Vector3 Move(Vector3 moveAmount)
 	{
 		float deltaY = moveAmount.y;
 		float deltaX = moveAmount.x;
@@ -127,8 +125,8 @@ public class PlayerPhysics : MonoBehaviour
 			Debug.DrawRay(ray_left.origin,ray_left.direction);
 			Debug.DrawRay(ray_right.origin,ray_right.direction);
 
-			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
-			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
+			//float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
+			//float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
 			//Debug.Log("left: " + slopeL + " right: " + slopeR);
 
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
@@ -150,10 +148,9 @@ public class PlayerPhysics : MonoBehaviour
 
 		}
 
-
+		Vector3 playerDir = new Vector3 (deltaX, deltaY);
 		if (!grounded && !movementStopped)
 		{
-			Vector3 playerDir = new Vector3 (deltaX, deltaY);
 			Vector3 o = new Vector3(p.x + centre.x + size.x/2 * Mathf.Sign(deltaX),p.y + centre.y + size.y/2 * Mathf.Sign(deltaY));
 			//Debug.DrawRay(o,playerDir.normalized);
 			ray = new Ray(o, playerDir.normalized);
@@ -167,5 +164,6 @@ public class PlayerPhysics : MonoBehaviour
 		Vector3 finalTransform = new Vector3(deltaX,deltaY,0.0f);
 		transform.Translate (finalTransform);
 
+		return playerDir.normalized;
 	}
 }

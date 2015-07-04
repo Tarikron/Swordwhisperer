@@ -28,9 +28,17 @@ Material:
         second: 1
       data:
         first:
+          name: PixelSnap
+        second: 0
+      data:
+        first:
           name: _FlashAmount
         second: .532999992
     m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _FlashColor

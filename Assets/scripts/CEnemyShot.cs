@@ -7,6 +7,7 @@ public class CEnemyShot : MonoBehaviour {
 	private float shotSpeedY = 0.0f;
 	public float gravity = 1.0f;
 	private Vector3 headingTo = Vector3.zero;
+	public float damage = 1.0f;
 
 	// Use this for initialization
 	void Start () 
@@ -40,7 +41,7 @@ public class CEnemyShot : MonoBehaviour {
 		{
 			if (collision.gameObject.tag == "player")
 			{
-				collision.gameObject.SendMessage("msg_hit",null,SendMessageOptions.RequireReceiver);
+				collision.gameObject.SendMessage("msg_hit",damage,SendMessageOptions.RequireReceiver);
 			}
 			Destroy(this.gameObject);
 		}

@@ -54,27 +54,26 @@ public class cPlayer_c : cUnit
 	private bool bCanJump = false;
 	private bool bJumping = false;
 	private bool bFalling = false;
-	private int iGroundBridge = 0; //quick dirty solution
 	private int iJumpCounter = 0;
-	private float fTempTimeGravity = 0.0f;
 	private Vector2 movementDirection;
-	private float jumpDestHeight = 0.0f;
 	private bool bSkipMovementForAnim = false;
 	private bool bSkipAnimForAttack = false;
 
 	private float attackDelayCounter = 0.0f;
 	public float attackDelay = 0.1f;
 	private bool attackNext = false;
-	private bool attackCombo = false;
 	private eAttackType attackState = 0;
 	private int attackCounter = 0;
 	private float attackResetCurrent = 0.0f;
 	public float attackResetTime = 0.2f;
+	public float attackDmg = 1.0f;
 
 	private struct stHitBoxes
 	{
 		public BoxCollider2D hitBox_attack_123;
 		public BoxCollider2D hitBox_attack_3;
+		public int maxDelay;
+		public int current;
 	}
 	private stHitBoxes hitBoxes;
 
@@ -164,6 +163,14 @@ public class cPlayer_c : cUnit
 	public audioSFX audioClipsSFX;
 	public AudioSource audioSourceSFX;
 	public AudioSource audioSourceSFX2;
+
+	private bool tookDamage = false;
+	private int delayFrames = 3;
+	private int frameCounter = 0;
+	private bool flyingBack = false;
+
+	private Vector3 lastDirection = Vector3.zero;
+	private float angleToFlyback = 0.0f;
 
 	void handleSwordPickup()
 	{
@@ -396,8 +403,6 @@ public class cPlayer_c : cUnit
 	{
 		if (Input.GetButtonDown ("jump"))
 		{
-			float absX = Mathf.Abs(x);
-			
 			if (playerPhysics.grounded)
 				iJumpCounter = 0;
 
@@ -426,6 +431,17 @@ public class cPlayer_c : cUnit
 
 	void handleAttack()
 	{
+		//enable collider after delay
+		if (hitBoxes.current >= hitBoxes.maxDelay)
+		{
+			hitBoxes.current = 0;
+			hitBoxes.hitBox_attack_123.enabled = true;
+			if (attackState == eAttackType.ATTACK_3)
+				hitBoxes.hitBox_attack_3.enabled = true;
+
+		}
+		hitBoxes.current++;
+		
 		AudioClip attack = null;
 		AudioClip attackVoice = null;
 
@@ -433,8 +449,6 @@ public class cPlayer_c : cUnit
 		attackResetCurrent += Time.deltaTime;
 		if (Input.GetButtonDown ("attack")) 
 		{
-			Debug.Log ("attack: " + attackResetCurrent);
-
 			if (attackCounter < 3)
 				attackCounter++;
 			if (attackCounter == 1)
@@ -465,7 +479,6 @@ public class cPlayer_c : cUnit
 				attackAnim = animations.attack1;
 				attack = audioClipsSFX.attack1;
 				attackVoice = audioClipsSFX.attackVoice1;
-				hitBoxes.hitBox_attack_123.enabled = true;
 				break;
 			case eAttackType.ATTACK_2:
 			{
@@ -478,7 +491,6 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack2;
 					attack = audioClipsSFX.attack2;
 					attackVoice = audioClipsSFX.attackVoice2;
-					hitBoxes.hitBox_attack_123.enabled = true;
 				}
 				break;
 			}
@@ -492,8 +504,6 @@ public class cPlayer_c : cUnit
 					attackAnim = animations.attack3;
 					attack = audioClipsSFX.attack3;
 					attackVoice = audioClipsSFX.attackVoice3;
-					hitBoxes.hitBox_attack_123.enabled = true;
-					hitBoxes.hitBox_attack_3.enabled = true;
 				}
 				break;
 			default:
@@ -533,9 +543,10 @@ public class cPlayer_c : cUnit
 	}
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () 
+	{
+		base.Start ();
 
-		jumpDestHeight = -999.0f;
 		sleepAnim = true;
 
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
@@ -555,6 +566,9 @@ public class cPlayer_c : cUnit
 
 		sword.bCollectedSword = true;
 
+		hitBoxes.current = 0;
+		hitBoxes.maxDelay = 5;
+
 	}
 
 	void FixedUpdate()
@@ -565,10 +579,61 @@ public class cPlayer_c : cUnit
 	// Update is called once per frame
 	void Update () 
 	{
+	
 		if (Input.GetKeyDown(KeyCode.F2))
 			Application.LoadLevel ("swordwhisperer");
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.LoadLevel("menu");
+
+		if (tookDamage)
+		{
+			if (delayFrames < frameCounter)
+			{
+				skeletonAnimation.skeleton.r = 1.0f;
+				skeletonAnimation.skeleton.b = 1.0f;
+				skeletonAnimation.skeleton.g = 1.0f;
+				skeletonAnimation.skeleton.a = 1.0f;
+
+				frameCounter = 0;
+				tookDamage = false;
+			}
+			frameCounter++;
+		}
+		if (false)
+		{
+			movementDirection.x = 0.0f;
+			movementDirection.y = 0.0f;
+			//falling back 
+			if (angleToFlyback > 0 && angleToFlyback < 90)
+			{
+				//initialize values
+
+				if (currentSpeed.x == 0.0f)
+					currentSpeed.x = -20.0f;
+				else
+				{
+					currentSpeed.x *= -1.0f;
+				}
+			}
+
+			currentSpeed.x = currentSpeed.x * Mathf.Cos(angleToFlyback * Mathf.PI/180);
+			currentSpeed.y = -accelerationY * Time.deltaTime + currentSpeed.y * Mathf.Sin(angleToFlyback * Mathf.PI/180);
+
+			movementDirection.x = currentSpeed.x * Time.deltaTime;
+			float newSX = transform.position.x + movementDirection.x;
+			movementDirection.y = (-accelerationY * newSX*newSX);
+			movementDirection.y /= (2 * (currentSpeed.x * currentSpeed.x));
+			movementDirection.y += Mathf.Tan (angleToFlyback * Mathf.PI/180)*newSX;
+
+			lastDirection = playerPhysics.Move (movementDirection);
+
+			if (playerPhysics.grounded)
+				flyingBack = false;
+
+			return;
+
+		}
+		
 
 		if (sleepAnim)
 		{
@@ -630,7 +695,7 @@ public class cPlayer_c : cUnit
 				}
 				//Debug.Log("jump speed: " + currentSpeedY);
 				movementDirection.y = currentSpeed.y * Time.deltaTime;
-				playerPhysics.Move (movementDirection);
+				lastDirection = playerPhysics.Move (movementDirection);
 				//rb2D.MovePosition( rb2D.position  + movementDirection);
 			}
 		}
@@ -646,7 +711,7 @@ public class cPlayer_c : cUnit
 	{
 		if (collider.gameObject.tag == "enemyFlyingHurtBox")
 		{
-			collider.gameObject.SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+			collider.gameObject.SendMessage("msg_damage",attackDmg,SendMessageOptions.RequireReceiver);
 			GamePad.SetVibration(0,1.0f,1.0f);
 		}
 	}
@@ -657,8 +722,6 @@ public class cPlayer_c : cUnit
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
 		{
 			iJumpCounter = 0;
-			jumpDestHeight = -999.0f;
-
 		}
 
 		if (collision.gameObject.name == "groundGameEnd")
@@ -731,7 +794,8 @@ public class cPlayer_c : cUnit
 			attackCounter = 0;
 			bSkipAnimForAttack = false;
 		}
-		Debug.Log ("end:" + animName + "  " + attackCounter);
+		//Debug.Log ("end:" + animName + "  " + attackCounter);
+
 		
 	}
 
@@ -739,12 +803,21 @@ public class cPlayer_c : cUnit
 	//################# Receiver/Messages ###########
 	//########################################
 
-	void msg_hit()
+	void msg_hit(float dmg)
 	{
-		if (currentLife > 0)
-			currentLife--;
+		takeDmg(dmg);
+
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 0.3f;
+		skeletonAnimation.skeleton.g = 0.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
 
 		ui.txtLife.text = currentLife+" Life";
+	
+		angleToFlyback = Vector3.Angle(lastDirection,new Vector3(1.0f,0.0f,0.0f) );
+		Debug.Log (angleToFlyback);
+		tookDamage = true;
+		flyingBack = true;
 	}
 		
 }

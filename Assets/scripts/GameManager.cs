@@ -9,9 +9,7 @@ public class GameManager : MonoBehaviour {
 	private GameCamera cam;
 	private float minY = float.PositiveInfinity;
 	private float maxY = -1.0f;
-	private bool stopCam = false;
 	private bool offsetSet = false;
-	private float distanceToGround = 0.0f;
 	private float distancePlayerCamBottom = 0.0f;
 	private float oldYOffset = 0.0f;
 
@@ -31,8 +29,7 @@ public class GameManager : MonoBehaviour {
 		cam.SetOffset(new Vector3(0.0f,player.transform.position.y*-1.0f ,0.0f));
 		oldYOffset = player.transform.position.y*-1.0f;
 		offsetSet = false;
-
-		distanceToGround = GetDistanceToGround(cPlayer);
+		
 		Camera c = GetComponent<Camera>();
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
 		distancePlayerCamBottom = Mathf.Abs (p2.y) - Mathf.Abs (player.transform.position.y);
@@ -119,7 +116,6 @@ public class GameManager : MonoBehaviour {
 			float height = player.GetComponent<MeshRenderer>().bounds.size.y;
 			maxY = GetDistanceWithVelocityZero(cPlayer)+Mathf.Abs (player.transform.position.y+height) + Mathf.Abs (p.y);
 			minY = p2.y;
-			Debug.Log ("set minY: " + minY);
 		}
 		else if (currentSpeed.y < 0.0f)
 		{
@@ -127,7 +123,6 @@ public class GameManager : MonoBehaviour {
 			if (minY != float.PositiveInfinity && distance != float.PositiveInfinity)
 			{
 				minY = player.transform.position.y - (distance + distancePlayerCamBottom);
-				Debug.Log ("calculated minY: " + minY);
 			}
 
 			if (cam.stopCam)

@@ -3,9 +3,13 @@ using System.Collections;
 
 public class cEnemyHurt : MonoBehaviour 
 {
-
-	void msg_die()
+	void msg_damage(float dmg)
 	{
-		this.GetComponentInParent<cFlyingEnemy>().SendMessage("msg_die",null,SendMessageOptions.RequireReceiver);
+		GameObject parent = transform.parent.gameObject;
+
+		if (parent.CompareTag("enemyFlying"))
+			parent.GetComponent<cFlyingEnemy>().SendMessage("msg_damage",dmg,SendMessageOptions.RequireReceiver);
+		else if (parent.CompareTag("bossMinion"))
+			parent.GetComponent<bossMinion>().SendMessage("msg_damage",dmg,SendMessageOptions.RequireReceiver);				
 	}
 }
