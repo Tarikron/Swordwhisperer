@@ -1,0 +1,83 @@
+
+forest1_layers.png
+size: 4096,4096
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer18
+  rotate: false
+  xy: 2, 2
+  size: 325, 161
+  orig: 325, 161
+  offset: 0, 0
+  index: -1
+Layer19
+  rotate: false
+  xy: 1555, 2305
+  size: 1029, 704
+  orig: 1029, 704
+  offset: 0, 0
+  index: -1
+Layer21
+  rotate: false
+  xy: 2955, 2850
+  size: 905, 481
+  orig: 905, 481
+  offset: 0, 0
+  index: -1
+Layer23
+  rotate: false
+  xy: 2, 2372
+  size: 1551, 1669
+  orig: 1551, 1669
+  offset: 0, 0
+  index: -1
+Layer24
+  rotate: false
+  xy: 2955, 3333
+  size: 1034, 708
+  orig: 1034, 708
+  offset: 0, 0
+  index: -1
+Layer30
+  rotate: true
+  xy: 2586, 2549
+  size: 460, 292
+  orig: 460, 292
+  offset: 0, 0
+  index: -1
+Layer31
+  rotate: false
+  xy: 1555, 3011
+  size: 1398, 1030
+  orig: 1398, 1030
+  offset: 0, 0
+  index: -1
+Layer33
+  rotate: true
+  xy: 1090, 389
+  size: 483, 215
+  orig: 483, 215
+  offset: 0, 0
+  index: -1
+Layer36
+  rotate: false
+  xy: 1322, 2206
+  size: 224, 164
+  orig: 224, 164
+  offset: 0, 0
+  index: -1
+Layer38
+  rotate: false
+  xy: 2, 165
+  size: 1086, 707
+  orig: 1086, 707
+  offset: 0, 0
+  index: -1
+tree1
+  rotate: false
+  xy: 2, 874
+  size: 1318, 1496
+  orig: 1318, 1496
+  offset: 0, 0
+  index: -1

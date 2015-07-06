@@ -1,0 +1,13 @@
+
+Bus_Forest.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer 7
+  rotate: false
+  xy: 2, 2
+  size: 1983, 1220
+  orig: 1983, 1220
+  offset: 0, 0
+  index: -1

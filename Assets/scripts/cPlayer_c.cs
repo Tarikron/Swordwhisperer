@@ -172,6 +172,9 @@ public class cPlayer_c : cUnit
 	private Vector3 lastDirection = Vector3.zero;
 	private float angleToFlyback = 0.0f;
 
+
+	private bool bBlackScreenGone = false;
+
 	void handleSwordPickup()
 	{
 		GameObject swTakePos = GameObject.Find("swordTakePosition");
@@ -564,11 +567,13 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		sword.bCollectedSword = true;
+		//sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;
 
+		bBlackScreenGone = false;
+	
 	}
 
 	void FixedUpdate()
@@ -584,6 +589,9 @@ public class cPlayer_c : cUnit
 			Application.LoadLevel ("swordwhisperer");
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.LoadLevel("menu");
+
+		if (!bBlackScreenGone)
+			return;
 
 		if (tookDamage)
 		{
@@ -647,7 +655,7 @@ public class cPlayer_c : cUnit
 		if (bCutscene == false)
 		{
 			float x = Input.GetAxis("Horizontal");
-			
+
 			if ((x >= 0.0f && x <= 0.05f) || (x <= 0.0f && x >= -0.05f ))
 				x = 0.0f;
 
@@ -656,7 +664,6 @@ public class cPlayer_c : cUnit
 
 			if (!bSkipMovementForAnim)
 			{
-				bCanJump = true;
 				//movement
 				if (bCanJump && sword.bCollectedSword)
 					handleJump (x);
@@ -668,10 +675,11 @@ public class cPlayer_c : cUnit
 					currentSpeed.y -= accelerationY * Time.deltaTime; 
 				else
 				{
+					//Debug.Log (playerPhysics.grounded == false && playerPhysics.onSlope == false);
 					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
 					{
 						//we are falling if we have negative speedY and we are not grounded
-						if (sword.bCollectedSword)
+						if (sword.bCollectedSword && bCanJump)
 							animHandler.addAnimation(animations.jump_fall,true);
 						bFalling = true;
 						//we want to gain speed if we are falling
@@ -679,6 +687,7 @@ public class cPlayer_c : cUnit
 					}
 					else
 					{
+						//movement is handled earlier, if we jump we need to know if we go to idle
 						if (bFalling && movementDirection.x == 0.0f)
 						{
 							if (sword.bCollectedSword)
@@ -744,7 +753,7 @@ public class cPlayer_c : cUnit
 	}
 	void endAnimListener (string animName)
 	{
-		//Debug.Log("end player - " + Time.frameCount + "   " + animName);
+		Debug.Log("end player - " + Time.frameCount + "   " + animName);
 
 		if (animName == animations.wakeup || 
 		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
@@ -802,6 +811,12 @@ public class cPlayer_c : cUnit
 	//########################################
 	//################# Receiver/Messages ###########
 	//########################################
+
+	void msg_blackscreen()
+	{
+		bBlackScreenGone = true;
+	}
+
 
 	void msg_hit(float dmg)
 	{

@@ -1,0 +1,13 @@
+
+Grassyo.png
+size: 4096,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Grassyayaya
+  rotate: false
+  xy: 2, 2
+  size: 2369, 363
+  orig: 2369, 363
+  offset: 0, 0
+  index: -1

@@ -31,7 +31,7 @@ public class GameCamera : MonoBehaviour {
 			float x = IncrementTowards(transform.position.x,target.position.x+offset.x,trackSpeed.x);
 			if (stopCam == false)
 				y = IncrementTowards(y,target.position.y+offset.y,trackSpeed.y);
-			if (x >= -9.11)
+			if (x >= -6.94)
 				transform.position = new Vector3(x,y,transform.position.z);
 		}
 	}

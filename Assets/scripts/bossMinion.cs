@@ -11,6 +11,13 @@ public class bossMinion : cEnemy {
 	public float amplitude = 2.0f;
 	private float minionAlpha = 0.0f;
 
+	private Color originColor;
+	private SkeletonAnimation skeletonAnimation;
+
+	private bool tookDamge = false;
+	private int delayFrames=4;
+	private int frameCounter=0;
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -18,12 +25,40 @@ public class bossMinion : cEnemy {
 
 		radius = 0.0f;
 		minionAlpha = Random.Range (0.0f,360.0f);
+
+		skeletonAnimation = GetComponent<SkeletonAnimation>();
+		originColor.a = skeletonAnimation.skeleton.a;
+		originColor.r = skeletonAnimation.skeleton.r;
+		originColor.g = skeletonAnimation.skeleton.g;
+		originColor.b = skeletonAnimation.skeleton.b;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		defaultDeath();
+
+		if (tookDamge)
+		{
+			if (delayFrames < frameCounter)
+			{
+				skeletonAnimation.skeleton.r = 1.0f;
+				skeletonAnimation.skeleton.b = 1.0f;
+				skeletonAnimation.skeleton.g = 1.0f;
+				skeletonAnimation.skeleton.a = 1.0f;
+				
+				tookDamge = false;
+				frameCounter = 0;
+			}
+			frameCounter++;
+		}
+
+		if (isDead() && !tookDamge)
+		{
+			GetComponent<BoxCollider2D>().enabled = false;
+			iDieState = eDieState.DIE_START;
+		}
+		if (defaultDeath()) //if we are dead, no need for others
+			return;
 
 		minionAlpha += 10.0f;
 		
@@ -38,13 +73,15 @@ public class bossMinion : cEnemy {
 
 	void msg_damage(float dmg)
 	{
-		takeDmg(dmg);
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 0.3f;
+		skeletonAnimation.skeleton.g = 0.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
 		
-		if (isDead())
-		{
-			GetComponent<BoxCollider2D>().enabled = false;
-			iDieState = eDieState.DIE_START;
-		}
+		takeDmg(dmg);	
+		
+		tookDamge = true;
+
 	}
 
 	void msg_shot()
