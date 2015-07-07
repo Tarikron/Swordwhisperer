@@ -68,6 +68,8 @@ public class cPlayer_c : cUnit
 	public float attackResetTime = 0.2f;
 	public float attackDmg = 1.0f;
 
+	private bool bExternCutScene = false;
+
 	private struct stHitBoxes
 	{
 		public BoxCollider2D hitBox_attack_123;
@@ -592,7 +594,13 @@ public class cPlayer_c : cUnit
 
 		if (!bBlackScreenGone)
 			return;
+		if (bExternCutScene)
+		{
+			animHandler.addAnimation(animations.idle_sword,true);
+			animHandler.playAnimation();
 
+			return;
+		}
 		if (tookDamage)
 		{
 			if (delayFrames < frameCounter)
@@ -641,8 +649,6 @@ public class cPlayer_c : cUnit
 			return;
 
 		}
-		
-
 		if (sleepAnim)
 		{
 			animHandler.addAnimation(animations.wakeup,false);
@@ -812,7 +818,20 @@ public class cPlayer_c : cUnit
 	//################# Receiver/Messages ###########
 	//########################################
 
-	void msg_blackscreen()
+	void msg_externCutsceneStart()
+	{
+		bExternCutScene = true;
+	}
+	void msg_externCutsceneEnd()
+	{
+		bExternCutScene = false;
+	}
+
+	void msg_blackscreenArrive()
+	{
+		bBlackScreenGone = false;
+	}
+	void msg_blackscreenGone()
 	{
 		bBlackScreenGone = true;
 	}

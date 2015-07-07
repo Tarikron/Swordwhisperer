@@ -6,7 +6,7 @@ public class GameCamera : MonoBehaviour {
 	private Transform target;
 	private Vector3 offset;
 	public bool stopCam = false;
-	private Vector2 trackSpeed = Vector2.zero;
+	public Vector2 trackSpeed = Vector2.zero;
 
 	public void SetTrackSpeed(float accX, float accY)
 	{
