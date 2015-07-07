@@ -8,6 +8,7 @@ public class bossMinion : cEnemy {
 	[HideInInspector]
 	public float radius = -1.0f;
 
+	public float angleSpeed = 20.0f;
 	public float amplitude = 2.0f;
 	private float minionAlpha = 0.0f;
 
@@ -60,7 +61,7 @@ public class bossMinion : cEnemy {
 		if (defaultDeath()) //if we are dead, no need for others
 			return;
 
-		minionAlpha += 10.0f;
+		minionAlpha += angleSpeed * Time.deltaTime;
 		
 		if (minionAlpha > 360.0f)
 			minionAlpha = 0.0f;

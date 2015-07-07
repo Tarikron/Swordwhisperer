@@ -85,7 +85,8 @@ public class cEnemyBoss1 : cEnemy
 			//Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180)
 
 			currentAngleSpeed = IncrementTowards(currentAngleSpeed,minions.rotationSpeedAngle,minions.acceleration);
-			alpha += currentAngleSpeed * Mathf.Sign (minions.rotationDirection);
+
+			alpha += currentAngleSpeed * Mathf.Sign (minions.rotationDirection) * Time.deltaTime;
 			if (alpha > 360.0f)
 				alpha = 0.0f;
 			if (alpha < 0.0f)

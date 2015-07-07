@@ -13,7 +13,11 @@ public class cFlyingEnemy : cEnemy {
 	public eAttackType attackType = eAttackType.ATTACK_CHARGE;
 
 	//for attack
-	public float attackSpeed = 7.0f;
+	public float chargeSpeed = 7.0f;
+	private float currentChargeSpeed = 0.0f;
+	public float chargeAcceleration = 0.5f;
+	private bool IsCharging = false;
+
 	public float flyingBackSpeed = 4.0f;
 	private Vector3 originBeforeAttackPos = Vector3.zero;
 	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
@@ -50,7 +54,13 @@ public class cFlyingEnemy : cEnemy {
 	private Color originColor;
 	private SkeletonAnimation skeletonAnimation;
 
+	private bool bAttack = false;
 	private bool tookDamge = false;
+
+	private GameObject player;
+	private Vector3 playerDirection = Vector3.zero;
+
+	public LayerMask collisionMask;
 
 	// Use this for initialization
 	public override void Start () 
@@ -69,6 +79,8 @@ public class cFlyingEnemy : cEnemy {
 		originColor.r = skeletonAnimation.skeleton.r;
 		originColor.g = skeletonAnimation.skeleton.g;
 		originColor.b = skeletonAnimation.skeleton.b;
+
+		player = GameObject.Find("Player");
 	}
 	
 	private void movementAirLoop()
@@ -140,74 +152,6 @@ public class cFlyingEnemy : cEnemy {
 		transform.position = movement;
 		
 	}
-
-	private void attackCharge(GameObject player, Vector3 target)
-	{
-		if ( iAttackState == eAttackState.ATTACK_NONE && lastPlayerPos == Vector3.zero)
-		{
-			//we are in attack range
-			originBeforeAttackPos = transform.position;
-			origin = transform.position;
-			lastPlayerPos = target;
-			lastPlayerPos.y += (player.GetComponent<BoxCollider2D>().size.y - player.GetComponent<BoxCollider2D>().size.y/3);
-			iAttackState = eAttackState.ATTACK_STAGE1;
-			isCharge = true;
-		}
-		else if (iAttackState == eAttackState.ATTACK_STAGE1) 
-		{
-			transform.position = Vector3.MoveTowards(transform.position,lastPlayerPos,attackSpeed*Time.deltaTime);
-
-			last_direction = lastPlayerPos - transform.position;
-
-			//charged to latest player pos
-			if (transform.position == lastPlayerPos)
-			{
-				lastPlayerPos = Vector3.zero;
-				iAttackState = eAttackState.ATTACK_STAGE2;
-			}
-		}
-		else if (iAttackState == eAttackState.ATTACK_STAGE2)
-		{
-			//flying back a bit for new charge
-			transform.position = Vector3.MoveTowards(transform.position,originBeforeAttackPos,flyingBackSpeed*Time.deltaTime);
-			if (transform.position == originBeforeAttackPos)
-			{
-				iAttackState = eAttackState.ATTACK_NONE;
-				originBeforeAttackPos = Vector3.zero;
-				origin = transform.position;
-				isCharge = false;
-			}
-		}
-	}
-
-	private void manageAttack()
-	{
-		GameObject player = GameObject.Find("Player");
-		Vector3 playerPos = player.gameObject.transform.position;
-		Vector3 enemyPos = transform.position;
-		
-		float distance = Vector3.Distance(enemyPos,playerPos);
-		
-		//if get in range trigger attack
-		if (iAttackState != eAttackState.ATTACK_NONE || distance <= attackDistance)
-		{
-			switch (attackType)
-			{
-				case eAttackType.ATTACK_CHARGE:
-					attackCharge(player,playerPos);
-					break;
-				case eAttackType.ATTACK_SHOT:
-					attackShot (player,playerPos);
-					break;
-			}
-		}
-		else
-		{
-			isCharge = false;
-			iAttackState = eAttackState.ATTACK_NONE;
-		}
-	}
-
 	private void manageMovementAfterCollide()
 	{
 		switch (iDefaultCollide)
@@ -264,6 +208,95 @@ public class cFlyingEnemy : cEnemy {
 		
 	}
 
+	private void attackCharge(GameObject player)
+	{
+		Vector3 playerPos = player.transform.position;
+		playerPos.y += player.GetComponent<BoxCollider2D>().size.y- (player.GetComponent<BoxCollider2D>().size.y*0.2f);
+
+		Vector3 direction = Vector3.zero;
+		direction = playerPos-transform.position;
+		RaycastHit2D hit;
+		//can we reach player ?
+		IsCharging = false;
+		if (hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y), direction.normalized ,triggerRange,collisionMask))
+		{
+			Vector3 movement = Vector3.zero;
+			//nothing between me and target
+			currentChargeSpeed = IncrementTowards(currentChargeSpeed,chargeSpeed,chargeAcceleration);
+
+			movement.x = currentChargeSpeed * direction.normalized.x * Time.deltaTime;
+			movement.y = currentChargeSpeed * direction.normalized.y * Time.deltaTime;
+
+			transform.Translate(movement);
+
+			IsCharging = true;
+		}
+		else
+		{
+			//something else ahead, wait
+
+			currentChargeSpeed = 0.0f;
+			defaultIdleMovement();
+
+			//wait 3sec before going back to origin
+
+		}
+	}
+
+	private void defaultIdleMovement()
+	{
+		Vector3 movement = Vector3.zero;
+		movement.y = Time.deltaTime * Mathf.Sin(angleTemp * Mathf.PI/180);
+
+		transform.Translate(movement);
+
+		angleTemp += 2.0f;
+		if (angleTemp > 360.0f)
+			angleTemp = 0.0f;
+	}
+
+	private void manageAttack(float playerDistance)
+	{
+		//if get in range trigger attack
+		if (iAttackState != eAttackState.ATTACK_NONE || playerDistance <= attackDistance)
+		{
+			switch (attackType)
+			{
+			case eAttackType.ATTACK_CHARGE:
+				attackCharge(player);
+				break;
+			case eAttackType.ATTACK_SHOT:
+				attackShot (player,player.transform.position);
+				break;
+			}
+		}
+		else
+		{
+			isCharge = false;
+			iAttackState = eAttackState.ATTACK_NONE;
+		}
+	}
+
+	void manageMovement(float playerDistance)
+	{
+		if (aggroRange <= playerDistance) //we are out of range
+		{
+			bAttack = false;
+		}
+		else
+		{
+			//we are in range
+			if (!bAttack && triggerRange >= playerDistance)
+			{
+				bAttack = true;
+				originBeforeAttackPos = transform.position;
+			}
+
+			if (bAttack)
+				manageAttack(playerDistance);
+		}
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -294,7 +327,14 @@ public class cFlyingEnemy : cEnemy {
 			manageMovementAfterCollide();
 			return; 
 		}
-		manageAttack();
+		
+		Vector3 playerPos = player.gameObject.transform.position;
+		Vector3 enemyPos = transform.position;
+		float distance = Vector3.Distance(enemyPos,playerPos);
+
+		//manageMovement(distance);
+
+		manageAttack(distance);
 
 		//we are charging to player or flying back.. so no need for movement calculation
 		if (!isCharge)

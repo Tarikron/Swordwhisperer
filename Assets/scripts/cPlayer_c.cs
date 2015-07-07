@@ -177,6 +177,9 @@ public class cPlayer_c : cUnit
 
 	private bool bBlackScreenGone = false;
 
+	private float hurtTimer = 0.0f;
+	private float hurtTime = 2.0f;
+
 	void handleSwordPickup()
 	{
 		GameObject swTakePos = GameObject.Find("swordTakePosition");
@@ -198,6 +201,11 @@ public class cPlayer_c : cUnit
 		{
 			case eAnimTakeSword.ANIM_DONE:
 			{
+
+				//Camera mainCam = Camera.main;
+				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
+				//gameCam.decreaseFactor = 0.5f;
+
 				sword.bCollectedSword = true;
 				sword.sSword = "sword";
 				bSkipMovementForAnim = false;
@@ -226,6 +234,12 @@ public class cPlayer_c : cUnit
 			case eAnimTakeSword.ANIM_WALK:
 			{
 				dialog.SendMessage("msg_eventTriggerEnd",null,SendMessageOptions.RequireReceiver);
+
+				//Camera mainCam = Camera.main;
+				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
+
+				//gameCam.startShake();
+				//gameCam.decreaseFactor = 0.0f;
 
 				transform.position = Vector3.MoveTowards(playerPos,enemyPos,Time.deltaTime * walkVelocity);
 				
@@ -390,9 +404,6 @@ public class cPlayer_c : cUnit
 
 		if (transform.eulerAngles.y >= 180.0f)
 			xAxis *= -1;
-
-
-
 
 		targetSpeed.x = velocity;
 		currentSpeed.x = IncrementTowards(currentSpeed.x, targetSpeed.x, accelerationX);
@@ -575,6 +586,9 @@ public class cPlayer_c : cUnit
 		hitBoxes.maxDelay = 5;
 
 		bBlackScreenGone = false;
+
+		hurtTime = 0.0f;
+		hurtTimer = 0.0f;
 	
 	}
 
@@ -601,6 +615,21 @@ public class cPlayer_c : cUnit
 
 			return;
 		}
+
+		/*if (!sword.bCollectedSword)
+		{
+			if (hurtTime <= hurtTimer)
+			{
+				hurtTime = Random.Range (2.0f,4.0f);
+
+				Camera mainCam = Camera.main;
+				GameCamera gameCam = mainCam.GetComponent<GameCamera>();
+
+				gameCam.startShake();
+				hurtTimer = 0.0f;
+			}
+			hurtTimer += Time.deltaTime;
+		}*/
 		if (tookDamage)
 		{
 			if (delayFrames < frameCounter)
