@@ -11,6 +11,9 @@ using XInputDotNetPure;
 [RequireComponent(typeof(PlayerPhysics))]
 public class cPlayer_c : cUnit 
 {
+	public enum eSwordTakeAfter {NONE = 0, WHILE = 1, DONE = 2};
+	private eSwordTakeAfter iSwordTakeAfter = eSwordTakeAfter.NONE;
+
 	enum eAttackType {ATTACK_NONE = 0 , ATTACK_1 = 1, ATTACK_2 = 2, ATTACK_3 = 3};
 	enum eAnimTakeSword {ANIM_NONE = 0,ANIM_START,ANIM_WALK,ANIM_TAKESTART,ANIM_TAKEIDLE,ANIM_DONE};
 	enum eAnimWalk{ANIM_NONE = 0,ANIM_WALK,ANIM_END};
@@ -174,11 +177,65 @@ public class cPlayer_c : cUnit
 	private Vector3 lastDirection = Vector3.zero;
 	private float angleToFlyback = 0.0f;
 
-
 	private bool bBlackScreenGone = false;
 
 	private float hurtTimer = 0.0f;
 	private float hurtTime = 2.0f;
+
+	public float timeToGetOneLife = 2.0f;
+	private float lifeTimer = 0.0f;
+	public ParticleSystem PowerUp;
+	private bool playback = true;
+
+	void playPowerUp(bool playbackspeed)
+	{
+		PowerUp.enableEmission = true;
+		if (!PowerUp.isPlaying)
+			PowerUp.Play ();
+		if (!playbackspeed)
+			PowerUp.Stop();
+		ParticleSystem[] systems = PowerUp.gameObject.GetComponentsInChildren<ParticleSystem>();
+		
+		for (int i = 0; i < systems.Length; i++)
+		{
+			ParticleSystem ps = systems[i];
+			if (ps)
+			{
+				ps.enableEmission = true;
+				if (!PowerUp.isPlaying)
+					ps.Play();
+				if (!playbackspeed)
+					ps.Stop();
+			}
+		}
+
+	}
+
+	void handleSwordAfterPickup()
+	{
+		if (iSwordTakeAfter == eSwordTakeAfter.WHILE)
+		{
+			if (timeToGetOneLife <= lifeTimer)
+			{
+				if (currentLife < startLife)
+					currentLife++;
+
+				lifeTimer = 0.0f;
+			}
+			lifeTimer += Time.deltaTime;
+
+			playPowerUp(playback);
+
+			ui.txtLife.text = currentLife+" Life";
+			if (currentLife == startLife)
+			{
+				playback = false;
+				playPowerUp(playback);
+				iSwordTakeAfter = eSwordTakeAfter.NONE;
+			}
+		}
+
+	}
 
 	void handleSwordPickup()
 	{
@@ -201,6 +258,9 @@ public class cPlayer_c : cUnit
 		{
 			case eAnimTakeSword.ANIM_DONE:
 			{
+				
+				//start swordAfterPickEvent
+				iSwordTakeAfter = eSwordTakeAfter.WHILE;
 
 				//Camera mainCam = Camera.main;
 				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
@@ -685,7 +745,7 @@ public class cPlayer_c : cUnit
 			sleepAnim = false;
 		}
 		handleSwordPickup();
-		
+		handleSwordAfterPickup();
 		//skip all related input/movement/loop animation for cutscene
 		if (bCutscene == false)
 		{
@@ -747,10 +807,20 @@ public class cPlayer_c : cUnit
 		animHandler.playAnimation();
 
 	}
+	public eSwordTakeAfter GetSwordTakeState()
+	{
+		return iSwordTakeAfter;
+	}
 	public Vector2 GetCurrentSpeed()
 	{
 		return currentSpeed;
 	}
+	public bool GetBlackSreenState()
+	{
+		return bBlackScreenGone;
+	}
+
+
 	void OnTriggerEnter2D (Collider2D collider)
 	{
 		if (collider.gameObject.tag == "enemyFlyingHurtBox")
