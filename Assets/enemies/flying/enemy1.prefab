@@ -64,8 +64,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 146066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 67.4000015, y: 19.2999992, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 8.05000019, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 494530}
   - {fileID: 422090}
@@ -90,7 +90,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .349999994, y: 0, z: 0}
+  m_LocalPosition: {x: .270000011, y: .239999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 408758}
@@ -183,7 +183,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: .0118350387, y: -.0237800181}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1.90613008, y: 1.80265999}
 --- !u!61 &6170510
@@ -221,16 +221,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3f3fdf07b7255498cc29acb85fc27f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 20
+  startLife: 1
+  currentLife: 1
+  aggroRange: 30
+  triggerRange: 20
   shotInterval: 2
-  attackDistance: 20
-  speed: 2
-  xLengthTurning: 20
-  flyingType: 1
+  attackCollideDmg: 1
+  flyingType: 0
   attackType: 0
-  circleSize: 20
-  attackSpeed: 5
+  chargeSpeed: 7
+  chargeAcceleration: 2
   flyingBackSpeed: 4
+  attackChargeDmg: 1
+  circleSize: 5
+  xLengthTurning: 10
+  speedX: 4
+  accelerationX: 1
+  angleSpeed: 20
+  angleAcceleration: 5
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 16384
 --- !u!114 &11469230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -253,8 +264,8 @@ MonoBehaviour:
   logErrors: 0
   submeshSeparators: []
   timeScale: 1
-  loop: 0
-  _animationName: 
+  loop: 1
+  _animationName: Idle
 --- !u!114 &11475350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -268,6 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotSpeed: 10
   gravity: 1
+  damage: 1
 --- !u!212 &21212036
 SpriteRenderer:
   m_ObjectHideFlags: 1

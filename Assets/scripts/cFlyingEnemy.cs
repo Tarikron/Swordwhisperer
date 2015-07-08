@@ -20,9 +20,8 @@ public class cFlyingEnemy : cEnemy {
 
 	public float flyingBackSpeed = 4.0f;
 	private Vector3 originBeforeAttackPos = Vector3.zero;
-	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2};
+	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2, ATTACK_TO_ORIGIN=3};
 	private eAttackState iAttackState;
-	private bool isCharge = false;
 	public float attackChargeDmg = 1.0f;
 
 
@@ -54,7 +53,6 @@ public class cFlyingEnemy : cEnemy {
 	private Color originColor;
 	private SkeletonAnimation skeletonAnimation;
 
-	private bool bAttack = false;
 	private bool tookDamge = false;
 
 	private GameObject player;
@@ -62,12 +60,24 @@ public class cFlyingEnemy : cEnemy {
 
 	public LayerMask collisionMask;
 
+	private bool waitForAttack = false;
+	private bool waitForSec = false;
+
 	// Use this for initialization
 	public override void Start () 
 	{
 		base.Start();
 
 		xDirection = 1;
+			
+		angleSpeed += Random.Range(-1.0f,1.0f); 
+		if (angleSpeed == 0.0f)
+			angleSpeed = 1.0f;
+		xDirection = Random.Range (-1,1);
+		if (xDirection == 0)
+			xDirection = 1;
+
+		speedX += Random.Range (0.1f,0.6f);
 
 		targetSpeed.x = speedX;
 		acceleration.x = accelerationX;
@@ -81,6 +91,10 @@ public class cFlyingEnemy : cEnemy {
 		originColor.b = skeletonAnimation.skeleton.b;
 
 		player = GameObject.Find("Player");
+
+		iAttackState = eAttackState.ATTACK_NONE;
+	
+		Debug.Log ("startSpeed: " + speedX);
 	}
 	
 	private void movementAirLoop()
@@ -139,17 +153,41 @@ public class cFlyingEnemy : cEnemy {
 			angleTemp = angleTemp - 360.0f;
 		else if (angleTemp < 0.0f)
 			angleTemp = 360.0f-angleTemp;
+
 		
-		float yInc = origin.y + (circleSize) * Mathf.Sin (angleTemp * Mathf.PI/180) * Time.deltaTime;
+		float yInc = Time.deltaTime * Mathf.Sin(angleTemp * Mathf.PI/180);
 
 		movement.y = yInc;
 
 		last_direction.x = movement.x;
-		last_direction.y = movement.y - origin.y;
+		last_direction.y = yInc;
 
-		movement.x += x;
-		movement.z = transform.position.z;
-		transform.position = movement;
+		RaycastHit2D hit;
+		Vector2 pos = Vector2.zero;
+
+		//can we move in that direction?
+		float collideX = 0.0f;
+		float collideY = 0.0f;
+		if (Mathf.Abs(last_direction.normalized.x) > 0.5f)
+			collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(last_direction.x) * 1.2f;
+		if (Mathf.Abs(last_direction.normalized.y) > 0.5f)
+			collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(last_direction.y) * 1.2f;
+		
+		pos.x = collideX + transform.position.x;
+		pos.y = collideY + transform.position.y;
+		Debug.DrawRay(pos,last_direction.normalized * 3.0f);
+		if (hit = Physics2D.Raycast (pos, last_direction.normalized ,3.0f,Physics.AllLayers))
+		{
+			//if we hit something, went opposite direction
+			bDecreasingSpeed = false;
+			xDirection *= -1;
+			xTurningTemp = 0.0f;
+
+			last_direction *= xDirection;
+		}
+
+		transform.Translate(last_direction);
+
 		
 	}
 	private void manageMovementAfterCollide()
@@ -208,38 +246,183 @@ public class cFlyingEnemy : cEnemy {
 		
 	}
 
+	private  IEnumerator WaitForSec(float sec)
+	{
+		
+		yield return new WaitForSeconds(sec);
+
+		iAttackState = eAttackState.ATTACK_TO_ORIGIN;
+
+		Debug.Log ("im the shitty unity: " + iAttackState);
+
+		currentChargeSpeed = 0.0f;
+
+		yield break;
+	}
+
+
+	private  IEnumerator WaitForNextAttack(float sec)
+	{
+
+		yield return new WaitForSeconds(sec);
+
+		iAttackState = eAttackState.ATTACK_STAGE1;
+
+		Debug.Log ("im the big shit unity: " + iAttackState);
+
+		yield break;
+	}
+
+	private void startIdleAttack()
+	{
+		//wait 1 sec
+		defaultIdleMovement();
+		if (!waitForAttack)
+		{
+			StartCoroutine("WaitForNextAttack",0.5f); 
+			waitForAttack = true;
+		}
+	}
+	private void startIdle()
+	{
+		currentChargeSpeed = 0.0f;
+		defaultIdleMovement();
+		if (!waitForSec)
+		{
+			//wait 3sec before going back to origin
+			StartCoroutine("WaitForSec",3.0f); 
+			waitForSec = true;
+		}
+	}
+	private void moveToDirection(Vector3 direction)
+	{
+		Vector3 movement = Vector3.zero;
+		
+		//nothing between me and target
+		currentChargeSpeed = IncrementTowards(currentChargeSpeed,chargeSpeed,chargeAcceleration);
+		
+		movement.x = currentChargeSpeed * direction.normalized.x * Time.deltaTime;
+		movement.y = currentChargeSpeed * direction.normalized.y * Time.deltaTime;
+		
+		transform.Translate(movement);
+	}
+
 	private void attackCharge(GameObject player)
 	{
+		RaycastHit2D hit;
+		IsCharging = true;
 		Vector3 playerPos = player.transform.position;
 		playerPos.y += player.GetComponent<BoxCollider2D>().size.y- (player.GetComponent<BoxCollider2D>().size.y*0.2f);
-
 		Vector3 direction = Vector3.zero;
 		direction = playerPos-transform.position;
-		RaycastHit2D hit;
-		//can we reach player ?
-		IsCharging = false;
-		if (hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y), direction.normalized ,triggerRange,collisionMask))
+
+		Vector2 pos = Vector2.zero;
+
+		if (iAttackState == eAttackState.ATTACK_TO_ORIGIN)
 		{
-			Vector3 movement = Vector3.zero;
-			//nothing between me and target
-			currentChargeSpeed = IncrementTowards(currentChargeSpeed,chargeSpeed,chargeAcceleration);
+			waitForSec = false;
+			Vector3 origin_direction = Vector3.zero;
+			origin_direction = originBeforeAttackPos-transform.position;
+			float dist = Vector3.Distance(transform.position,origin_direction);
 
-			movement.x = currentChargeSpeed * direction.normalized.x * Time.deltaTime;
-			movement.y = currentChargeSpeed * direction.normalized.y * Time.deltaTime;
+			if (origin_direction.sqrMagnitude < 1.0f)
+			{
+				iAttackState = eAttackState.ATTACK_NONE;
+				//we are done
+				waitForSec = false;
+				waitForAttack = false;
+				StopCoroutine("WaitForNextAttack"); //if we can reach our goal again just stop coroutine
+				StopCoroutine("WaitForSec"); //if we can reach our goal again just stop coroutine
+				return;
+			}
 
-			transform.Translate(movement);
+			float collideX = 0.0f;
+			float collideY = 0.0f;
+			if (Mathf.Abs(origin_direction.normalized.x) > 0.5f)
+				collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(origin_direction.x) * 1.2f;
+			if (Mathf.Abs(origin_direction.normalized.y) > 0.5f)
+				collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(origin_direction.y) * 1.2f;
 
-			IsCharging = true;
+			pos.x = collideX + transform.position.x;
+			pos.y = collideY + transform.position.y;
+			Debug.DrawRay(pos,origin_direction.normalized * dist);
+			if (hit = Physics2D.Raycast (pos, origin_direction.normalized ,5.0f,Physics.AllLayers))
+			{
+				//something at our place :/ live here for now
+				iAttackState = eAttackState.ATTACK_NONE;
+				waitForSec = false;
+				waitForAttack = false;
+				StopCoroutine("WaitForNextAttack"); //if we can reach our goal again just stop coroutine
+				StopCoroutine("WaitForSec"); //if we can reach our goal again just stop coroutine
+			}
+			else
+				moveToDirection(origin_direction);
+
 		}
-		else
+		else if (iAttackState == eAttackState.ATTACK_STAGE2)
 		{
-			//something else ahead, wait
+			//go back a bit and wait 1sec for next attack 
 
-			currentChargeSpeed = 0.0f;
-			defaultIdleMovement();
+			float goBackDistance = Vector3.Distance (playerPos,transform.position);
+			if (goBackDistance < 8.0f)
+			{
+				direction *=  -1.0f;
 
-			//wait 3sec before going back to origin
+				float dist = Vector3.Distance(transform.position,direction);
+				LayerMask newMask= ~collisionMask;
+				float collideX = 0.0f;
+				float collideY = 0.0f;
+				if (Mathf.Abs(direction.normalized.x) > 0.5f)
+					collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(direction.x) * 1.2f;
+				if (Mathf.Abs(direction.normalized.y) > 0.5f)
+					collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(direction.y) * 1.2f;
+				pos.x = collideX + transform.position.x;
+				pos.y = collideY + transform.position.y;
+				Debug.DrawRay(pos,direction.normalized * 4.0f);
 
+				if (hit = Physics2D.Raycast (pos, direction.normalized ,2.0f,newMask))
+					startIdleAttack();
+				else
+					moveToDirection(direction);
+			}
+			else
+				startIdleAttack();
+
+		}
+		else if (iAttackState == eAttackState.ATTACK_STAGE1)
+		{
+			waitForAttack = false;
+			float collideX = 0.0f;
+			float collideY = 0.0f;
+			if (Mathf.Abs(direction.normalized.x) > 0.5f)
+				collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(direction.x) * 1.2f;
+			if (Mathf.Abs(direction.normalized.y) > 0.5f)
+				collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(direction.y) * 1.2f;
+			pos.x = collideX + transform.position.x;
+			pos.y = collideY + transform.position.y;
+
+			//can we reach player ?
+			float dist = Vector3.Distance(transform.position,playerPos) + 1.0f;
+			Debug.DrawRay(pos,direction.normalized * dist);
+			if (hit = Physics2D.Raycast (pos, direction.normalized ,dist,Physics.AllLayers))
+			{
+				//nothing between me and target
+				if (hit.collider.tag == "player")
+				{
+					waitForSec = false;
+					waitForAttack = false;
+					StopCoroutine("WaitForNextAttack"); //if we can reach our goal again just stop coroutine
+					StopCoroutine("WaitForSec"); //if we can reach our goal again just stop coroutine
+					moveToDirection(direction);
+				}
+				else
+					startIdle();
+			}
+			else
+			{
+				//something else ahead, wait
+				startIdle();
+			}
 		}
 	}
 
@@ -258,7 +441,7 @@ public class cFlyingEnemy : cEnemy {
 	private void manageAttack(float playerDistance)
 	{
 		//if get in range trigger attack
-		if (iAttackState != eAttackState.ATTACK_NONE || playerDistance <= attackDistance)
+		if (iAttackState != eAttackState.ATTACK_NONE || playerDistance <= triggerRange)
 		{
 			switch (attackType)
 			{
@@ -272,34 +455,37 @@ public class cFlyingEnemy : cEnemy {
 		}
 		else
 		{
-			isCharge = false;
 			iAttackState = eAttackState.ATTACK_NONE;
 		}
 	}
 
 	void manageMovement(float playerDistance)
 	{
+		IsCharging = false;
 		if (aggroRange <= playerDistance) //we are out of range
 		{
-			bAttack = false;
+			if (iAttackState != eAttackState.ATTACK_NONE)
+				iAttackState = eAttackState.ATTACK_TO_ORIGIN;
 		}
 		else
 		{
 			//we are in range
-			if (!bAttack && triggerRange >= playerDistance)
+			if (iAttackState == eAttackState.ATTACK_NONE && triggerRange >= playerDistance)
 			{
-				bAttack = true;
+				iAttackState = eAttackState.ATTACK_STAGE1;
 				originBeforeAttackPos = transform.position;
 			}
-
-			if (bAttack)
-				manageAttack(playerDistance);
 		}
+		if (iAttackState != eAttackState.ATTACK_NONE)
+			manageAttack(playerDistance);
+
+
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+
 		if (tookDamge)
 		{
 			if (delayFrames < frameCounter)
@@ -314,7 +500,7 @@ public class cFlyingEnemy : cEnemy {
 			}
 			frameCounter++;
 		}
-		if (isDead() && !tookDamge)
+		if (iDieState == eDieState.DIE_NONE && isDead() && !tookDamge)
 		{
 			GetComponent<BoxCollider2D>().enabled = false;
 			iDieState = eDieState.DIE_START;
@@ -332,12 +518,12 @@ public class cFlyingEnemy : cEnemy {
 		Vector3 enemyPos = transform.position;
 		float distance = Vector3.Distance(enemyPos,playerPos);
 
-		//manageMovement(distance);
+		manageMovement(distance);
 
-		manageAttack(distance);
+		//manageAttack(distance);
 
 		//we are charging to player or flying back.. so no need for movement calculation
-		if (!isCharge)
+		if (!IsCharging)
 		{
 			targetSpeed.x = speedX;
 			acceleration.x = accelerationX;
@@ -376,8 +562,10 @@ public class cFlyingEnemy : cEnemy {
 		{
 			if (eAttackType.ATTACK_CHARGE == attackType)
 			{
+				Debug.Log ("collide");
 				lastPlayerPos = Vector3.zero;
 				iAttackState = eAttackState.ATTACK_STAGE2;
+				currentChargeSpeed = 0.0f;
 				collision.gameObject.SendMessage("msg_hit",attackChargeDmg,SendMessageOptions.RequireReceiver);
 			}
 			else
