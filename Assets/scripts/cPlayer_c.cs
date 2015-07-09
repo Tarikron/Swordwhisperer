@@ -164,6 +164,10 @@ public class cPlayer_c : cUnit
 		public AudioClip attackVoice1;
 		public AudioClip attackVoice2;
 		public AudioClip attackVoice3;
+
+		public AudioClip damageVoice1;
+		public AudioClip damageVoice2;
+		public AudioClip damageVoice3;
 	}
 	public audioSFX audioClipsSFX;
 	public AudioSource audioSourceSFX;
@@ -951,6 +955,32 @@ public class cPlayer_c : cUnit
 		Debug.Log (angleToFlyback);
 		tookDamage = true;
 		flyingBack = true;
+
+		playDamageVoiceClips();
+	}
+
+	//########################################
+	//################# Sounds ###########
+	//########################################
+	
+	private void playDamageVoiceClips(){
+		switch (UnityEngine.Random.Range(0,3)) {
+			
+		case 0:
+			audioSourceSFX2.PlayOneShot(audioClipsSFX.damageVoice1);
+			break;
+			
+		case 1:
+			audioSourceSFX2.PlayOneShot(audioClipsSFX.damageVoice2);
+			break;
+			
+		case 2:
+			audioSourceSFX2.PlayOneShot(audioClipsSFX.damageVoice3);
+			break;
+			
+		default:
+			break;
+		}
 	}
 		
 }
