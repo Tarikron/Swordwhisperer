@@ -28,7 +28,11 @@ public class MainMenu : MonoBehaviour
 
 	public void Credits()
 	{
-		creditsPanelGroup.alpha = 1.0f;
+		if(creditsPanelGroup.alpha == 1.0f){
+			creditsPanelGroup.alpha = 0.0f;
+		}else{
+			creditsPanelGroup.alpha = 1.0f;
+		}
 	}
 
 	public void Exit()
