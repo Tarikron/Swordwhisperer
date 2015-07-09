@@ -74,8 +74,7 @@ public class cEnemyBoss1 : cEnemy
 	{
 		int minionCount = lMinions.Count;
 		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
-
-
+		
 		if (tookDamge)
 		{
 			if (delayFrames < frameCounter)
@@ -106,13 +105,17 @@ public class cEnemyBoss1 : cEnemy
 
 		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
 		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
-		
+
+		int minionsC = 0;
+
 		for (int i = 0; i<minionCount; i++)
 		{
 			GameObject _minion = lMinions[i];
 			bossMinion = _minion.GetComponent<bossMinion>();
 			if ( !_minion.activeSelf || bossMinion == null)
 				continue;
+
+			minionsC++;
 
 			float alpha = bossMinion.alpha;
 

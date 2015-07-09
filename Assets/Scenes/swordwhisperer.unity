@@ -4338,8 +4338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba3a86d19e8df0439441c70b1727014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startLife: 1
-  currentLife: 1
+  startLife: 3
+  currentLife: 3
   aggroRange: 2
   triggerRange: 1
   shotInterval: 2
@@ -4901,8 +4901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba3a86d19e8df0439441c70b1727014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startLife: 1
-  currentLife: 1
+  startLife: 3
+  currentLife: 3
   aggroRange: 2
   triggerRange: 1
   shotInterval: 2
