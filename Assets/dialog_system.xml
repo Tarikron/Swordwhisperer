@@ -6,16 +6,31 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
+		<dialog eventTrigger="sword_take">
+			<person uid="me123" order="1">
+				<text>Press A to take me.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>1</duration>
+				<click_away>0</click_away>
+				<help>1</help>
+			</person>
+		</dialog>		
 		<dialog eventTrigger="afterSwordTake">
 			<person uid="me123" order="1">
 				<text>Lets get out!</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
 		<dialog eventTrigger="outOfCave">
@@ -24,17 +39,32 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
-		<dialog eventTrigger="outOfCave">
+		<dialog eventTrigger="beforeCamDrive">
 			<person uid="me123" order="1">
 				<text>I sense something ... A presence that I have not felt since ...</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>3</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
+		<dialog eventTrigger="afterCamDrive">
+			<person uid="me123" order="1">
+				<text>Go lets explore this place.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>2</duration>
+				<click_away>0</click_away>
+				<help>0</help>
+			</person>
+		</dialog>		
 	</lang>
 </dialogs>

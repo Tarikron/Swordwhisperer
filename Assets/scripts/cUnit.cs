@@ -39,6 +39,8 @@ public class cUnit : MonoBehaviour
 	protected bool takeDmg(float dmg)
 	{
 		currentLife -= dmg;
+		if (currentLife < 0.0f)
+			currentLife = 0.0f;
 		return isDead();
 	}
 

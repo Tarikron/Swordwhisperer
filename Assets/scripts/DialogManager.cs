@@ -27,12 +27,14 @@ public class DialogManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		dlgCanvas = GetComponent<CanvasGroup>();
-		currentXml = "dialog_system.xml";
+		currentXml = Application.dataPath+"/dialog_system.xml";
 		currentEvent = "";
 
 		DialogLoadXml loadXml = new DialogLoadXml(currentXml);
 		dialogs = loadXml.parseXml();
 
+
+		dlgMessage.text = currentXml;
 	}
 	
 	// Update is called once per frame
