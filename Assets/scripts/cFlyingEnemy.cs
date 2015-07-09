@@ -63,6 +63,15 @@ public class cFlyingEnemy : cEnemy {
 	private bool waitForAttack = false;
 	private bool waitForSec = false;
 
+	[SerializeField]
+	private AudioClip attackClip1;
+	
+	[SerializeField]
+	private AudioClip attackClip2;
+	
+	[SerializeField]
+	private AudioClip attackClip3;
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -267,6 +276,7 @@ public class cFlyingEnemy : cEnemy {
 		yield return new WaitForSeconds(sec);
 
 		iAttackState = eAttackState.ATTACK_STAGE1;
+		playAttackClips();
 
 		Debug.Log ("im the big shit unity: " + iAttackState);
 
@@ -320,6 +330,7 @@ public class cFlyingEnemy : cEnemy {
 
 		if (iAttackState == eAttackState.ATTACK_TO_ORIGIN)
 		{
+
 			waitForSec = false;
 			Vector3 origin_direction = Vector3.zero;
 			origin_direction = originBeforeAttackPos-transform.position;
@@ -566,6 +577,7 @@ public class cFlyingEnemy : cEnemy {
 				lastPlayerPos = Vector3.zero;
 				iAttackState = eAttackState.ATTACK_STAGE2;
 				currentChargeSpeed = 0.0f;
+//				playAttackClips();
 				collision.gameObject.SendMessage("msg_hit",attackChargeDmg,SendMessageOptions.RequireReceiver);
 			}
 			else
@@ -576,5 +588,25 @@ public class cFlyingEnemy : cEnemy {
 		}
 		else
 			iDefaultCollide = eDefaultCollideType.COLLIDE_MOVE;
+	}
+
+	private void playAttackClips(){
+		switch (UnityEngine.Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(attackClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(attackClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(attackClip3);
+			break;
+			
+		default:
+			break;
+		}
 	}
 }
