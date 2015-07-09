@@ -189,6 +189,9 @@ public class cPlayer_c : cUnit
 
 	private bool didDialog = false;
 
+	public float OneLifePerTime = 3.0f;
+	public float OneLifeTimer = 0.0f;
+
 	void playPowerUp(bool playbackspeed)
 	{
 		PowerUp.enableEmission = true;
@@ -715,6 +718,17 @@ public class cPlayer_c : cUnit
 			}
 			frameCounter++;
 		}
+
+		if (sword.bCollectedSword && currentLife < startLife)
+		{
+			if (OneLifePerTime <= OneLifeTimer)
+			{
+				currentLife+=1.0f;
+				OneLifeTimer = 0.0f;
+			}
+			OneLifeTimer += Time.deltaTime;
+		}
+
 		if (false)
 		{
 			movementDirection.x = 0.0f;
@@ -856,7 +870,11 @@ public class cPlayer_c : cUnit
 			iJumpCounter = 0;
 		}
 
-		if (collision.gameObject.name == "groundGameEnd")
+		if (collision.gameObject.tag == "soul")
+		{
+			collision.gameObject.SetActive(false);
+		}
+		else if (collision.gameObject.name == "groundGameEnd")
 		{
 			Application.LoadLevel("swordwhisperer");
 		}

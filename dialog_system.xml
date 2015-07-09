@@ -50,18 +50,18 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
-				<duration>1</duration>
+				<duration>3</duration>
 				<click_away>0</click_away>
 				<help>0</help>
 			</person>
 		</dialog>
 		<dialog eventTrigger="afterCamDrive">
 			<person uid="me123" order="1">
-				<text>Go lets Explore this place.</text>
+				<text>Go lets explore this place.</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
-				<duration>1</duration>
+				<duration>2</duration>
 				<click_away>0</click_away>
 				<help>0</help>
 			</person>

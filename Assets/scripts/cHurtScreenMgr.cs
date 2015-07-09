@@ -89,7 +89,7 @@ public class cHurtScreenMgr : MonoBehaviour {
 						col.a = 0.0f;
 						img3.color = col;
 
-
+						currentHurtScreen = 0;
 						stop = false;
 					}
 					currentHurtScreen = -1;
@@ -137,6 +137,44 @@ public class cHurtScreenMgr : MonoBehaviour {
 					currentHurtScreen = currentHurtScreen + direction;
 
 				}
+			}
+			else
+			{
+				//if some screens alive
+
+				//dirty solution, todo do it better
+				Image img1 = hurtScreens[0];
+				col = img1.color;
+				col.a -= scale;
+				img1.color = col;
+				
+				Image img2 = hurtScreens[1];
+				col = img2.color;
+				col.a -= scale;
+				img2.color = col;
+				
+				Image img3 = hurtScreens[2];
+				col = img3.color;
+				col.a -= scale;
+				img3.color = col;
+				
+				if (img1.color.a <= 0.0f && img2.color.a <= 0.0f && img3.color.a <= 0.0f)
+				{
+					col = img1.color;
+					col.a = 0.0f;
+					img1.color = col;
+					col = img2.color;
+					col.a = 0.0f;
+					img2.color = col;
+					col = img3.color;
+					col.a = 0.0f;
+					img3.color = col;
+					
+					currentHurtScreen = 0;
+					stop = false;
+				}
+				return;
+
 			}
 		}
 	}
