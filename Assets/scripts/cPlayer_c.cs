@@ -819,6 +819,12 @@ public class cPlayer_c : cUnit
 		animHandler.playAnimation();
 
 	}
+
+	public bool isCutscene()
+	{
+		return bExternCutScene || bCutscene;
+	}
+
 	public eSwordTakeAfter GetSwordTakeState()
 	{
 		return iSwordTakeAfter;
@@ -932,6 +938,10 @@ public class cPlayer_c : cUnit
 	void msg_externCutsceneEnd()
 	{
 		bExternCutScene = false;
+
+		//little bit dirty here... but we only have one event
+		dialog.SendMessage("msg_eventTrigger","afterCamDrive",SendMessageOptions.RequireReceiver);
+
 	}
 
 	void msg_blackscreenArrive()

@@ -12,6 +12,7 @@ public class DialogManager : MonoBehaviour {
 
 	Dictionary<string,Dialog> dialogs;
 	CanvasGroup dlgCanvas;
+	public CanvasGroup dlgHelpCanvas;
 	public Text dlgMessage;
 	private int currentIndex = 0;
 	public float timerNextMessage = 2.0f;
@@ -19,6 +20,9 @@ public class DialogManager : MonoBehaviour {
 
 	private bool nextMessage = false;
 	private bool stopEvent = false;
+	private bool checkForNext = false;
+
+	private float durationTimer = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -48,20 +52,48 @@ public class DialogManager : MonoBehaviour {
 			if (!nextMessage && !stopEvent && dlgCanvas.alpha < 1.0f)
 			{
 				float fade_in = dlg.persons[currentIndex].fade_in;
-				dlgCanvas.alpha += (1.0f * Time.deltaTime)/fade_in;
-				if (dlgCanvas.alpha > 1.0f)
-					dlgCanvas.alpha = 1.0f;
-				string text = dlg.persons[currentIndex].text;
-				dlgMessage.text = text;
+
+				if (dlg.persons[currentIndex].help == 0)
+				{
+					dlgCanvas.alpha += (1.0f * Time.deltaTime)/fade_in;
+					if (dlgCanvas.alpha > 1.0f)
+						dlgCanvas.alpha = 1.0f;
+					string text = dlg.persons[currentIndex].text;
+					dlgMessage.text = text;
+				}
+				else
+				{
+					dlgHelpCanvas.alpha += (1.0f * Time.deltaTime)/fade_in;
+					if (dlgHelpCanvas.alpha > 1.0f)
+						dlgHelpCanvas.alpha = 1.0f;
+				}
+
 			}
 			else if (stopEvent || nextMessage)
 			{
+				float alpha = 0.0f;
 				float fade_out = dlg.persons[currentIndex].fade_out;
-				dlgCanvas.alpha -= (1.0f * Time.deltaTime)/fade_out;
-				if (dlgCanvas.alpha < 0.0f)
-					dlgCanvas.alpha = 0.0f;
 
-				if (dlgCanvas.alpha <= 0.01f)
+				//Todo: kinda shitty solution... do it smarter
+				if (dlg.persons[currentIndex].help == 0)
+				{
+
+					dlgCanvas.alpha -= (1.0f * Time.deltaTime)/fade_out;
+					if (dlgCanvas.alpha < 0.0f)
+						dlgCanvas.alpha = 0.0f;
+
+					alpha = dlgCanvas.alpha;
+				}
+				else
+				{
+					dlgHelpCanvas.alpha -= (1.0f * Time.deltaTime)/fade_out;
+					if (dlgHelpCanvas.alpha < 0.0f)
+						dlgHelpCanvas.alpha = 0.0f;
+					
+					alpha = dlgHelpCanvas.alpha;
+				}
+
+				if (alpha <= 0.01f)
 				{
 					if (nextMessage)
 						currentIndex++;
@@ -76,11 +108,27 @@ public class DialogManager : MonoBehaviour {
 			}
 			else if (dlgCanvas.alpha >= 1.0f)
 			{
-				timerCurrentMessage += Time.deltaTime;
-				if (timerNextMessage <= timerCurrentMessage)
+				if (checkForNext)
 				{
-					nextMessage = true;
-					timerCurrentMessage = 0.0f;
+					//after duration check for next
+					timerCurrentMessage += Time.deltaTime;
+					if (timerNextMessage <= timerCurrentMessage)
+					{
+						nextMessage = true;
+						timerCurrentMessage = 0.0f;
+						durationTimer = 0.0f;
+						checkForNext = false;
+					}
+				}
+				else
+				{
+					//stay alpha 1 as long as duration goes
+					float duration = dlg.persons[currentIndex].duration;
+					if (duration <= durationTimer)
+					{
+						checkForNext = true;
+					}
+					durationTimer += Time.deltaTime;
 				}
 			}
 
@@ -92,6 +140,9 @@ public class DialogManager : MonoBehaviour {
 		currentEvent = nextEvent;
 		stopEvent = false;
 		currentIndex = 0;
+		checkForNext = false;
+		durationTimer = 0.0f;
+
 	}
 	void msg_eventTriggerEnd(string nextEvent)
 	{

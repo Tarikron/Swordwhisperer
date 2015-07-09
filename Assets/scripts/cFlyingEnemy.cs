@@ -436,6 +436,9 @@ public class cFlyingEnemy : cEnemy {
 
 	private void manageAttack(float playerDistance)
 	{
+		if (player.GetComponent<cPlayer_c>().isCutscene())
+			return;
+
 		//if get in range trigger attack
 		if (iAttackState != eAttackState.ATTACK_NONE || playerDistance <= triggerRange)
 		{

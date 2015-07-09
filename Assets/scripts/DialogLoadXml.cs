@@ -62,6 +62,9 @@ public class DialogLoadXml : MonoBehaviour {
 							dlg.person.fade_out = int.Parse(currentNode["fade_out"].InnerText);
 							dlg.person.click_away = int.Parse(currentNode["click_away"].InnerText);
 							dlg.person.soundfile = currentNode["soundfile"].InnerText;
+							dlg.person.help = int.Parse(currentNode["help"].InnerText);
+							dlg.person.duration = int.Parse(currentNode["duration"].InnerText);
+
 							dlg.persons.Add(dlg.person);
 
 							if (currentNode.NextSibling == null)

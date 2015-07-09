@@ -6,7 +6,9 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
 		<dialog eventTrigger="sword_take">
@@ -15,7 +17,9 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>1</help>
 			</person>
 		</dialog>		
 		<dialog eventTrigger="afterSwordTake">
@@ -24,7 +28,9 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
 		<dialog eventTrigger="outOfCave">
@@ -33,7 +39,9 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
 		<dialog eventTrigger="beforeCamDrive">
@@ -42,8 +50,21 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
+				<duration>1</duration>
 				<click_away>0</click_away>
+				<help>0</help>
 			</person>
 		</dialog>
+		<dialog eventTrigger="afterCamDrive">
+			<person uid="me123" order="1">
+				<text>Go lets Explore this place.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>1</duration>
+				<click_away>0</click_away>
+				<help>0</help>
+			</person>
+		</dialog>		
 	</lang>
 </dialogs>

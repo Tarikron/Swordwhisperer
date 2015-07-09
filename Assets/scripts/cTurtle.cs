@@ -81,24 +81,29 @@ public class cTurtle : cEnemy {
 		{
 			GetComponent<BoxCollider2D>().enabled = false;
 			iDieState = eDieState.DIE_START;
+
+			//animationToPlay = turtleAnimations.death;
+			//animLoop = false;
 		}
 		
 		if (defaultDeath()) //if we are dead, no need for others
 			return;
-
-		float distance = Vector2.Distance (enemyPos,playerPos);
-		if (distance <= triggerDistance) 
+		if (iDieState == eDieState.DIE_NONE)
 		{
-			if (animationToPlay == "")
+			float distance = Vector2.Distance (enemyPos,playerPos);
+			if (distance <= triggerDistance) 
 			{
-				currentTimeScale = 0.7f;
-				animationToPlay = "wakeUP";
-				animLoop = false;
-			}
-			else if (animationToPlay == "idle")
-			{
-				currentTimeScale = 1.0f;
-				animLoop = true;
+				if (animationToPlay == "")
+				{
+					currentTimeScale = 0.7f;
+					animationToPlay = "wakeUP";
+					animLoop = false;
+				}
+				else if (animationToPlay == "idle")
+				{
+					currentTimeScale = 1.0f;
+					animLoop = true;
+				}
 			}
 		}
 

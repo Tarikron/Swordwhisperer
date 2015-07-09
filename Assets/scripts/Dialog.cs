@@ -23,6 +23,8 @@ public class Dialog
 		public int fade_out;
 		public string soundfile;
 		public int click_away;
+		public int help;
+		public int duration;
 	}
 	public stPerson person;
 	public List<stPerson> persons = new List<stPerson>();

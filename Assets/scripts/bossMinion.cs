@@ -37,7 +37,6 @@ public class bossMinion : cEnemy {
 	// Update is called once per frame
 	void Update () 
 	{
-
 		if (tookDamge)
 		{
 			if (delayFrames < frameCounter)
