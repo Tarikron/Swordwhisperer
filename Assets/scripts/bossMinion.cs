@@ -91,7 +91,7 @@ public class bossMinion : cEnemy {
 		Vector3 playerPos = player.gameObject.transform.position;
 		Vector3 enemyPos = transform.position;
 		float distance = Vector3.Distance(enemyPos,playerPos);
-		if (distance <= attackDistance)
+		if (distance <= triggerRange)
 			attackShot(player,playerPos);
 	}
 

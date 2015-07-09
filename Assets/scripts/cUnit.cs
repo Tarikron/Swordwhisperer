@@ -25,7 +25,8 @@ public class cUnit : MonoBehaviour
 
 	public virtual void Start()
 	{
-		currentLife = startLife;
+		if (currentLife <= 0.0f)
+			currentLife = startLife;
 	}
 
 	protected bool isDead()
