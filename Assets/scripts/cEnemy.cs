@@ -14,6 +14,18 @@ public class cEnemy : cUnit
 	protected Vector3 lastPlayerPos = Vector3.zero;
 	public float attackCollideDmg = 1.0f;
 
+	public AudioSource audioSource;
+
+
+	[SerializeField]
+	private  AudioClip damagedClip;
+
+	[SerializeField]
+	private AudioClip deathClip;
+
+
+	[SerializeField]
+	private AudioClip movementClip;
 
 	protected bool defaultDeath()
 	{
@@ -32,6 +44,12 @@ public class cEnemy : cUnit
 			currentSpeed.y += -9.81f * Time.deltaTime;
 			transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
 
+			audioSource.clip = damagedClip;
+			if(!audioSource.isPlaying){
+				audioSource.Play();
+			}
+
+
 			if (scale.x <= 0.0f)
 				iDieState = eDieState.DIE_DONE;
 			
@@ -39,6 +57,10 @@ public class cEnemy : cUnit
 		}
 		case eDieState.DIE_DONE:
 			die ();
+			audioSource.clip = deathClip;
+			if(!audioSource.isPlaying){
+				audioSource.Play();
+			}
 			return true;
 		}
 
@@ -70,7 +92,7 @@ public class cEnemy : cUnit
 			//shotClone.transform.lossyScale = shot.transform.localScale;
 			//shotClone.GetComponent<SpriteRenderer>().enabled = true;
 			shotClone.GetComponent<BoxCollider2D>().enabled = true;
-
+		
 			ParticleSystem ps = shotClone.GetComponent<ParticleSystem>();
 			if (ps)
 			{
@@ -79,6 +101,8 @@ public class cEnemy : cUnit
 
 		}
 	}
+
+
 }
 
 
