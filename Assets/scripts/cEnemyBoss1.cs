@@ -28,6 +28,11 @@ public class cEnemyBoss1 : cEnemy
 	private float bossAlpha = 0.0f;
 	private bossMinion bossMinion;
 
+	private SkeletonAnimation skeletonAnimation;
+	private bool tookDamge = false;
+	private Color originColor;
+	private int delayFrames=4;
+	private int frameCounter=0;
 
 	public override void Start()
 	{
@@ -57,12 +62,42 @@ public class cEnemyBoss1 : cEnemy
 			lMinions.Add (ga);
 			alpha += angleDistance;
 		}
+
+		skeletonAnimation = GetComponent<SkeletonAnimation>();
+		originColor.a = skeletonAnimation.skeleton.a;
+		originColor.r = skeletonAnimation.skeleton.r;
+		originColor.g = skeletonAnimation.skeleton.g;
+		originColor.b = skeletonAnimation.skeleton.b;
 	}
 
 	public void Update()
 	{
 		int minionCount = lMinions.Count;
 		Vector3 movement = new Vector3(0.0f,0.0f,0.0f);
+
+
+		if (tookDamge)
+		{
+			if (delayFrames < frameCounter)
+			{
+				skeletonAnimation.skeleton.r = 1.0f;
+				skeletonAnimation.skeleton.b = 1.0f;
+				skeletonAnimation.skeleton.g = 1.0f;
+				skeletonAnimation.skeleton.a = 1.0f;
+				
+				tookDamge = false;
+				frameCounter = 0;
+			}
+			frameCounter++;
+		}
+		if (iDieState == eDieState.DIE_NONE && isDead() && !tookDamge)
+		{
+			GetComponent<BoxCollider2D>().enabled = false;
+			iDieState = eDieState.DIE_START;
+		}
+		
+		if (defaultDeath()) //if we are dead, no need for others
+			return;
 
 		transform.position = new Vector3(transform.position.x,transform.position.y + Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180),transform.position.z);
 		bossAlpha += 2.0f;
@@ -110,6 +145,18 @@ public class cEnemyBoss1 : cEnemy
 			}
 		}
 
+	}
+
+	void msg_damage(float dmg)
+	{
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 0.3f;
+		skeletonAnimation.skeleton.g = 0.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
+		
+		takeDmg(dmg);	
+		
+		tookDamge = true;
 	}
 
 }

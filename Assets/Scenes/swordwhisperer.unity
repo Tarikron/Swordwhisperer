@@ -544,10 +544,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 888708174}
     m_Modifications:
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.size
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 89.8000031
@@ -580,81 +576,13 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 3356654, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 146066, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_Name
       value: enemy3
       objectReference: {fileID: 0}
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: 3356654, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
+      propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 310f9a52e94dcb844a8c96a65b1c5854, type: 2}
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.data[3]
-      value: 
-      objectReference: {fileID: 2100000, guid: 310f9a52e94dcb844a8c96a65b1c5854, type: 2}
-    - target: {fileID: 2323808, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_Materials.Array.data[4]
-      value: 
-      objectReference: {fileID: 2100000, guid: 1a20b50a22c4e0a4aa888c213851edf5, type: 2}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: flyingType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: angleSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 146066, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: circleSize
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: speedX
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: accelerationX
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: xLengthTurning
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: attackDistance
-      value: 2000
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: chargeAcceleration
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: angleAcceleration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: aggroRange
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446330, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: triggerRange
-      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
@@ -1101,6 +1029,59 @@ SpriteRenderer:
 Transform:
   m_PrefabParentObject: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
   m_PrefabInternal: {fileID: 887588745}
+--- !u!1 &159425024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 159425025}
+  - 61: {fileID: 159425026}
+  - 114: {fileID: 159425027}
+  m_Layer: 10
+  m_Name: hurtBox
+  m_TagString: enemyFlyingHurtBox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &159425025
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 159425024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 156593430}
+  m_RootOrder: 0
+--- !u!61 &159425026
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 159425024}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+--- !u!114 &159425027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 159425024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f960236498490439b0fd89de28843b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &185671773
 Prefab:
   m_ObjectHideFlags: 0
@@ -1709,7 +1690,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 17.6399994
+      value: 20.2000008
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2010,7 +1991,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300001, guid: 53167790950933c418b03684e26b30be,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: b9e21e992a2a39f408a93ab17ef7b4f5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: dc9a3abfe5d35f244b2d89274b7b46c6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -3686,7 +3667,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 28.5
+      value: 30.1000004
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3997,7 +3978,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 9.80000019
+      value: 14.54
       objectReference: {fileID: 0}
     - target: {fileID: 408758, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_LocalPosition.y
@@ -4363,6 +4344,10 @@ MonoBehaviour:
   triggerRange: 1
   shotInterval: 2
   attackCollideDmg: 1
+  audioSource: {fileID: 0}
+  damagedClip: {fileID: 0}
+  deathClip: {fileID: 0}
+  movementClip: {fileID: 0}
   skeletonAnimation: {fileID: 879752945}
   triggerDistance: 9
   triggerAttack: 6
@@ -4626,6 +4611,14 @@ Prefab:
     - target: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_LocalScale.y
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: startLife
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
+      propertyPath: currentLife
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
@@ -4914,6 +4907,10 @@ MonoBehaviour:
   triggerRange: 1
   shotInterval: 2
   attackCollideDmg: 1
+  audioSource: {fileID: 0}
+  damagedClip: {fileID: 0}
+  deathClip: {fileID: 0}
+  movementClip: {fileID: 0}
   skeletonAnimation: {fileID: 959205573}
   triggerDistance: 9
   triggerAttack: 6
@@ -5823,6 +5820,42 @@ Prefab:
       propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attackVoice1
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attackVoice2
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attackVoice3
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attack1
+      value: 
+      objectReference: {fileID: 8300000, guid: 5c781742d443f402887a2b383b3fea57, type: 3}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attack2
+      value: 
+      objectReference: {fileID: 8300000, guid: 1506e0350d06f4b1091ec35f027f97f8, type: 3}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.attack3
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a37387f0d07f447f8efb0f51a898c8b, type: 3}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.damageVoice1
+      value: 
+      objectReference: {fileID: 8300000, guid: fa1206155e594440e8d74b56e98c587c, type: 3}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.damageVoice2
+      value: 
+      objectReference: {fileID: 8300000, guid: ce3278eb372dd45e08ac97cecc155196, type: 3}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.damageVoice3
+      value: 
+      objectReference: {fileID: 8300000, guid: 7488e0b98dfad4d488ee6f271b664e07, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c6a50a06da7e41740861f418822d763d, type: 2}
   m_IsPrefabParent: 0

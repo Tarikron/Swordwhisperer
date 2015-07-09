@@ -24,7 +24,6 @@ public class cFlyingEnemy : cEnemy {
 	private eAttackState iAttackState;
 	public float attackChargeDmg = 1.0f;
 
-
 	public float circleSize = 2.0f;
 	public float xLengthTurning = 20.0f;
 	public float speedX = 0.0f;

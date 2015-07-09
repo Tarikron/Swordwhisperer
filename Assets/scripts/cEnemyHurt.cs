@@ -13,5 +13,7 @@ public class cEnemyHurt : MonoBehaviour
 			parent.GetComponent<bossMinion>().SendMessage("msg_damage",dmg,SendMessageOptions.RequireReceiver);				
 		else if (parent.CompareTag("heroTurtle"))
 			parent.GetComponent<cTurtle>().SendMessage("msg_damage",dmg,SendMessageOptions.RequireReceiver);
+		else if (parent.CompareTag("boss1"))
+			parent.GetComponent<cEnemyBoss1>().SendMessage("msg_damage",dmg,SendMessageOptions.RequireReceiver);
 	}
 }

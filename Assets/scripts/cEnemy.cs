@@ -44,22 +44,26 @@ public class cEnemy : cUnit
 			currentSpeed.y += -9.81f * Time.deltaTime;
 			transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
 
-			audioSource.clip = damagedClip;
-			if(!audioSource.isPlaying){
-				audioSource.Play();
+			if (damagedClip)
+			{
+				audioSource.clip = damagedClip;
+				if(!audioSource.isPlaying){
+					audioSource.Play();
+				}
 			}
-
-
 			if (scale.x <= 0.0f)
 				iDieState = eDieState.DIE_DONE;
 			
 			return true;
 		}
 		case eDieState.DIE_DONE:
-			die ();
-			audioSource.clip = deathClip;
-			if(!audioSource.isPlaying){
-				audioSource.Play();
+			if (deathClip)
+			{
+				audioSource.clip = deathClip;
+				if(!audioSource.isPlaying){
+					audioSource.Play();
+				}
+				die ();
 			}
 			return true;
 		}

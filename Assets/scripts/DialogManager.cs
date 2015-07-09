@@ -33,7 +33,6 @@ public class DialogManager : MonoBehaviour {
 		DialogLoadXml loadXml = new DialogLoadXml(currentXml);
 		dialogs = loadXml.parseXml();
 
-
 		dlgMessage.text = currentXml;
 	}
 	
