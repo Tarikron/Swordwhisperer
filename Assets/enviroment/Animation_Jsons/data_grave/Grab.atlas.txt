@@ -1,0 +1,41 @@
+
+Grab.png
+size: 4096,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer1
+  rotate: true
+  xy: 2, 699
+  size: 1302, 2122
+  orig: 1302, 2122
+  offset: 0, 0
+  index: -1
+Layer2
+  rotate: false
+  xy: 2904, 1515
+  size: 725, 486
+  orig: 725, 486
+  offset: 0, 0
+  index: -1
+Layer3
+  rotate: false
+  xy: 2126, 1176
+  size: 776, 825
+  orig: 776, 825
+  offset: 0, 0
+  index: -1
+Layer5
+  rotate: false
+  xy: 2126, 942
+  size: 196, 232
+  orig: 196, 232
+  offset: 0, 0
+  index: -1
+scarf
+  rotate: false
+  xy: 2, 2
+  size: 2364, 695
+  orig: 2364, 695
+  offset: 0, 0
+  index: -1

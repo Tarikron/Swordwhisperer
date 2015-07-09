@@ -125,9 +125,9 @@ public class PlayerPhysics : MonoBehaviour
 			Debug.DrawRay(ray_left.origin,ray_left.direction);
 			Debug.DrawRay(ray_right.origin,ray_right.direction);
 
-			//float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
-			//float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
-			//Debug.Log("left: " + slopeL + " right: " + slopeR);
+			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
+			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
+			Debug.Log("left: " + slopeL + " right: " + slopeR);
 
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
 			{
@@ -141,8 +141,11 @@ public class PlayerPhysics : MonoBehaviour
 					deltaY = Mathf.Tan ((slopeR * Mathf.PI)/180.0f) * deltaX * xDir;
 					onSlope = true;
 				}
+
+				if (cFunction.xor(dst_left < dst_right && xDir > 0.0f,dst_left < dst_right && xDir < 0.0f)) //moving down to left or up to right
+					deltaY *= -1.0f;
 			}
-	
+
 			ray = new Ray(new Vector2(transform.position.x,transform.position.y), (new Vector2 (deltaX*xDir, deltaY)));
 			Debug.DrawRay(ray.origin,ray.direction*10.0f);
 

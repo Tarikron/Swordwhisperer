@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject player;
+	//public GameObject playerPrefab;
 	private GameCamera cam;
 	private float minY = float.PositiveInfinity;
 	private float maxY = -1.0f;
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour {
 
 	void Start () 
 	{
+		//player = GameObject.Instantiate(playerPrefab);
+
 		cam = GetComponent<GameCamera>();
 		cPlayer_c cPlayer = player.GetComponent<cPlayer_c>();
 

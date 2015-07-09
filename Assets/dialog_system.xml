@@ -1,50 +1,40 @@
 <dialogs>
 	<lang lang="de">
-		<dialog eventTrigger="sword_take">
+		<dialog eventTrigger="wakeUp">
 			<person uid="me123" order="1">
-				<text>Help! Please someone rescue me from this misery!</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
-			</person>
-			<person uid="you123" order="2">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
-			</person>
-			<person uid="me123" order="3">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
-			</person>
-			<person uid="you123" order="4">
-				<text>Hello, How are you?</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away> <!-- default 1 -->
+				<text>Hey, wake up!</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<click_away>0</click_away>
 			</person>
 		</dialog>
-		<dialog eventTrigger="enter_boss1">
+		<dialog eventTrigger="afterSwordTake">
 			<person uid="me123" order="1">
-				<text>You are a ugly Boss.</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
+				<text>Lets get out!</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<click_away>0</click_away>
 			</person>
-			<person uid="boss123" order="2">
-				<text>Yes. I'am.</text> <!-- required -->
-				<soundfile>talk_me123.mp3</soundfile> <!-- optional -->
-				<fade_in>10</fade_in> <!--  sec -->
-				<fade_out>10</fade_out> <!--  sec -->
-				<click_away>1</click_away>
-			</person>		
-		</dialog>	
+		</dialog>
+		<dialog eventTrigger="outOfCave">
+			<person uid="me123" order="1">
+				<text>After many years, I'm finally free!</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<click_away>0</click_away>
+			</person>
+		</dialog>
+		<dialog eventTrigger="outOfCave">
+			<person uid="me123" order="1">
+				<text>I sense something ... A presence that I have not felt since ...</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<click_away>0</click_away>
+			</person>
+		</dialog>
 	</lang>
 </dialogs>

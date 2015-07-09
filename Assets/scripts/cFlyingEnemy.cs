@@ -253,8 +253,6 @@ public class cFlyingEnemy : cEnemy {
 
 		iAttackState = eAttackState.ATTACK_TO_ORIGIN;
 
-		Debug.Log ("im the shitty unity: " + iAttackState);
-
 		currentChargeSpeed = 0.0f;
 
 		yield break;
@@ -267,8 +265,6 @@ public class cFlyingEnemy : cEnemy {
 		yield return new WaitForSeconds(sec);
 
 		iAttackState = eAttackState.ATTACK_STAGE1;
-
-		Debug.Log ("im the big shit unity: " + iAttackState);
 
 		yield break;
 	}

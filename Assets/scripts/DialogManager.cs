@@ -90,10 +90,12 @@ public class DialogManager : MonoBehaviour {
 	void msg_eventTrigger(string nextEvent)
 	{
 		currentEvent = nextEvent;
+		stopEvent = false;
+		currentIndex = 0;
 	}
-	void msg_eventTriggerEnd()
+	void msg_eventTriggerEnd(string nextEvent)
 	{
-		if (currentEvent != "")
+		if (currentEvent != "" && nextEvent == currentEvent)
 			stopEvent = true;
 	}
 }

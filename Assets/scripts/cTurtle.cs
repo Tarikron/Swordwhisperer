@@ -16,6 +16,11 @@ public class cTurtle : cEnemy {
 	private bool animLoop = false;
 	private float currentTimeScale = 1.0f;
 
+	private bool tookDamge = false;
+	private Color originColor;
+	private int delayFrames=4;
+	private int frameCounter=0;
+
 	[System.Serializable]
 	public struct animTurtle
 	{
@@ -43,6 +48,12 @@ public class cTurtle : cEnemy {
 
 		skeletonAnimation.state.Start += startAnimListener;
 		skeletonAnimation.state.End += endAnimListener;
+
+		skeletonAnimation = GetComponent<SkeletonAnimation>();
+		originColor.a = skeletonAnimation.skeleton.a;
+		originColor.r = skeletonAnimation.skeleton.r;
+		originColor.g = skeletonAnimation.skeleton.g;
+		originColor.b = skeletonAnimation.skeleton.b;
 	}
 	
 	// Update is called once per frame
@@ -51,6 +62,29 @@ public class cTurtle : cEnemy {
 		GameObject player = GameObject.Find("Player");
 		Vector2 playerPos = player.transform.position;
 		Vector2 enemyPos = this.gameObject.transform.position;
+
+		if (tookDamge)
+		{
+			if (delayFrames < frameCounter)
+			{
+				skeletonAnimation.skeleton.r = 1.0f;
+				skeletonAnimation.skeleton.b = 1.0f;
+				skeletonAnimation.skeleton.g = 1.0f;
+				skeletonAnimation.skeleton.a = 1.0f;
+				
+				tookDamge = false;
+				frameCounter = 0;
+			}
+			frameCounter++;
+		}
+		if (iDieState == eDieState.DIE_NONE && isDead() && !tookDamge)
+		{
+			GetComponent<BoxCollider2D>().enabled = false;
+			iDieState = eDieState.DIE_START;
+		}
+		
+		if (defaultDeath()) //if we are dead, no need for others
+			return;
 
 		float distance = Vector2.Distance (enemyPos,playerPos);
 		if (distance <= triggerDistance) 
@@ -117,6 +151,19 @@ public class cTurtle : cEnemy {
 			animLoop = false;
 		}
 	}
+
+	void msg_damage(float dmg)
+	{
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 0.3f;
+		skeletonAnimation.skeleton.g = 0.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
+		
+		takeDmg(dmg);	
+		
+		tookDamge = true;
+	}
+
 	void msg_die()
 	{
 		die();

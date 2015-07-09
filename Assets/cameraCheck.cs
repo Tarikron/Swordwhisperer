@@ -58,6 +58,9 @@ public class cameraCheck : MonoBehaviour
 			break;
 			case eCutsceneSteps.SCENE_START:
 			{
+
+				player.GetComponent<cPlayer_c>().dialog.SendMessage("msg_eventTrigger","beforeCamDrive",SendMessageOptions.RequireReceiver);
+
 				gameCam.SetTarget(currentTarget);
 				originTrackSpeed = gameCam.trackSpeed;
 				gameCam.SetTrackSpeed(trackSpeed.x,trackSpeed.y);

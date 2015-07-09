@@ -187,6 +187,8 @@ public class cPlayer_c : cUnit
 	public ParticleSystem PowerUp;
 	private bool playback = true;
 
+	private bool didDialog = false;
+
 	void playPowerUp(bool playbackspeed)
 	{
 		PowerUp.enableEmission = true;
@@ -229,6 +231,8 @@ public class cPlayer_c : cUnit
 			ui.txtLife.text = currentLife+" Life";
 			if (currentLife == startLife)
 			{
+				dialog.SendMessage("msg_eventTrigger","afterSwordTake",SendMessageOptions.RequireReceiver);
+
 				playback = false;
 				playPowerUp(playback);
 				iSwordTakeAfter = eSwordTakeAfter.NONE;
@@ -244,7 +248,7 @@ public class cPlayer_c : cUnit
 		Vector3 playerPos = this.gameObject.transform.position;
 		
 		float distance = Vector2.Distance (playerPos,enemyPos);
-		if (distance <= 4) 
+		if (distance <= 4 && !sword.bCollectedSword) 
 		{
 			dialog.SendMessage("msg_eventTrigger","sword_take",SendMessageOptions.RequireReceiver);
 
@@ -252,7 +256,7 @@ public class cPlayer_c : cUnit
 				iAnimTakeSword = eAnimTakeSword.ANIM_WALK;
 		}
 		else
-			dialog.SendMessage("msg_eventTriggerEnd",null,SendMessageOptions.RequireReceiver);
+			dialog.SendMessage("msg_eventTriggerEnd","sword_take",SendMessageOptions.RequireReceiver);
 
 		switch (iAnimTakeSword)
 		{
@@ -293,7 +297,7 @@ public class cPlayer_c : cUnit
 			}
 			case eAnimTakeSword.ANIM_WALK:
 			{
-				dialog.SendMessage("msg_eventTriggerEnd",null,SendMessageOptions.RequireReceiver);
+				dialog.SendMessage("msg_eventTriggerEnd","sword_take",SendMessageOptions.RequireReceiver);
 
 				//Camera mainCam = Camera.main;
 				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
@@ -348,7 +352,15 @@ public class cPlayer_c : cUnit
 
 
 				if (c.a  >= 1.0f)
+				{
+					if (didDialog == false)
+					{
+						dialog.SendMessage("msg_eventTrigger","outOfCave",SendMessageOptions.RequireReceiver);
+						didDialog = true;
+					}
 					bCanJump = true;
+
+				}
 				else
 					bCanJump = false;
 
@@ -407,7 +419,6 @@ public class cPlayer_c : cUnit
 		}
 		else
 		{
-
 			//Debug.Log ("current: " + currentAnimation);
 			if (anim.sAnimation == animations.walk_sword || anim.sAnimation == animations.walk_start_sword ||
 			    anim.sAnimation == animations.walk_nosword || anim.sAnimation == animations.walk_start_nosword)
@@ -640,7 +651,7 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		sword.bCollectedSword = true;
+		//sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;
@@ -740,6 +751,7 @@ public class cPlayer_c : cUnit
 		}
 		if (sleepAnim)
 		{
+			dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
 			animHandler.addAnimation(animations.wakeup,false);
 			bCutscene = true;
 			sleepAnim = false;
@@ -823,7 +835,7 @@ public class cPlayer_c : cUnit
 
 	void OnTriggerEnter2D (Collider2D collider)
 	{
-		if (collider.gameObject.tag == "enemyFlyingHurtBox")
+		if (collider.gameObject.tag == "enemyFlyingHurtBox" || collider.gameObject.tag == "enemyFlyingHurtBox")
 		{
 			collider.gameObject.SendMessage("msg_damage",attackDmg,SendMessageOptions.RequireReceiver);
 			GamePad.SetVibration(0,1.0f,1.0f);
@@ -844,21 +856,17 @@ public class cPlayer_c : cUnit
 		}
 	}
 
-
-
-
-
 	//########################################
 	//################# Animation ################
 	//########################################
 
 	void startAnimListener(string animName)
 	{
-		Debug.Log("start player - frames: " + Time.frameCount + "   " + animName );
+		//Debug.Log("start player - frames: " + Time.frameCount + "   " + animName );
 	}
 	void endAnimListener (string animName)
 	{
-		Debug.Log("end player - " + Time.frameCount + "   " + animName);
+		//Debug.Log("end player - " + Time.frameCount + "   " + animName);
 
 		if (animName == animations.wakeup || 
 		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
