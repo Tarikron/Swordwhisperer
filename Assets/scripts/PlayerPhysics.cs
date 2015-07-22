@@ -9,9 +9,10 @@ public class PlayerPhysics : MonoBehaviour
 	public bool grounded;
 	[HideInInspector]
 	public bool onSlope;
-
 	[HideInInspector]
 	public bool movementStopped;
+	[HideInInspector]
+	public float distanceToGround;
 
 	private BoxCollider2D _collider;
 	private Vector3 size;
@@ -21,6 +22,8 @@ public class PlayerPhysics : MonoBehaviour
 
 	private Ray ray;
 	private RaycastHit2D hit;
+
+
 
 	void Start()
 	{
@@ -127,7 +130,7 @@ public class PlayerPhysics : MonoBehaviour
 
 			float dst_left = Vector3.Distance (ray_left.origin,hit_left.point);
 			float dst_right = Vector3.Distance (ray_right.origin,hit_right.point);
-			Debug.Log("left: " + slopeL + " right: " + slopeR);
+			//Debug.Log("left: " + slopeL + " right: " + slopeR);
 
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
 			{

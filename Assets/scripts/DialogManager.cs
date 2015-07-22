@@ -32,8 +32,8 @@ public class DialogManager : MonoBehaviour {
 
 		DialogLoadXml loadXml = new DialogLoadXml(currentXml);
 		dialogs = loadXml.parseXml();
-
-		dlgMessage.text = currentXml;
+		if (dlgMessage)
+			dlgMessage.text = currentXml;
 	}
 	
 	// Update is called once per frame
@@ -78,7 +78,6 @@ public class DialogManager : MonoBehaviour {
 				//Todo: kinda shitty solution... do it smarter
 				if (dlg.persons[currentIndex].help == 0)
 				{
-
 					dlgCanvas.alpha -= (1.0f * Time.deltaTime)/fade_out;
 					if (dlgCanvas.alpha < 0.0f)
 						dlgCanvas.alpha = 0.0f;

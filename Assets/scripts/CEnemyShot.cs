@@ -8,7 +8,7 @@ public class CEnemyShot : MonoBehaviour {
 	public float gravity = 1.0f;
 	private Vector3 headingTo = Vector3.zero;
 	public float damage = 1.0f;
-
+	public bool linear = false;
 	// Use this for initialization
 	void Start () 
 	{
@@ -22,9 +22,17 @@ public class CEnemyShot : MonoBehaviour {
 		{
 			//calculate to better values
 			Vector3 vec3 = this.gameObject.transform.position;
-			vec3.x += Time.deltaTime * shotSpeed * Mathf.Sign (headingTo.x);
-			shotSpeedY += Time.deltaTime * gravity;
-			vec3.y +=  shotSpeedY * Time.deltaTime;
+			if (linear)
+			{
+				vec3.x += Time.deltaTime * shotSpeed * headingTo.x;
+				vec3.y += Time.deltaTime * shotSpeed * headingTo.y;
+			}
+			else
+			{
+				vec3.x += Time.deltaTime * shotSpeed * Mathf.Sign (headingTo.x);
+				shotSpeedY += Time.deltaTime * gravity;
+				vec3.y +=  shotSpeedY * Time.deltaTime;
+			}
 			this.gameObject.transform.position = vec3;
 		}
 	}

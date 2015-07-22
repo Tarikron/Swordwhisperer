@@ -20,7 +20,7 @@ public class cFlyingEnemy : cEnemy {
 
 	public float flyingBackSpeed = 4.0f;
 	private Vector3 originBeforeAttackPos = Vector3.zero;
-	public enum eAttackState {ATTACK_NONE = 0,ATTACK_STAGE1=1,ATTACK_STAGE2=2, ATTACK_TO_ORIGIN=3};
+	public enum eAttackState {ATTACK_NONE = 0,ATTACK_CHARGE=1,ATTACK_SHOT=2, ATTACK_TO_ORIGIN=3};
 	private eAttackState iAttackState;
 	public float attackChargeDmg = 1.0f;
 
@@ -101,7 +101,7 @@ public class cFlyingEnemy : cEnemy {
 		player = GameObject.Find("Player");
 
 		iAttackState = eAttackState.ATTACK_NONE;
-	
+
 		Debug.Log ("startSpeed: " + speedX);
 	}
 	
@@ -196,7 +196,6 @@ public class cFlyingEnemy : cEnemy {
 
 		transform.Translate(last_direction);
 
-		
 	}
 	private void manageMovementAfterCollide()
 	{
@@ -256,9 +255,7 @@ public class cFlyingEnemy : cEnemy {
 
 	private  IEnumerator WaitForSec(float sec)
 	{
-		
 		yield return new WaitForSeconds(sec);
-
 		iAttackState = eAttackState.ATTACK_TO_ORIGIN;
 
 		currentChargeSpeed = 0.0f;
@@ -269,33 +266,40 @@ public class cFlyingEnemy : cEnemy {
 
 	private  IEnumerator WaitForNextAttack(float sec)
 	{
-
 		yield return new WaitForSeconds(sec);
+		waitForAttack = false;
 
-		iAttackState = eAttackState.ATTACK_STAGE1;
-		playAttackClips();
-
+		int x = Random.Range (0,100);
+		if  (x < 70)
+		{
+			iAttackState = eAttackState.ATTACK_CHARGE;
+			firstProjectileShot = false;
+			playAttackClips();
+		}
+		else
+			iAttackState = eAttackState.ATTACK_SHOT;
+				
 		yield break;
 	}
 
-	private void startIdleAttack()
+	private void startIdleAttack(bool shot = false)
 	{
 		//wait 1 sec
-		defaultIdleMovement();
+		defaultIdleMovement(shot);
 		if (!waitForAttack)
 		{
-			StartCoroutine("WaitForNextAttack",0.5f); 
+			StartCoroutine("WaitForNextAttack",5.5f); 
 			waitForAttack = true;
 		}
 	}
-	private void startIdle()
+	private void startIdle(bool shot = false)
 	{
 		currentChargeSpeed = 0.0f;
-		defaultIdleMovement();
+		defaultIdleMovement(shot);
 		if (!waitForSec)
 		{
 			//wait 3sec before going back to origin
-			StartCoroutine("WaitForSec",3.0f); 
+			StartCoroutine("WaitForSec",1000.0f); 
 			waitForSec = true;
 		}
 	}
@@ -365,37 +369,12 @@ public class cFlyingEnemy : cEnemy {
 				moveToDirection(origin_direction);
 
 		}
-		else if (iAttackState == eAttackState.ATTACK_STAGE2)
+		else if (iAttackState == eAttackState.ATTACK_SHOT)
 		{
-			//go back a bit and wait 1sec for next attack 
-
-			float goBackDistance = Vector3.Distance (playerPos,transform.position);
-			if (goBackDistance < 8.0f)
-			{
-				direction *=  -1.0f;
-
-				float dist = Vector3.Distance(transform.position,direction);
-				LayerMask newMask= ~collisionMask;
-				float collideX = 0.0f;
-				float collideY = 0.0f;
-				if (Mathf.Abs(direction.normalized.x) > 0.5f)
-					collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(direction.x) * 1.2f;
-				if (Mathf.Abs(direction.normalized.y) > 0.5f)
-					collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(direction.y) * 1.2f;
-				pos.x = collideX + transform.position.x;
-				pos.y = collideY + transform.position.y;
-				Debug.DrawRay(pos,direction.normalized * 4.0f);
-
-				if (hit = Physics2D.Raycast (pos, direction.normalized ,2.0f,newMask))
-					startIdleAttack();
-				else
-					moveToDirection(direction);
-			}
-			else
-				startIdleAttack();
+			moveBackABit(direction,playerPos);
 
 		}
-		else if (iAttackState == eAttackState.ATTACK_STAGE1)
+		else if (iAttackState == eAttackState.ATTACK_CHARGE)
 		{
 			waitForAttack = false;
 			float collideX = 0.0f;
@@ -422,17 +401,50 @@ public class cFlyingEnemy : cEnemy {
 					moveToDirection(direction);
 				}
 				else
-					startIdle();
+					startIdleAttack(true);
 			}
 			else
 			{
 				//something else ahead, wait
-				startIdle();
+				startIdleAttack(true);
 			}
 		}
 	}
 
-	private void defaultIdleMovement()
+	private void moveBackABit(Vector3 currentDirection,Vector3 playerPos)
+	{
+		RaycastHit2D hit;
+		Vector2 pos = Vector2.zero;
+		//go back a bit and wait 1sec for next attack 
+		float goBackDistance = Vector3.Distance (lastPlayerPos,transform.position);
+		if (goBackDistance < 12.0f)
+		{
+			currentDirection *=  -1.0f;
+
+			currentDirection.y *= 0.3f;
+
+			float dist = Vector3.Distance(transform.position,currentDirection);
+			LayerMask newMask= ~collisionMask;
+			float collideX = 0.0f;
+			float collideY = 0.0f;
+			if (Mathf.Abs(currentDirection.normalized.x) > 0.5f)
+				collideX = GetComponent<BoxCollider2D>().size.x * Mathf.Sign(currentDirection.x) * 1.2f;
+			if (Mathf.Abs(currentDirection.normalized.y) > 0.5f)
+				collideY = GetComponent<BoxCollider2D>().size.y * Mathf.Sign(currentDirection.y) * 1.2f;
+			pos.x = collideX + transform.position.x;
+			pos.y = collideY + transform.position.y;
+			Debug.DrawRay(pos,currentDirection.normalized * 4.0f);
+
+			if (hit = Physics2D.Raycast (pos, currentDirection.normalized ,2.0f,newMask))
+				startIdleAttack(true);
+			else
+				moveToDirection(currentDirection);
+		}
+		else
+			startIdleAttack(true);
+	}
+
+	private void defaultIdleMovement(bool shot)
 	{
 		Vector3 movement = Vector3.zero;
 		movement.y = Time.deltaTime * Mathf.Sin(angleTemp * Mathf.PI/180);
@@ -442,6 +454,36 @@ public class cFlyingEnemy : cEnemy {
 		angleTemp += 2.0f;
 		if (angleTemp > 360.0f)
 			angleTemp = 0.0f;
+		if (shot)
+		{
+			if (shots == 0)
+			{
+				shots = Random.Range (1,4);
+
+				if (!firstProjectileShot && currentShots == 0)
+					intervalTimer = 0.0f;
+				else if (firstProjectileShot)
+					intervalTimer = shotInterval;
+			}
+
+			if (shots > 0)
+			{
+				multibleProjectile = false;
+				if (shots > 1)
+					multibleProjectile = true;
+
+				attackShot(player,player.transform.position);
+				if (currentShots >= shots)
+				{
+					//we are done
+					//time up ?
+					currentShots = 0;
+					shots = 0;
+					//charge next ? or shot more ? or go back to origin?
+				}
+
+			}
+		}
 	}
 
 	private void manageAttack(float playerDistance)
@@ -481,14 +523,13 @@ public class cFlyingEnemy : cEnemy {
 			//we are in range
 			if (iAttackState == eAttackState.ATTACK_NONE && triggerRange >= playerDistance)
 			{
-				iAttackState = eAttackState.ATTACK_STAGE1;
+				iAttackState = eAttackState.ATTACK_CHARGE;
 				originBeforeAttackPos = transform.position;
 			}
 		}
 		if (iAttackState != eAttackState.ATTACK_NONE)
 			manageAttack(playerDistance);
-
-
+		
 	}
 
 	// Update is called once per frame
@@ -517,12 +558,7 @@ public class cFlyingEnemy : cEnemy {
 
 		if (defaultDeath()) //if we are dead, no need for others
 			return;
-		if (cFunction.xor(tookDamge, iDefaultCollide != eDefaultCollideType.COLLIDE_NONE))
-		{
-			manageMovementAfterCollide();
-			return; 
-		}
-		
+				
 		Vector3 playerPos = player.gameObject.transform.position;
 		Vector3 enemyPos = transform.position;
 		float distance = Vector3.Distance(enemyPos,playerPos);
@@ -559,9 +595,19 @@ public class cFlyingEnemy : cEnemy {
 		skeletonAnimation.skeleton.g = 0.0f;
 		skeletonAnimation.skeleton.a = 1.0f;
 
+		if (damagedClip)
+		{
+			audioSource.clip = damagedClip;
+			if(!audioSource.isPlaying){
+				audioSource.Play();
+			}
+		}
+
 		takeDmg(dmg);	
 
 		tookDamge = true;
+		lastPlayerPos = player.transform.position;
+		iAttackState = eAttackState.ATTACK_SHOT;
 	}
 
 	//collsions
@@ -572,8 +618,8 @@ public class cFlyingEnemy : cEnemy {
 			if (eAttackType.ATTACK_CHARGE == attackType)
 			{
 				Debug.Log ("collide");
-				lastPlayerPos = Vector3.zero;
-				iAttackState = eAttackState.ATTACK_STAGE2;
+				lastPlayerPos = collision.gameObject.transform.position;
+				iAttackState = eAttackState.ATTACK_SHOT;
 				currentChargeSpeed = 0.0f;
 //				playAttackClips();
 				collision.gameObject.SendMessage("msg_hit",attackChargeDmg,SendMessageOptions.RequireReceiver);
@@ -589,7 +635,7 @@ public class cFlyingEnemy : cEnemy {
 	}
 
 	private void playAttackClips(){
-		switch (UnityEngine.Random.Range(0,3)) {
+		switch (Random.Range(0,3)) {
 			
 		case 0:
 			audioSource.PlayOneShot(attackClip1);

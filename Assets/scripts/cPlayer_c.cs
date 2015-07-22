@@ -173,9 +173,11 @@ public class cPlayer_c : cUnit
 	public AudioSource audioSourceSFX;
 	public AudioSource audioSourceSFX2;
 
+	public int damageBlinkCount = 3;
+	private int damageBlinkCounter = 0;
 	private bool tookDamage = false;
-	private int delayFrames = 3;
-	private int frameCounter = 0;
+	public float damageBlinkInterval = 0.2f;
+	private float damageBlinkTimer = 0;
 	private bool flyingBack = false;
 
 	private Vector3 lastDirection = Vector3.zero;
@@ -653,12 +655,11 @@ public class cPlayer_c : cUnit
 		animHandler.delEnd = endAnimListener;
 
 		ui.txtLife.text = currentLife+" Life";
-
-
+		
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		//sword.bCollectedSword = true;
+		sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;
@@ -710,17 +711,25 @@ public class cPlayer_c : cUnit
 		}*/
 		if (tookDamage)
 		{
-			if (delayFrames < frameCounter)
+			if (damageBlinkTimer <= 0.0f)
 			{
-				skeletonAnimation.skeleton.r = 1.0f;
-				skeletonAnimation.skeleton.b = 1.0f;
-				skeletonAnimation.skeleton.g = 1.0f;
-				skeletonAnimation.skeleton.a = 1.0f;
-
-				frameCounter = 0;
-				tookDamage = false;
+				if (skeletonAnimation.skeleton.g == 0.0f)
+				{
+					makeNormal();
+					if (damageBlinkCounter == damageBlinkCount)
+					{
+						tookDamage = false;
+						damageBlinkCounter = 0;
+					}
+				}
+				else
+				{
+					makeRed();
+					damageBlinkCounter++;
+				}
+				damageBlinkTimer = damageBlinkInterval;
 			}
-			frameCounter++;
+			damageBlinkTimer-=Time.deltaTime;
 		}
 
 		if (sword.bCollectedSword && currentLife < startLife)
@@ -800,13 +809,21 @@ public class cPlayer_c : cUnit
 					currentSpeed.y -= accelerationY * Time.deltaTime; 
 				else
 				{
-					//Debug.Log (playerPhysics.grounded == false && playerPhysics.onSlope == false);
+
 					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
 					{
 						//we are falling if we have negative speedY and we are not grounded
 						if (sword.bCollectedSword && bCanJump)
-							animHandler.addAnimation(animations.jump_fall,true);
-						bFalling = true;
+						{
+
+							float distanceGround = playerPhysics.GetDistanceToGround();
+							if  (distanceGround > 0.04)
+							{
+								animHandler.addAnimation(animations.jump_fall,true);
+								bFalling = true;
+							}
+
+						}
 						//we want to gain speed if we are falling
 						currentSpeed.y -= accelerationY * Time.deltaTime; 
 					}
@@ -975,24 +992,39 @@ public class cPlayer_c : cUnit
 		bBlackScreenGone = true;
 	}
 
-
-	void msg_hit(float dmg)
+	void makeRed()
 	{
-		takeDmg(dmg);
-
 		skeletonAnimation.skeleton.r = 1.0f;
 		skeletonAnimation.skeleton.b = 0.3f;
 		skeletonAnimation.skeleton.g = 0.0f;
 		skeletonAnimation.skeleton.a = 1.0f;
+	}
+	void makeNormal()
+	{
+		skeletonAnimation.skeleton.r = 1.0f;
+		skeletonAnimation.skeleton.b = 1.0f;
+		skeletonAnimation.skeleton.g = 1.0f;
+		skeletonAnimation.skeleton.a = 1.0f;
+	}
 
-		ui.txtLife.text = currentLife+" Life";
-	
-		angleToFlyback = Vector3.Angle(lastDirection,new Vector3(1.0f,0.0f,0.0f) );
-		Debug.Log (angleToFlyback);
-		tookDamage = true;
-		flyingBack = true;
 
-		playDamageVoiceClips();
+	void msg_hit(float dmg)
+	{
+		if (!tookDamage)
+		{
+			takeDmg(dmg);
+
+			makeRed ();
+
+			ui.txtLife.text = currentLife+" Life";
+		
+			angleToFlyback = Vector3.Angle(lastDirection,new Vector3(1.0f,0.0f,0.0f) );
+			tookDamage = true;
+			flyingBack = true;
+
+			playDamageVoiceClips();
+		}
+
 	}
 
 	//########################################

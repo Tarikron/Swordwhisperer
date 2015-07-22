@@ -104,11 +104,11 @@ public class cAnimationHandler
 
 		//Works like fifo, first in, first out
 		cAnimation anim = this.removeAnimation();
-
 		skeletonAnimation.timeScale = timescale;
 
 		if (anim.sAnimation != "")
 		{
+			//Debug.Log ("anim: " + anim.sAnimation);
 			skeletonAnimation.state.SetAnimation(0,anim.sAnimation,anim.bLoop);
 		}
 		if (bAdd == true)
@@ -119,7 +119,9 @@ public class cAnimationHandler
 		
 			for (int i = 0; i<count;i++)
 			{
+
 				cAnimation cAnim = this.removeAnimation();
+				//Debug.Log (" cAnim: " + cAnim.sAnimation);
 				this.skeletonAnimation.state.AddAnimation(0,cAnim.sAnimation,cAnim.bLoop,cAnim.fDelay);
 			}
 		}
