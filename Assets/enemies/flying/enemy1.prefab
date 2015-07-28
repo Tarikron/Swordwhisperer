@@ -46,6 +46,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 408758}
+  - 114: {fileID: 11404294}
   - 114: {fileID: 11446330}
   - 33: {fileID: 3356654}
   - 23: {fileID: 2323808}
@@ -341,6 +342,20 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!114 &11404294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &11422902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,7 +393,7 @@ MonoBehaviour:
   flyingType: 0
   attackType: 0
   chargeSpeed: 14
-  chargeAcceleration: 10
+  chargeAcceleration: 8
   flyingBackSpeed: 4
   attackChargeDmg: 1
   circleSize: 5
@@ -393,6 +408,7 @@ MonoBehaviour:
   attackClip1: {fileID: 8300000, guid: 6bfab185facd54536a6db27f16d14fbd, type: 3}
   attackClip2: {fileID: 8300000, guid: 21258018b115745369d84e53fc452675, type: 3}
   attackClip3: {fileID: 8300000, guid: ff8ad9e353a80473ba61195dbcc3c398, type: 3}
+  enemyPhysics: {fileID: 0}
 --- !u!114 &11446484
 MonoBehaviour:
   m_ObjectHideFlags: 1
