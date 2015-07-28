@@ -120,7 +120,9 @@ public class cEnemy : cUnit
 			lastPlayerPos = target;
 			lastPlayerPos.y += 0.5f;
 			shot.transform.position = transform.position + (heading.normalized * 2.5f);
-			
+
+			playAttackClips();
+
 			GameObject shotClone = GameObject.Instantiate(shot);
 			shotClone.SendMessage("msg_shotfired",heading.normalized,SendMessageOptions.RequireReceiver);
 			shotClone.transform.localScale = shot.transform.lossyScale;
@@ -141,7 +143,65 @@ public class cEnemy : cUnit
 		}
 	}
 
-
+	protected void playAttackClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(attackClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(attackClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(attackClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	protected void playDamagedClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(damagedClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(damagedClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(damagedClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	protected void playShootClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(shootClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(shootClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(shootClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
 }
 
 

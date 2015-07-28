@@ -4096,6 +4096,7 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &861025022
 Transform:
   m_ObjectHideFlags: 0
@@ -4261,9 +4262,17 @@ MonoBehaviour:
   shotInterval: 2
   attackCollideDmg: 1
   audioSource: {fileID: 0}
-  damagedClip: {fileID: 0}
+  damagedClip1: {fileID: 0}
+  damagedClip2: {fileID: 0}
+  damagedClip3: {fileID: 0}
   deathClip: {fileID: 0}
   movementClip: {fileID: 0}
+  attackClip1: {fileID: 0}
+  attackClip2: {fileID: 0}
+  attackClip3: {fileID: 0}
+  shootClip1: {fileID: 0}
+  shootClip2: {fileID: 0}
+  shootClip3: {fileID: 0}
   skeletonAnimation: {fileID: 879752945}
   triggerDistance: 9
   triggerAttack: 6
@@ -4826,9 +4835,17 @@ MonoBehaviour:
   shotInterval: 2
   attackCollideDmg: 1
   audioSource: {fileID: 0}
-  damagedClip: {fileID: 0}
+  damagedClip1: {fileID: 0}
+  damagedClip2: {fileID: 0}
+  damagedClip3: {fileID: 0}
   deathClip: {fileID: 0}
   movementClip: {fileID: 0}
+  attackClip1: {fileID: 0}
+  attackClip2: {fileID: 0}
+  attackClip3: {fileID: 0}
+  shootClip1: {fileID: 0}
+  shootClip2: {fileID: 0}
+  shootClip3: {fileID: 0}
   skeletonAnimation: {fileID: 959205573}
   triggerDistance: 9
   triggerAttack: 6
@@ -12293,18 +12310,6 @@ Prefab:
     - target: {fileID: 146066, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
       propertyPath: m_Name
       value: enemy5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5014770, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5014770, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: m_FixedAngle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11446484, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}
-      propertyPath: linear
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37e4ef58244faea46820ead3a04cff1f, type: 2}

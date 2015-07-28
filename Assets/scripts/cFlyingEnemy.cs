@@ -492,6 +492,7 @@ public class cFlyingEnemy : cEnemy {
 				attackCharge(player);
 				break;
 			case eAttackType.ATTACK_SHOT:
+				playShootClips();
 				attackShot (player,player.transform.position);
 				break;
 			}
@@ -620,65 +621,5 @@ public class cFlyingEnemy : cEnemy {
 		}
 		else
 			iDefaultCollide = eDefaultCollideType.COLLIDE_MOVE;
-	}
-
-	private void playAttackClips(){
-		switch (Random.Range(0,3)) {
-			
-		case 0:
-			audioSource.PlayOneShot(attackClip1);
-			break;
-			
-		case 1:
-			audioSource.PlayOneShot(attackClip2);
-			break;
-			
-		case 2:
-			audioSource.PlayOneShot(attackClip3);
-			break;
-			
-		default:
-			break;
-		}
-	}
-
-	private void playDamagedClips(){
-		switch (Random.Range(0,3)) {
-			
-		case 0:
-			audioSource.PlayOneShot(damagedClip1);
-			break;
-			
-		case 1:
-			audioSource.PlayOneShot(damagedClip2);
-			break;
-			
-		case 2:
-			audioSource.PlayOneShot(damagedClip3);
-			break;
-			
-		default:
-			break;
-		}
-	}
-
-	private void playShootClips(){
-		switch (Random.Range(0,3)) {
-			
-		case 0:
-			audioSource.PlayOneShot(shootClip1);
-			break;
-			
-		case 1:
-			audioSource.PlayOneShot(shootClip2);
-			break;
-			
-		case 2:
-			audioSource.PlayOneShot(shootClip3);
-			break;
-			
-		default:
-			break;
-		}
 	}
 }
