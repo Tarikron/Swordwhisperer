@@ -61,15 +61,7 @@ public class cFlyingEnemy : cEnemy {
 
 	private bool waitForAttack = false;
 	private bool waitForSec = false;
-
-	[SerializeField]
-	private AudioClip attackClip1;
 	
-	[SerializeField]
-	private AudioClip attackClip2;
-	
-	[SerializeField]
-	private AudioClip attackClip3;
 
 	// Use this for initialization
 	public override void Start () 
@@ -595,12 +587,8 @@ public class cFlyingEnemy : cEnemy {
 		skeletonAnimation.skeleton.g = 0.0f;
 		skeletonAnimation.skeleton.a = 1.0f;
 
-		if (damagedClip)
-		{
-			audioSource.clip = damagedClip;
-			if(!audioSource.isPlaying){
-				audioSource.Play();
-			}
+		if(!audioSource.isPlaying){
+			playDamagedClips();
 		}
 
 		takeDmg(dmg);	
@@ -647,6 +635,46 @@ public class cFlyingEnemy : cEnemy {
 			
 		case 2:
 			audioSource.PlayOneShot(attackClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	private void playDamagedClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(damagedClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(damagedClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(damagedClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	private void playShootClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(shootClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(shootClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(shootClip3);
 			break;
 			
 		default:
