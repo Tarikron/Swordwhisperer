@@ -388,7 +388,7 @@ public class cPlayer_c : cUnit
 		bool animLoop = false;
 		string animationToPlay = "";
 
-		if  (absX > 0.7f && sword.bCollectedSword == true)
+		if  (absX > 0.7f && sword.bCollectedSword == true && !tookDamage)
 		{
 			animationToPlay = animations.run_sword;
 			animLoop = true;
@@ -643,6 +643,7 @@ public class cPlayer_c : cUnit
 	{
 		base.Start ();
 
+		bCutscene = true;
 		sleepAnim = true;
 
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
@@ -776,9 +777,14 @@ public class cPlayer_c : cUnit
 			return;
 
 		}
+
+		float x = Input.GetAxis("Horizontal");
+		float absX = Mathf.Abs(x);
 		if (sleepAnim)
-		{
 			dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
+
+		if (sleepAnim && absX>0)
+		{
 			animHandler.addAnimation(animations.wakeup,false);
 			bCutscene = true;
 			sleepAnim = false;
@@ -788,12 +794,11 @@ public class cPlayer_c : cUnit
 		//skip all related input/movement/loop animation for cutscene
 		if (bCutscene == false)
 		{
-			float x = Input.GetAxis("Horizontal");
 
 			if ((x >= 0.0f && x <= 0.05f) || (x <= 0.0f && x >= -0.05f ))
 				x = 0.0f;
 
-			if (sword.bCollectedSword)
+			if (sword.bCollectedSword && !tookDamage)
 				handleAttack ();
 
 			if (!bSkipMovementForAnim)
@@ -913,13 +918,15 @@ public class cPlayer_c : cUnit
 	{
 		//Debug.Log("end player - " + Time.frameCount + "   " + animName);
 
-		if (animName == animations.wakeup || 
-		    animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
+		if (animName == animations.wakeup || animName == animations.walk_end_nosword || animName == animations.walk_end_sword ||
 		    animName == animations.attack)
 		{
 			bSkipMovementForAnim = false;
 			bCutscene = false; // for wakeup
+			sleepAnim = false;
 			iAnimWalk = eAnimWalk.ANIM_END;
+			currentLife = 2;
+
 		}
 		else if (animName == animations.walk_start_sword || animName == animations.walk_start_nosword)
 			iAnimWalk = eAnimWalk.ANIM_WALK;

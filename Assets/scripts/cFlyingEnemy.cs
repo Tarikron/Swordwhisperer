@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+[RequireComponent(typeof(cEnemyPhysic))]
 public class cFlyingEnemy : cEnemy {
 
 	private enum eDefaultCollideType {COLLIDE_NONE = 0, COLLIDE_MOVE=1, COLLIDE_STOP=2, COLLIDE_DONE=3};
@@ -63,6 +65,9 @@ public class cFlyingEnemy : cEnemy {
 	private bool waitForSec = false;
 	
 
+	[HideInInspector]
+	public cEnemyPhysic enemyPhysics;
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -84,6 +89,7 @@ public class cFlyingEnemy : cEnemy {
 
 		origin = transform.position;
 
+		enemyPhysics = GetComponent<cEnemyPhysic>();
 		skeletonAnimation = GetComponent<SkeletonAnimation>();
 		originColor.a = skeletonAnimation.skeleton.a;
 		originColor.r = skeletonAnimation.skeleton.r;
@@ -412,8 +418,7 @@ public class cFlyingEnemy : cEnemy {
 		if (goBackDistance < 12.0f)
 		{
 			currentDirection *=  -1.0f;
-
-			currentDirection.y *= 0.3f;
+			currentDirection.y *= 0.05f;
 
 			float dist = Vector3.Distance(transform.position,currentDirection);
 			LayerMask newMask= ~collisionMask;
@@ -609,7 +614,7 @@ public class cFlyingEnemy : cEnemy {
 				Debug.Log ("collide");
 				lastPlayerPos = collision.gameObject.transform.position;
 				iAttackState = eAttackState.ATTACK_SHOT;
-				currentChargeSpeed = 0.0f;
+				currentChargeSpeed = 5.0f;
 //				playAttackClips();
 				collision.gameObject.SendMessage("msg_hit",attackChargeDmg,SendMessageOptions.RequireReceiver);
 			}
