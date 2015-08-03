@@ -925,7 +925,8 @@ public class cPlayer_c : cUnit
 			bCutscene = false; // for wakeup
 			sleepAnim = false;
 			iAnimWalk = eAnimWalk.ANIM_END;
-			currentLife = 2;
+			if (animName == animations.wakeup)
+				currentLife = 2;
 
 		}
 		else if (animName == animations.walk_start_sword || animName == animations.walk_start_nosword)

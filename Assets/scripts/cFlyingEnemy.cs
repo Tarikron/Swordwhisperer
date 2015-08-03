@@ -64,6 +64,15 @@ public class cFlyingEnemy : cEnemy {
 	private bool waitForAttack = false;
 	private bool waitForSec = false;
 
+	private float deathAlpha = 0.0f;
+	private float startSpeedGround = 2.0f;
+	private float speedGround = 2.0f;
+
+	private float startAlphaGround = 10.0f;
+	private float speedAlphaGround = 10.0f;
+
+	private float fadeOutTime = 0.5f;
+
 	[SerializeField]
 	private AudioClip attackClip1;
 	
@@ -109,8 +118,76 @@ public class cFlyingEnemy : cEnemy {
 		iAttackState = eAttackState.ATTACK_NONE;
 
 		Debug.Log ("startSpeed: " + speedX);
+		deathAlpha = -50.0f;
+
+		startAlphaGround = deathAlpha;
+		speedAlphaGround = deathAlpha;
 	}
-	
+
+	protected override void die()
+	{
+
+		skeletonAnimation.skeleton.a -= Time.deltaTime/fadeOutTime;
+		if (skeletonAnimation.skeleton.a <= 0.0f)
+		{
+			skeletonAnimation.skeleton.a = 0.0f;
+			base.die();
+		}
+	}
+
+	private bool death()
+	{
+		switch (iDieState)
+		{	
+		case eDieState.DIE_START:
+		{
+			bool playDeath = false;
+
+			//if different namens, we have to play it, if null we can play anyway
+			playDeath = cFunction.xor (audioSource.clip != null && audioSource.clip.name != deathClip.name, audioSource.clip == null);
+
+			//last clip we give a shit and abusing .clip, since he will die..
+			if (deathClip && playDeath)
+			{
+				audioSource.clip = deathClip;
+				audioSource.PlayOneShot(deathClip);
+			}
+
+			//Vector3 scale = transform.localScale;
+			Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
+			//scale -= vec;
+			//if (scale.x < 0.0f)
+				//scale.x = 0.0f;
+			//if (scale.y < 0.0f)
+				//	scale.y = 0.0f;
+			//transform.localScale = scale;
+			currentSpeed.y += -9.81f * Time.deltaTime;
+			if (enemyPhysics.GetDistanceToGround() > 1.0f)
+				transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
+			else
+			{
+					transform.position += new Vector3(speedGround * Time.deltaTime,0.0f,0.0f);
+
+					speedGround = -startSpeedGround * Time.deltaTime + speedGround;
+					speedAlphaGround = -startAlphaGround * Time.deltaTime + speedAlphaGround;
+			}
+			transform.RotateAround(transform.position,Vector3.forward,speedAlphaGround * Time.deltaTime);
+
+			if (speedAlphaGround >= 0.0f)
+			{
+				iDieState = eDieState.DIE_DONE;
+			}
+			return true;
+			break;
+		}
+		case eDieState.DIE_DONE:
+			die ();
+			return true;
+		}
+
+		return false;
+	}
+
 	private void movementAirLoop()
 	{
 
@@ -541,6 +618,10 @@ public class cFlyingEnemy : cEnemy {
 	void Update () 
 	{
 
+		if (!isActiveAndEnabled)
+			return;
+
+
 		if (tookDamge)
 		{
 			if (delayFrames < frameCounter)
@@ -561,7 +642,7 @@ public class cFlyingEnemy : cEnemy {
 			iDieState = eDieState.DIE_START;
 		}
 
-		if (defaultDeath()) //if we are dead, no need for others
+		if (death()) //if we are dead, no need for others
 			return;
 				
 		Vector3 playerPos = player.gameObject.transform.position;

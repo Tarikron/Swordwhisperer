@@ -24,6 +24,8 @@ public class cameraCheck : MonoBehaviour
 	private bool IsCutsceneDone = false;
 	private blackScreenHandler blackSceenHdl;
 
+	private bool camAtGrave = false;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -54,17 +56,16 @@ public class cameraCheck : MonoBehaviour
 					currentTarget = waypointEnd.transform;
 					player.SendMessage("msg_externCutsceneStart",null,SendMessageOptions.RequireReceiver);
 				}
+				camAtGrave = false;
 			}
 			break;
 			case eCutsceneSteps.SCENE_START:
 			{
-
-				player.GetComponent<cPlayer_c>().dialog.SendMessage("msg_eventTrigger","beforeCamDrive",SendMessageOptions.RequireReceiver);
-
 				gameCam.SetTarget(currentTarget);
 				originTrackSpeed = gameCam.trackSpeed;
 				gameCam.SetTrackSpeed(trackSpeed.x,trackSpeed.y);
 				iState = eCutsceneSteps.SCENE_WHILE;
+				camAtGrave = false;
 			}
 			break;
 			case eCutsceneSteps.SCENE_WHILE:
@@ -81,6 +82,10 @@ public class cameraCheck : MonoBehaviour
 			break;
 			case eCutsceneSteps.SCENE_END:
 			{
+				if (!camAtGrave)	
+					player.GetComponent<cPlayer_c>().dialog.SendMessage("msg_eventTrigger","beforeCamDrive",SendMessageOptions.RequireReceiver);
+
+				camAtGrave = true;
 				if (endTimer >= stayAtEndPoint)
 				{
 					iState = eCutsceneSteps.SCENE_DONE;

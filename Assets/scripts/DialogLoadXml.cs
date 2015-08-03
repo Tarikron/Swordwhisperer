@@ -58,12 +58,12 @@ public class DialogLoadXml : MonoBehaviour {
 							dlg.person.order_id = int.Parse(currentNode.Attributes["order"].Value);
 							dlg.person.uid = currentNode.Attributes["uid"].Value;
 							dlg.person.text = currentNode["text"].InnerText;
-							dlg.person.fade_in = int.Parse(currentNode["fade_in"].InnerText);
-							dlg.person.fade_out = int.Parse(currentNode["fade_out"].InnerText);
+							dlg.person.fade_in = float.Parse(currentNode["fade_in"].InnerText);
+							dlg.person.fade_out = float.Parse(currentNode["fade_out"].InnerText);
 							dlg.person.click_away = int.Parse(currentNode["click_away"].InnerText);
 							dlg.person.soundfile = currentNode["soundfile"].InnerText;
 							dlg.person.help = int.Parse(currentNode["help"].InnerText);
-							dlg.person.duration = int.Parse(currentNode["duration"].InnerText);
+							dlg.person.duration = float.Parse(currentNode["duration"].InnerText);
 
 							dlg.persons.Add(dlg.person);
 

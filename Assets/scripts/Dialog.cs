@@ -19,12 +19,12 @@ public class Dialog
 		public string uid;
 		public int order_id;
 		public string text;
-		public int fade_in;
-		public int fade_out;
+		public float fade_in;
+		public float fade_out;
 		public string soundfile;
 		public int click_away;
 		public int help;
-		public int duration;
+		public float duration;
 	}
 	public stPerson person;
 	public List<stPerson> persons = new List<stPerson>();

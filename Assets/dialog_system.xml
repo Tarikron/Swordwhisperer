@@ -49,8 +49,8 @@
 				<text>I sense something ... A presence that I have not felt since ...</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
-				<fade_out>2</fade_out>
-				<duration>3</duration>
+				<fade_out>0.4</fade_out>
+				<duration>0.5</duration>
 				<click_away>0</click_away>
 				<help>0</help>
 			</person>
