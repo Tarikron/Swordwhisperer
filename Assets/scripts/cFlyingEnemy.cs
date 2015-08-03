@@ -48,8 +48,8 @@ public class cFlyingEnemy : cEnemy {
 	private int backMovement = 20;
 	private int backCounter = 0;
 
-	private int delayFrames=4;
-	private int frameCounter=0;
+	private float delayFrames=0.3f;
+	private float frameCounter=0.0f;
 
 	private Color originColor;
 	private SkeletonAnimation skeletonAnimation;
@@ -632,9 +632,9 @@ public class cFlyingEnemy : cEnemy {
 				skeletonAnimation.skeleton.a = 1.0f;
 
 				tookDamge = false;
-				frameCounter = 0;
+				frameCounter = 0.0f;
 			}
-			frameCounter++;
+			frameCounter+=Time.deltaTime;
 		}
 		if (iDieState == eDieState.DIE_NONE && isDead() && !tookDamge)
 		{
