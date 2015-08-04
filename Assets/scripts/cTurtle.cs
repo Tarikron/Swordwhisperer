@@ -23,6 +23,19 @@ public class cTurtle : cEnemy {
 	private int delayFrames=4;
 	private int frameCounter=0;
 
+	private float fadeTime = 1.0f;
+
+	private bool interact = false;
+
+	public bool sleeper = true;
+	private bool sleep = true;
+	private bool attackBite = false;
+
+	private float sleepTime = 2.0f;
+	private float sleepTimer = 0.0f;
+
+	private int interacts = 0;
+
 	[System.Serializable]
 	public struct animTurtle
 	{
@@ -48,16 +61,43 @@ public class cTurtle : cEnemy {
 		//todo
 	}
 
-	private void manageInteraction()
+	private void manageInteraction(Vector2 playerPos)
 	{
 		//todo
+		float distance = Vector2.Distance(playerPos,transform.position);
+		GameObject go = transform.FindChild("PressButton_go").gameObject;
+		if (go)
+		{
+			Color c = go.GetComponent<SpriteRenderer>().color;
+
+			if (distance <= 7.0f && sleep == false)
+			{
+				c.a += Time.deltaTime/fadeTime;
+				if (c.a > 1.0f)
+				{
+					c.a = 1.0f;
+					interact = true;
+				}
+			}
+			else
+			{
+				c.a -= Time.deltaTime/fadeTime;
+				if (c.a < 0.0f)
+				{
+					c.a = 0.0f;
+					interact = false;
+				}
+			}
+			go.GetComponent<SpriteRenderer>().color = c;
+		}
+
 	}
 
-	private void manageBehavior()
+	private void manageBehavior(Vector2 playerPos)
 	{
 		manageMovement();
 
-		manageInteraction();
+		manageInteraction(playerPos);
 	}
 
 	// Use this for initialization
@@ -109,21 +149,61 @@ public class cTurtle : cEnemy {
 			return;
 		if (iDieState == eDieState.DIE_NONE)
 		{
-			manageBehavior();
+			manageBehavior(playerPos);
 
-			float distance = Vector2.Distance (enemyPos,playerPos);
-			if (distance <= triggerDistance) 
+			if (!attackBite && !sleep && interact && Input.GetButtonDown("CtrlBButton"))
 			{
-				if (animationToPlay == "")
+				animLoop = true;
+
+				if (sleeper && interacts < 50)
 				{
 					currentTimeScale = 0.7f;
-					animationToPlay = "wakeUP";
-					animLoop = false;
+					animationToPlay = "sleep";
+					sleep = true;
 				}
-				else if (animationToPlay == "idle")
+				else
 				{
-					currentTimeScale = 1.0f;
-					animLoop = true;
+					animationToPlay = "attack_Bite";
+					attackBite = true;
+				}
+				interacts = Random.Range (10,100);
+
+				GameObject go = transform.FindChild("PressButton_go").gameObject;
+				if (go)
+				{
+					Color c = go.GetComponent<SpriteRenderer>().color;
+					c.a = 0.0f;
+					go.GetComponent<SpriteRenderer>().color = c;
+				}
+			}
+			else
+			{
+				float distance = Vector2.Distance (enemyPos,playerPos);
+				if (distance <= triggerDistance) 
+				{
+					if (animationToPlay == "sleep")
+					{
+						//wait random time
+						if (sleepTime <= sleepTimer)
+						{
+							sleepTimer = 0.0f;
+							sleepTime = Random.Range (2.0f,4.0f);
+							animationToPlay = "";
+						}
+						sleepTimer += Time.deltaTime;
+					}
+
+					if (animationToPlay == "")
+					{
+						currentTimeScale = 0.7f;
+						animationToPlay = "wakeUP";
+						animLoop = false;
+					}
+					else if (animationToPlay == "idle")
+					{
+						currentTimeScale = 1.0f;
+						animLoop = true;
+					}
 				}
 			}
 		}
@@ -145,7 +225,15 @@ public class cTurtle : cEnemy {
 		//Debug.Log ("end - " + state.GetCurrent (trackIndex).Animation.Name);
 		if (state.GetCurrent (trackIndex).Animation.Name == "wakeUP" ||
 		    state.GetCurrent (trackIndex).Animation.Name == "recieved_hit")
+		{
 			animationToPlay = "idle";
+			sleep = false;
+		}
+		else if (state.GetCurrent (trackIndex).Animation.Name == "attack_Bite")
+		{
+			attackBite = true;
+			animationToPlay = "idle";
+		}
 		else if (state.GetCurrent (trackIndex).Animation.Name == "death")
 			this.gameObject.SetActive(false);
 	}

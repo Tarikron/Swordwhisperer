@@ -677,7 +677,7 @@ public class cFlyingEnemy : cEnemy {
 	void msg_damage(float dmg)
 	{
 
-		GameObject go = GameObject.FindGameObjectWithTag("attackButton");
+		GameObject go = transform.FindChild("PressButton_go").gameObject;
 		if (go)
 			go.SetActive(false);
 
