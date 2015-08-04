@@ -14,11 +14,17 @@ public class GameManager : MonoBehaviour {
 	private float distancePlayerCamBottom = 0.0f;
 	private float oldYOffset = 0.0f;
 
+	public GameObject[] clouds;
 	public GameObject[] prefab_levels;
 	private GameObject[] levels;
 	private int currentIndex = 0;
 
 	private int[] indexToRemove;
+
+	private float cloudSpawnTimer = 0.0f;
+	private float cloudSpawnTime = 1.0f;
+
+	private float first = 0.0f;
 
 	void Start () 
 	{
@@ -74,6 +80,8 @@ public class GameManager : MonoBehaviour {
 		Camera c = GetComponent<Camera>();
 		Vector3 p = c.ViewportToWorldPoint(new Vector3(1, 1, Mathf.Abs(transform.position.z)));
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
+
+		moveClouds(p2);
 
 		for (int i =0; i < prefab_levels.Length; i++)
 		{
@@ -157,6 +165,26 @@ public class GameManager : MonoBehaviour {
 		//dialog
 		//if position for event reached 
 		// then set eventTrigger for canvas gameobject (send message)
+	}
+
+	private void moveClouds(Vector3 right_corner)
+	{
+		if (cloudSpawnTime <= cloudSpawnTimer)
+		{
+			for (int i=0; i< clouds.Length; i++)
+			{
+				GameObject go = GameObject.Instantiate(clouds[i]);
+				Vector3 cloudPosition = clouds[i].transform.position;
+				cloudPosition.x += first * 150.0f;
+				go.transform.position = cloudPosition;
+
+			}
+
+			cloudSpawnTimer = 0.0f;
+			first = 1.0f;
+			cloudSpawnTime = Random.Range (60.0f,70.0f);
+		}
+		cloudSpawnTimer += Time.deltaTime;
 	}
 
 	private void SpawnPlayer()

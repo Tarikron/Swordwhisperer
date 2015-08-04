@@ -914,7 +914,7 @@ public class cPlayer_c : cUnit
 
 	void OnTriggerEnter2D (Collider2D collider)
 	{
-		if (collider.gameObject.tag == "enemyFlyingHurtBox" || collider.gameObject.tag == "enemyFlyingHurtBox")
+		if (collider.gameObject.tag == "enemyFlyingHurtBox")
 		{
 			collider.gameObject.SendMessage("msg_damage",attackDmg,SendMessageOptions.RequireReceiver);
 			GamePad.SetVibration(0,1.0f,1.0f);
