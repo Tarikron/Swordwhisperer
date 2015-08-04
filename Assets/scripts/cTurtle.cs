@@ -2,11 +2,13 @@
 using System.Collections;
 using Spine;
 
+[RequireComponent(typeof(TurtlePhysics))]
 [RequireComponent(typeof(SkeletonAnimation))]
 public class cTurtle : cEnemy {
 
 	enum eTurtleMovement {ANIM_IDLE,ANIM_MOVE};
 
+	private TurtlePhysics physics;
 	public SkeletonAnimation skeletonAnimation;
 	public float triggerDistance = 0.0f;
 	public float triggerAttack = 0.0f;
@@ -41,6 +43,23 @@ public class cTurtle : cEnemy {
 	}
 	public animTurtle turtleAnimations;
 
+	private void manageMovement()
+	{
+		//todo
+	}
+
+	private void manageInteraction()
+	{
+		//todo
+	}
+
+	private void manageBehavior()
+	{
+		manageMovement();
+
+		manageInteraction();
+	}
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -55,7 +74,7 @@ public class cTurtle : cEnemy {
 		originColor.g = skeletonAnimation.skeleton.g;
 		originColor.b = skeletonAnimation.skeleton.b;
 	}
-	
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -90,6 +109,8 @@ public class cTurtle : cEnemy {
 			return;
 		if (iDieState == eDieState.DIE_NONE)
 		{
+			manageBehavior();
+
 			float distance = Vector2.Distance (enemyPos,playerPos);
 			if (distance <= triggerDistance) 
 			{

@@ -18,6 +18,9 @@ TagManager:
   - camDrive1
   - blackScreen
   - soul
+  - camZoomStart
+  - camZoomEnd
+  - attackButton
   layers:
   - Default
   - TransparentFX

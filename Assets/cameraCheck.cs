@@ -106,7 +106,8 @@ public class cameraCheck : MonoBehaviour
 					{
 						gameCam.SetTrackSpeed(originTrackSpeed.x,originTrackSpeed.y);
 						gameCam.SetTarget(player.transform);
-						mainCam.transform.position = new Vector3(player.transform.position.x,mainCam.transform.position.y,mainCam.transform.position.z);
+						
+						mainCam.transform.position = new Vector3(player.transform.position.x,mainCam.transform.position.y,  mainCam.transform.position.z + -14.0f - mainCam.transform.position.z);
 						
 						blackSceenHdl.state = blackScreenHandler.eCutsceneSteps.FADE_OUT;
 						blackSceenHdl.init();

@@ -31,6 +31,12 @@ public class cPlayer_c : cUnit
 
 	//settings via unity
 	public Canvas dialog;
+	public Canvas helpMoveCanvas;
+
+	private float helpMoveTimer = 0.0f;
+	public float helpMoveTime = 5.0f;
+	public float helpFadeTime = 1.0f;
+	private bool wakeup = false;
 
 	public float jumpHeight = 8.0f;
 	public float jumpTime = 2.0f;
@@ -344,7 +350,13 @@ public class cPlayer_c : cUnit
 		for (int i=0; i< go_s.Length; i++)
 		{
 			GameObject go = go_s[i];
-			float distance = Vector2.Distance (this.gameObject.transform.position,go.transform.position);
+			Vector3 v1 = Vector3.zero;
+			Vector3 v2 = Vector3.zero;
+
+			v1.x = this.gameObject.transform.position.x;
+			v2.x = go.transform.position.x - 2.0f;
+
+			float distance = Vector2.Distance (v1,v2);
 			if (distance <= _fadeCaveExit.fadeDistance)
 			{
 				Color c = go.GetComponent<SpriteRenderer>().color;
@@ -781,14 +793,35 @@ public class cPlayer_c : cUnit
 		float x = Input.GetAxis("Horizontal");
 		float absX = Mathf.Abs(x);
 		if (sleepAnim)
+		{
 			dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
 
+			if (helpMoveTimer >= helpMoveTime)
+			{
+				helpMoveCanvas.GetComponent<CanvasGroup>().alpha += Time.deltaTime/helpFadeTime;
+				if (helpMoveCanvas.GetComponent<CanvasGroup>().alpha > 1.0f)
+					helpMoveCanvas.GetComponent<CanvasGroup>().alpha = 1.0f;
+			}
+			else 
+				helpMoveTimer += Time.deltaTime;
+		}
 		if (sleepAnim && absX>0)
 		{
 			animHandler.addAnimation(animations.wakeup,false);
 			bCutscene = true;
 			sleepAnim = false;
+			wakeup = true;
 		}
+		if (wakeup)
+		{
+			helpMoveCanvas.GetComponent<CanvasGroup>().alpha -= Time.deltaTime/helpFadeTime;
+			if (helpMoveCanvas.GetComponent<CanvasGroup>().alpha <= 0.0f)
+			{
+				helpMoveCanvas.GetComponent<CanvasGroup>().alpha = 0.0f;
+				wakeup = false;
+			}
+		}
+
 		handleSwordPickup();
 		handleSwordAfterPickup();
 		//skip all related input/movement/loop animation for cutscene

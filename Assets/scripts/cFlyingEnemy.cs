@@ -676,6 +676,10 @@ public class cFlyingEnemy : cEnemy {
 
 	void msg_damage(float dmg)
 	{
+
+		GameObject go = GameObject.FindGameObjectWithTag("attackButton");
+		go.SetActive(false);
+
 		skeletonAnimation.skeleton.r = 1.0f;
 		skeletonAnimation.skeleton.b = 0.3f;
 		skeletonAnimation.skeleton.g = 0.0f;

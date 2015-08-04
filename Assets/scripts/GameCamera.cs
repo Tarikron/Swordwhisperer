@@ -16,6 +16,13 @@ public class GameCamera : MonoBehaviour {
 
 
 
+	public void SetCameraZ(float z)
+	{
+		Vector3 v = Vector3.zero;
+		v.z = z;
+		transform.Translate(v);
+	}
+
 	public void SetTrackSpeed(float accX, float accY)
 	{
 		trackSpeed.x = accX;
@@ -72,8 +79,34 @@ public class GameCamera : MonoBehaviour {
 
 			if (x >= -6.94)
 				transform.position = new Vector3(x,y,transform.position.z);
-				
+
+			Vector3 zoom = transform.position;
+			GameObject zoom1 = GameObject.FindGameObjectWithTag("camZoomStart");
+			GameObject zoom2 = GameObject.FindGameObjectWithTag("camZoomEnd");
+
+			Vector3 zoom1Pos = zoom1.transform.position;
+			Vector3 zoom2Pos = zoom2.transform.position;
+			if (zoom1Pos.x <= zoom.x && zoom2Pos.x >= zoom.x)
+			{
+				float endZ = -14.0f;
+				float startZ = -9.4f-0.01f;
+
+				//zoom.z + -9.4f;
+				float distanceX_ALL = zoom2Pos.x - zoom1Pos.x;
+				float distanceX_SC = zoom.x - zoom1Pos.x;
+
+				float percentage = distanceX_SC/distanceX_ALL;
+
+				float distanceZ_ALL = endZ - startZ;
+				float currentZoom = startZ + distanceZ_ALL * percentage;
+
+				zoom.z = currentZoom;
+
+				transform.position = zoom;
+
+			}
 			transform.position += vShake * Time.deltaTime;
+
 
 		}
 	}

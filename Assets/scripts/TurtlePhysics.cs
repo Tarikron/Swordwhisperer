@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class PlayerPhysics : cPhysics 
+public class TurtlePhysics : cPhysics 
 {
 	public override void Start()
 	{
