@@ -491,6 +491,18 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6186628, guid: 1d72ab7a512a5ac4e873c01abfaf0f5c, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11498222, guid: 1d72ab7a512a5ac4e873c01abfaf0f5c, type: 2}
+      propertyPath: startLife
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11498222, guid: 1d72ab7a512a5ac4e873c01abfaf0f5c, type: 2}
+      propertyPath: currentLife
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1d72ab7a512a5ac4e873c01abfaf0f5c, type: 2}
   m_IsPrefabParent: 0
@@ -12725,3 +12737,22 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2069734750}
   m_Mesh: {fileID: 0}
+--- !u!1 &2121137326 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 109044, guid: 1d72ab7a512a5ac4e873c01abfaf0f5c, type: 2}
+  m_PrefabInternal: {fileID: 59203127}
+--- !u!50 &2121137327
+Rigidbody2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2121137326}
+  m_Mass: 9.99999975e-05
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_FixedAngle: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0

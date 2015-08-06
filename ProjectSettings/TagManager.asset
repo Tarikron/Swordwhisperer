@@ -21,6 +21,7 @@ TagManager:
   - camZoomStart
   - camZoomEnd
   - attackButton
+  - biteBox
   layers:
   - Default
   - TransparentFX
@@ -37,8 +38,8 @@ TagManager:
   - enemyHit
   - cameraDrive1
   - player
-  - 
-  - 
+  - turtleHit
+  - turtleBiteHit
   - 
   - 
   - 

@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11498222}
   - 61: {fileID: 6185262}
   - 114: {fileID: 11472480}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: turtle
   m_TagString: heroTurtle
   m_Icon: {fileID: 0}
@@ -33,6 +33,22 @@ GameObject:
   m_Layer: 0
   m_Name: PressButton_go
   m_TagString: attackButton
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &164034
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 480156}
+  - 61: {fileID: 6186628}
+  m_Layer: 16
+  m_Name: biteBox
+  m_TagString: biteBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,7 +93,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 478476}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &478476
 Transform:
   m_ObjectHideFlags: 1
@@ -89,9 +105,22 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 416516}
+  - {fileID: 480156}
   - {fileID: 440120}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &480156
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164034}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 478476}
+  m_RootOrder: 1
 --- !u!23 &2305044
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -149,6 +178,19 @@ BoxCollider2D:
   m_Offset: {x: .386207581, y: 1.03001976}
   serializedVersion: 2
   m_Size: {x: 5.44097614, y: 2.55948043}
+--- !u!61 &6186628
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164034}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: -3.0693512, y: 1.01035428}
+  serializedVersion: 2
+  m_Size: {x: 2.24223042, y: 1.20452464}
 --- !u!114 &11420204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,6 +265,7 @@ MonoBehaviour:
   skeletonAnimation: {fileID: 11420204}
   triggerDistance: 9
   triggerAttack: 6
+  sleeper: 1
   turtleAnimations:
     sleep: sleep
     wakeup: wakeUP

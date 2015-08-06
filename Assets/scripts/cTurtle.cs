@@ -145,7 +145,7 @@ public class cTurtle : cEnemy {
 			//animLoop = false;
 		}
 		
-		if (defaultDeath()) //if we are dead, no need for others
+		if (death()) //if we are dead, no need for others
 			return;
 		if (iDieState == eDieState.DIE_NONE)
 		{
@@ -155,7 +155,7 @@ public class cTurtle : cEnemy {
 			{
 				animLoop = true;
 
-				if (sleeper && interacts < 50)
+				if (sleeper && interacts == 0)
 				{
 					currentTimeScale = 0.7f;
 					animationToPlay = "sleep";
@@ -164,10 +164,14 @@ public class cTurtle : cEnemy {
 				else
 				{
 					animationToPlay = "attack_Bite";
+					transform.FindChild("biteBox").gameObject.GetComponent<BoxCollider2D>().enabled = true;
 					attackBite = true;
+					animLoop = false;
 				}
 				interacts = Random.Range (10,100);
-
+				Debug.Log ("interacts: " + interacts);
+				interacts = interacts % 2;
+				Debug.Log ("interacts: " + interacts);
 				GameObject go = transform.FindChild("PressButton_go").gameObject;
 				if (go)
 				{
@@ -211,6 +215,22 @@ public class cTurtle : cEnemy {
 		SetAnimation (animationToPlay, animLoop);
 	}
 
+
+	void OnTriggerEnter2D (Collider2D collider)
+	{
+		if (collider.gameObject.tag == "player")
+		{
+			transform.FindChild("biteBox").gameObject.GetComponent<BoxCollider2D>().enabled = false;
+			collider.gameObject.SendMessage("msg_hit",1.0f,SendMessageOptions.RequireReceiver);
+		}
+	}
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		Debug.Log (collision.gameObject.tag);
+		
+		
+	}
+
 	//########################################
 	//################# Animation ############
 	//########################################
@@ -231,7 +251,7 @@ public class cTurtle : cEnemy {
 		}
 		else if (state.GetCurrent (trackIndex).Animation.Name == "attack_Bite")
 		{
-			attackBite = true;
+			attackBite = false;
 			animationToPlay = "idle";
 		}
 		else if (state.GetCurrent (trackIndex).Animation.Name == "death")
@@ -242,7 +262,6 @@ public class cTurtle : cEnemy {
 	{
 		if (currentAnimation != anim) 
 		{	
-			Debug.Log ("  " + anim + "   " + loop);
 			skeletonAnimation.state.SetAnimation(0,anim,loop);
 			skeletonAnimation.timeScale = currentTimeScale;
 			currentAnimation = anim;
@@ -276,6 +295,16 @@ public class cTurtle : cEnemy {
 		takeDmg(dmg);	
 		
 		tookDamge = true;
+	}
+
+	private bool death()
+	{
+		if (currentLife <= 0.0f)
+		{
+			die ();
+			return true;
+		}
+		return false;
 	}
 
 	void msg_die()
