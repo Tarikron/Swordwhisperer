@@ -169,9 +169,7 @@ public class cTurtle : cEnemy {
 					animLoop = false;
 				}
 				interacts = Random.Range (10,100);
-				Debug.Log ("interacts: " + interacts);
 				interacts = interacts % 2;
-				Debug.Log ("interacts: " + interacts);
 				GameObject go = transform.FindChild("PressButton_go").gameObject;
 				if (go)
 				{
