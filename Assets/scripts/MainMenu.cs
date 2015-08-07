@@ -16,6 +16,14 @@ public class MainMenu : MonoBehaviour
 		creditsPanelGroup = creditsPanel.GetComponent<CanvasGroup>();
 	}
 
+	void Update()
+	{
+		if (Input.anyKeyDown)
+		{
+			Application.LoadLevel("swordwhisperer");
+		}
+	}
+
 	public void Play()
 	{
 		Application.LoadLevel("swordwhisperer");

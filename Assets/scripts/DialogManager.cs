@@ -24,6 +24,10 @@ public class DialogManager : MonoBehaviour {
 
 	private float durationTimer = 0.0f;
 
+	public GameObject chatBoxIcn1;
+	public GameObject chatBoxIcn2;
+	public GameObject particle;
+
 	// Use this for initialization
 	void Start () {
 		dlgCanvas = GetComponent<CanvasGroup>();
@@ -57,8 +61,28 @@ public class DialogManager : MonoBehaviour {
 				if (dlg.persons[currentIndex].help == 0)
 				{
 					dlgCanvas.alpha += (1.0f * Time.deltaTime)/fade_in;
+					Color c1 = chatBoxIcn1.GetComponent<SpriteRenderer>().color;
+					Color c2 = chatBoxIcn2.GetComponent<SpriteRenderer>().color;
+					c1.a += (1.0f * Time.deltaTime)/(fade_in/2);
+					c2.a += (1.0f * Time.deltaTime)/fade_in;
+
+					if (c1.a > 0.5f)
+					{
+						float startsize = particle.GetComponent<ParticleSystem>().startSize;
+						startsize += (1.0f * Time.deltaTime)/(fade_in/2);
+						if (startsize <= 1.0f)
+							particle.GetComponent<ParticleSystem>().startSize = startsize;
+					}
 					if (dlgCanvas.alpha > 1.0f)
 						dlgCanvas.alpha = 1.0f;
+					if (c1.a > 1.0f)
+						c1.a = 1.0f;
+					if (c2.a > 1.0f)
+						c2.a = 1.0f;
+
+					chatBoxIcn1.GetComponent<SpriteRenderer>().color = c1;
+					chatBoxIcn2.GetComponent<SpriteRenderer>().color = c2;
+
 					string text = dlg.persons[currentIndex].text;
 					dlgMessage.text = text;
 				}
@@ -79,8 +103,25 @@ public class DialogManager : MonoBehaviour {
 				if (dlg.persons[currentIndex].help == 0)
 				{
 					dlgCanvas.alpha -= (1.0f * Time.deltaTime)/fade_out;
+					Color c1 = chatBoxIcn1.GetComponent<SpriteRenderer>().color;
+					Color c2 = chatBoxIcn2.GetComponent<SpriteRenderer>().color;
+					c1.a -= (1.0f * Time.deltaTime)/fade_out;
+					c2.a -= (1.0f * Time.deltaTime)/fade_out;
+
+					float startsize = particle.GetComponent<ParticleSystem>().startSize;
+					startsize -= (1.0f * Time.deltaTime)/(fade_out/2);
+					if (startsize >= 0.0f)
+						particle.GetComponent<ParticleSystem>().startSize = startsize;
+
 					if (dlgCanvas.alpha < 0.0f)
 						dlgCanvas.alpha = 0.0f;
+					if (c1.a < 0.0f)
+						c1.a = 0.0f;
+					if (c2.a < 0.0f)
+						c2.a = 0.0f;
+
+					chatBoxIcn1.GetComponent<SpriteRenderer>().color = c1;
+					chatBoxIcn2.GetComponent<SpriteRenderer>().color = c2;
 
 					alpha = dlgCanvas.alpha;
 				}
