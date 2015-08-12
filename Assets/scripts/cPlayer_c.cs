@@ -282,6 +282,13 @@ public class cPlayer_c : cUnit
 				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
 				//gameCam.decreaseFactor = 0.5f;
 
+				GameObject vineSoul = GameObject.FindGameObjectWithTag("vineSoul");
+				GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
+
+				playerSoul.transform.position = vineSoul.transform.position;
+
+				vineSoul.SetActive(false);
+
 				sword.bCollectedSword = true;
 				sword.sSword = "sword";
 				bSkipMovementForAnim = false;

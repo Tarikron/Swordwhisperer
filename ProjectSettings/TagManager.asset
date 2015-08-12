@@ -22,6 +22,8 @@ TagManager:
   - camZoomEnd
   - attackButton
   - biteBox
+  - vineSoul
+  - playerSoul
   layers:
   - Default
   - TransparentFX
