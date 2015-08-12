@@ -64,7 +64,7 @@ public class cFlyingEnemy : cEnemy {
 	private bool waitForAttack = false;
 	private bool waitForSec = false;
 
-	private float deathAlpha = 0.0f;
+    private float deathAlpha = 0.0f;
 	private float startSpeedGround = 2.0f;
 	private float speedGround = 2.0f;
 
@@ -78,9 +78,6 @@ public class cFlyingEnemy : cEnemy {
 	
 	[SerializeField]
 	private AudioClip attackClip2;
-	
-	[SerializeField]
-	private AudioClip attackClip3;
 
 	[HideInInspector]
 	public cEnemyPhysic enemyPhysics;
@@ -582,6 +579,7 @@ public class cFlyingEnemy : cEnemy {
 				attackCharge(player);
 				break;
 			case eAttackType.ATTACK_SHOT:
+				playShootClips();
 				attackShot (player,player.transform.position);
 				break;
 			}
@@ -686,12 +684,8 @@ public class cFlyingEnemy : cEnemy {
 		skeletonAnimation.skeleton.g = 0.0f;
 		skeletonAnimation.skeleton.a = 1.0f;
 
-		if (damagedClip)
-		{
-			audioSource.clip = damagedClip;
-			if(!audioSource.isPlaying){
-				audioSource.Play();
-			}
+		if(!audioSource.isPlaying){
+			playDamagedClips();
 		}
 
 		takeDmg(dmg);	
@@ -723,25 +717,5 @@ public class cFlyingEnemy : cEnemy {
 		}
 		else
 			iDefaultCollide = eDefaultCollideType.COLLIDE_MOVE;
-	}
-
-	private void playAttackClips(){
-		switch (Random.Range(0,3)) {
-			
-		case 0:
-			audioSource.PlayOneShot(attackClip1);
-			break;
-			
-		case 1:
-			audioSource.PlayOneShot(attackClip2);
-			break;
-			
-		case 2:
-			audioSource.PlayOneShot(attackClip3);
-			break;
-			
-		default:
-			break;
-		}
 	}
 }

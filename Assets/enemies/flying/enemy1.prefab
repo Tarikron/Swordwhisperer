@@ -46,7 +46,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 408758}
-  - 114: {fileID: 11404294}
   - 114: {fileID: 11446330}
   - 33: {fileID: 3356654}
   - 23: {fileID: 2323808}
@@ -284,6 +283,7 @@ MeshFilter:
   m_Mesh: {fileID: 0}
 --- !u!50 &5014770
 Rigidbody2D:
+  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -292,13 +292,14 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_FixedAngle: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!50 &5031744
 Rigidbody2D:
+  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -307,11 +308,11 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_FixedAngle: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &6105144
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -489,20 +490,6 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
---- !u!114 &11404294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 146066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &11422902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -534,13 +521,21 @@ MonoBehaviour:
   shotInterval: 2
   attackCollideDmg: 1
   audioSource: {fileID: 8240908}
-  damagedClip: {fileID: 0}
+  damagedClip1: {fileID: 8300000, guid: 128e0121c11ca4530b0099e3ce817458, type: 3}
+  damagedClip2: {fileID: 8300000, guid: bad36644ad05d4890b3ed3dcc53fb1fa, type: 3}
+  damagedClip3: {fileID: 8300000, guid: baa8e2537da92493b9836426325053ea, type: 3}
   deathClip: {fileID: 8300000, guid: 66bd75296af297a4d8c976fcf5da94cb, type: 3}
   movementClip: {fileID: 0}
+  attackClip1: {fileID: 8300000, guid: 6bfab185facd54536a6db27f16d14fbd, type: 3}
+  attackClip2: {fileID: 8300000, guid: 21258018b115745369d84e53fc452675, type: 3}
+  attackClip3: {fileID: 8300000, guid: ff8ad9e353a80473ba61195dbcc3c398, type: 3}
+  shootClip1: {fileID: 8300000, guid: 4491dc6b90b3b4b4b91824359da5e204, type: 3}
+  shootClip2: {fileID: 8300000, guid: 21243b1da4e7d4e0db960201439f1ea6, type: 3}
+  shootClip3: {fileID: 8300000, guid: 076962b06a9d143db88db4ecf0ace4bc, type: 3}
   flyingType: 0
   attackType: 0
   chargeSpeed: 14
-  chargeAcceleration: 8
+  chargeAcceleration: 10
   flyingBackSpeed: 4
   attackChargeDmg: 1
   circleSize: 5
@@ -552,10 +547,6 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 16384
-  attackClip1: {fileID: 8300000, guid: 6bfab185facd54536a6db27f16d14fbd, type: 3}
-  attackClip2: {fileID: 8300000, guid: 21258018b115745369d84e53fc452675, type: 3}
-  attackClip3: {fileID: 8300000, guid: ff8ad9e353a80473ba61195dbcc3c398, type: 3}
-  enemyPhysics: {fileID: 0}
 --- !u!114 &11446484
 MonoBehaviour:
   m_ObjectHideFlags: 1

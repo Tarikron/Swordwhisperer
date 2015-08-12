@@ -22,17 +22,42 @@ public class cEnemy : cUnit
 
 	protected int shots = 0;
 	protected int currentShots = 0;
-
-	public AudioSource audioSource;
+	
+	[SerializeField]
+	protected AudioSource audioSource;
 
 	[SerializeField]
-	protected  AudioClip damagedClip;
+	protected  AudioClip damagedClip1;
 
+	[SerializeField]
+	protected  AudioClip damagedClip2;
+
+	[SerializeField]
+	protected  AudioClip damagedClip3;
+	
 	[SerializeField]
 	protected AudioClip deathClip;
-
+	
 	[SerializeField]
 	protected AudioClip movementClip;
+	
+	[SerializeField]
+	protected AudioClip attackClip1;
+	
+	[SerializeField]
+	protected AudioClip attackClip2;
+	
+	[SerializeField]
+	protected AudioClip attackClip3;
+
+	[SerializeField]
+	protected AudioClip shootClip1;
+	
+	[SerializeField]
+	protected AudioClip shootClip2;
+	
+	[SerializeField]
+	protected AudioClip shootClip3;
 
 	protected bool defaultDeath()
 	{
@@ -95,7 +120,9 @@ public class cEnemy : cUnit
 			lastPlayerPos = target;
 			lastPlayerPos.y += 0.5f;
 			shot.transform.position = transform.position + (heading.normalized * 2.5f);
-			
+
+			playAttackClips();
+
 			GameObject shotClone = GameObject.Instantiate(shot);
 			shotClone.SendMessage("msg_shotfired",heading.normalized,SendMessageOptions.RequireReceiver);
 			shotClone.transform.localScale = shot.transform.lossyScale;
@@ -116,7 +143,65 @@ public class cEnemy : cUnit
 		}
 	}
 
-
+	protected void playAttackClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(attackClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(attackClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(attackClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	protected void playDamagedClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(damagedClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(damagedClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(damagedClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	protected void playShootClips(){
+		switch (Random.Range(0,3)) {
+			
+		case 0:
+			audioSource.PlayOneShot(shootClip1);
+			break;
+			
+		case 1:
+			audioSource.PlayOneShot(shootClip2);
+			break;
+			
+		case 2:
+			audioSource.PlayOneShot(shootClip3);
+			break;
+			
+		default:
+			break;
+		}
+	}
 }
 
 
