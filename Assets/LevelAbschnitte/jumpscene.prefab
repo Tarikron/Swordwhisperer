@@ -219,6 +219,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 463778}
   - 212: {fileID: 21209138}
+  - 114: {fileID: 11454564}
   m_Layer: 0
   m_Name: 16hoverBG1
   m_TagString: Untagged
@@ -235,6 +236,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 454260}
   - 212: {fileID: 21293438}
+  - 114: {fileID: 11439644}
   m_Layer: 0
   m_Name: 02felsenHover2
   m_TagString: Untagged
@@ -660,6 +662,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 437216}
   - 212: {fileID: 21222380}
+  - 114: {fileID: 11440120}
   m_Layer: 0
   m_Name: 01felsenHover1
   m_TagString: Untagged
@@ -1999,6 +2002,18 @@ MonoBehaviour:
   timeScale: .25
   loop: 1
   _animationName: animation
+--- !u!114 &11439644
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc50b15eca274d42a2f372645251182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angleSpeed: 10
 --- !u!114 &11439890
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2023,6 +2038,18 @@ MonoBehaviour:
   timeScale: .25
   loop: 1
   _animationName: animation
+--- !u!114 &11440120
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 161448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc50b15eca274d42a2f372645251182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angleSpeed: 10
 --- !u!114 &11449440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2047,6 +2074,18 @@ MonoBehaviour:
   timeScale: .200000003
   loop: 1
   _animationName: Shadow_Idle
+--- !u!114 &11454564
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc50b15eca274d42a2f372645251182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angleSpeed: 10
 --- !u!114 &11460374
 MonoBehaviour:
   m_ObjectHideFlags: 1

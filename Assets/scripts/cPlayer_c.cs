@@ -28,7 +28,6 @@ public class cPlayer_c : cUnit
 	}
 	public fadeCaveExit _fadeCaveExit;
 
-
 	//settings via unity
 	public Canvas dialog;
 	public Canvas helpMoveCanvas;
@@ -46,7 +45,6 @@ public class cPlayer_c : cUnit
 	public float hurtVelocity = 3.0f;
 	public float walkVelocity = 3.0f;
 	public float runVelocity = 6.0f;
-
 
 	//animation stuff
 	cAnimationHandler animHandler;
@@ -225,7 +223,6 @@ public class cPlayer_c : cUnit
 					ps.Stop();
 			}
 		}
-
 	}
 
 	void handleSwordAfterPickup()
@@ -357,6 +354,7 @@ public class cPlayer_c : cUnit
 			v2.x = go.transform.position.x - 2.0f;
 
 			float distance = Vector2.Distance (v1,v2);
+
 			if (distance <= _fadeCaveExit.fadeDistance)
 			{
 				Color c = go.GetComponent<SpriteRenderer>().color;
@@ -370,7 +368,6 @@ public class cPlayer_c : cUnit
 					c.a = 0.0f;
 				if (c.a > 1.0f)
 					c.a = 1.0f;
-
 
 				if (c.a  >= 1.0f)
 				{
