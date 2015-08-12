@@ -16,7 +16,7 @@ public class cPlayerSoul : cSoul
 		base.Update();
 
 		ParticleSystem ps = GetComponent<ParticleSystem>();
-		ps.enableEmission = true;
+		//ps.enableEmission = true;
 		ps.startSize = 1.0f;
 
 	}

@@ -54,6 +54,7 @@ GameObject:
   - 61: {fileID: 6145210}
   - 82: {fileID: 8271426}
   - 82: {fileID: 8240908}
+  - 114: {fileID: 11441506}
   m_Layer: 0
   m_Name: enemy1
   m_TagString: enemyFlying
@@ -283,7 +284,6 @@ MeshFilter:
   m_Mesh: {fileID: 0}
 --- !u!50 &5014770
 Rigidbody2D:
-  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -292,14 +292,13 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
+  m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!50 &5031744
 Rigidbody2D:
-  serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -308,11 +307,11 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
+  m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!61 &6105144
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -501,6 +500,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2f960236498490439b0fd89de28843b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11441506
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &11446330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -547,6 +560,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 16384
+  enemyPhysics: {fileID: 0}
 --- !u!114 &11446484
 MonoBehaviour:
   m_ObjectHideFlags: 1

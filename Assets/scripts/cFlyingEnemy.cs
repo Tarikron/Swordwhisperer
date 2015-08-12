@@ -73,12 +73,6 @@ public class cFlyingEnemy : cEnemy {
 
 	private float fadeOutTime = 0.5f;
 
-	[SerializeField]
-	private AudioClip attackClip1;
-	
-	[SerializeField]
-	private AudioClip attackClip2;
-
 	[HideInInspector]
 	public cEnemyPhysic enemyPhysics;
 

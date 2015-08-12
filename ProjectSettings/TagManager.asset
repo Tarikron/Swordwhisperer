@@ -24,6 +24,7 @@ TagManager:
   - biteBox
   - vineSoul
   - playerSoul
+  - eventHandler
   layers:
   - Default
   - TransparentFX
