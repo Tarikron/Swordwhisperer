@@ -25,6 +25,7 @@ TagManager:
   - vineSoul
   - playerSoul
   - eventHandler
+  - turtleParticle
   layers:
   - Default
   - TransparentFX

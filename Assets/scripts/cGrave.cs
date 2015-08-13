@@ -32,6 +32,7 @@ public class cGrave : MonoBehaviour
 				if (c.a < 0.0f)
 				{
 					c.a = 0.0f;
+					interact = false;
 				}
 			}
 			go.GetComponent<SpriteRenderer>().color = c;

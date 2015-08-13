@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 486544}
   - 198: {fileID: 19812274}
   - 199: {fileID: 19975344}
-  - 114: {fileID: 11415140}
   m_Layer: 0
   m_Name: BLATTPARTICLE
   m_TagString: Untagged
@@ -453,7 +452,6 @@ GameObject:
   - 4: {fileID: 471176}
   - 198: {fileID: 19897254}
   - 199: {fileID: 19967032}
-  - 114: {fileID: 11456190}
   m_Layer: 0
   m_Name: BLATTPARTICLE 1
   m_TagString: Untagged
@@ -1139,7 +1137,6 @@ GameObject:
   - 4: {fileID: 438678}
   - 198: {fileID: 19820026}
   - 199: {fileID: 19965546}
-  - 114: {fileID: 11449714}
   m_Layer: 0
   m_Name: BLATTPARTICLE 2
   m_TagString: Untagged
@@ -1257,7 +1254,6 @@ GameObject:
   - 4: {fileID: 463248}
   - 198: {fileID: 19825740}
   - 199: {fileID: 19918116}
-  - 114: {fileID: 11409444}
   m_Layer: 0
   m_Name: BLATTPARTICLE 3
   m_TagString: Untagged
@@ -3724,17 +3720,6 @@ MonoBehaviour:
   timeScale: .200000003
   loop: 1
   _animationName: idle_rayFRONT
---- !u!114 &11409444
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11412010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3807,17 +3792,6 @@ MonoBehaviour:
   timeScale: .100000001
   loop: 1
   _animationName: Idle
---- !u!114 &11415140
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11415818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4130,17 +4104,6 @@ MonoBehaviour:
   timeScale: .150000006
   loop: 1
   _animationName: Shadow_Idle
---- !u!114 &11449714
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11451524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4237,17 +4200,6 @@ MonoBehaviour:
   timeScale: .150000006
   loop: 1
   _animationName: animation
---- !u!114 &11456190
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 133028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11459744
 MonoBehaviour:
   m_ObjectHideFlags: 1

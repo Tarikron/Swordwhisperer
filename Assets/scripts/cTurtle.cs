@@ -311,8 +311,16 @@ public class cTurtle : cEnemy {
 	}
 	protected override void die()
 	{
+		if (currentAnimation != turtleAnimations.death)
+		{
+			ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>();
+			foreach (ParticleSystem ps in particleSystems)
+			{
+				ps.enableEmission = true;
+			}
+		}
+
 		currentLife = 0;
-		
 		SetAnimation (turtleAnimations.death, false);
 	}
 }
