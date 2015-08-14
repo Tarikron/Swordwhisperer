@@ -63,10 +63,10 @@ public class GameCamera : MonoBehaviour {
 				vShake.x = -3.0f;
 			else if (vShake.x > 3.0f)
 				vShake.x = 3.0f;
-			if (vShake.y > 0.2f)
-				vShake.y = 0.2f;
-			else if (vShake.y < -0.2f)
-				vShake.y = -0.2f;
+			if (vShake.y > 0.9f)
+				vShake.y = 0.9f;
+			else if (vShake.y < -0.9f)
+				vShake.y = -0.9f;
 
 			vShake.z = 0.0f;
 

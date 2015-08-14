@@ -321,6 +321,7 @@ public class cTurtle : cEnemy {
 		}
 
 		currentLife = 0;
+		currentTimeScale = 1.3f;
 		SetAnimation (turtleAnimations.death, false);
 	}
 }

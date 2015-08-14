@@ -133,7 +133,6 @@ public class DialogManager : MonoBehaviour {
 					
 					alpha = dlgHelpCanvas.alpha;
 				}
-
 				if (alpha <= 0.01f)
 				{
 					if (nextMessage)

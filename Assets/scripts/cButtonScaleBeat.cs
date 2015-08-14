@@ -18,8 +18,6 @@ public class cButtonScaleBeat : MonoBehaviour {
 
 		Vector3 lossyScale = transform.localScale;
 
-		Debug.Log(Mathf.Sin (alpha * Mathf.PI/180));
-
 		lossyScale.x = startScale.x + Mathf.Sin (alpha * Mathf.PI/180)/10.0f;
 		lossyScale.y = startScale.y + Mathf.Sin (alpha * Mathf.PI/180)/10.0f;
 

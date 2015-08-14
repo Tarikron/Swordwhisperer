@@ -16,7 +16,7 @@
 				<text>Press A to take me.</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
-				<fade_out>2</fade_out>
+				<fade_out>0.5</fade_out>
 				<duration>1</duration>
 				<click_away>0</click_away>
 				<help>1</help>
