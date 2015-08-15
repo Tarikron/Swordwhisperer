@@ -1,0 +1,99 @@
+{
+"skeleton": { "hash": "Yv+/EKsFwQMNppk3mRbXS/aRpj4", "spine": "2.1.27", "width": 0, "height": 0 },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "15", "bone": "root" },
+	{ "name": "40", "bone": "root" },
+	{ "name": "65", "bone": "root" },
+	{ "name": "100", "bone": "root" },
+	{ "name": "glow", "bone": "root" },
+	{ "name": "glow2", "bone": "root" }
+],
+"skins": {
+	"default": {
+		"100": {
+			"100": { "x": -1.5, "y": 2, "width": 541, "height": 412 }
+		},
+		"15": {
+			"15": { "x": -1, "y": 2.5, "width": 540, "height": 411 }
+		},
+		"40": {
+			"40": { "x": -1.5, "y": 2, "width": 541, "height": 412 }
+		},
+		"65": {
+			"65": { "x": -1.5, "y": 2, "width": 541, "height": 412 }
+		},
+		"glow": {
+			"glow": { "x": -1, "y": 2, "width": 576, "height": 448 }
+		},
+		"glow2": {
+			"glow2": { "x": -1, "y": 1.5, "width": 644, "height": 517 }
+		}
+	}
+},
+"animations": {
+	"animation": {
+		"slots": {
+			"100": {
+				"attachment": [
+					{ "time": 0.1, "name": "100" },
+					{ "time": 0.1333, "name": null },
+					{ "time": 0.2333, "name": "100" },
+					{ "time": 0.2666, "name": null }
+				]
+			},
+			"15": {
+				"attachment": [
+					{ "time": 0, "name": "15" },
+					{ "time": 0.0333, "name": null },
+					{ "time": 0.3333, "name": "15" },
+					{ "time": 0.3666, "name": null }
+				]
+			},
+			"40": {
+				"attachment": [
+					{ "time": 0.0333, "name": "40" },
+					{ "time": 0.0666, "name": null },
+					{ "time": 0.3, "name": "40" },
+					{ "time": 0.3333, "name": null }
+				]
+			},
+			"65": {
+				"attachment": [
+					{ "time": 0.0666, "name": "65" },
+					{ "time": 0.1, "name": null },
+					{ "time": 0.2666, "name": "65" },
+					{ "time": 0.3, "name": null }
+				]
+			},
+			"glow": {
+				"attachment": [
+					{ "time": 0.1333, "name": "glow" },
+					{ "time": 0.1666, "name": null },
+					{ "time": 0.2, "name": "glow" },
+					{ "time": 0.2333, "name": null }
+				]
+			},
+			"glow2": {
+				"attachment": [
+					{ "time": 0.1666, "name": "glow2" },
+					{ "time": 0.2, "name": null },
+					{ "time": 0.4, "name": null }
+				]
+			}
+		},
+		"bones": {
+			"root": {
+				"rotate": [
+					{ "time": 0.4, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0.4, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}

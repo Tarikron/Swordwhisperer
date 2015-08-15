@@ -1,0 +1,48 @@
+
+icon_loadingScreen.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+100
+  rotate: false
+  xy: 648, 557
+  size: 541, 412
+  orig: 541, 412
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 1191, 144
+  size: 540, 411
+  orig: 540, 411
+  offset: 0, 0
+  index: -1
+40
+  rotate: false
+  xy: 1191, 557
+  size: 541, 412
+  orig: 541, 412
+  offset: 0, 0
+  index: -1
+65
+  rotate: false
+  xy: 648, 143
+  size: 541, 412
+  orig: 541, 412
+  offset: 0, 0
+  index: -1
+glow
+  rotate: false
+  xy: 2, 2
+  size: 576, 448
+  orig: 576, 448
+  offset: 0, 0
+  index: -1
+glow2
+  rotate: false
+  xy: 2, 452
+  size: 644, 517
+  orig: 644, 517
+  offset: 0, 0
+  index: -1

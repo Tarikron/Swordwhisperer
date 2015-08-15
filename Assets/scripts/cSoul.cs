@@ -6,7 +6,8 @@ public class cSoul : MonoBehaviour {
 	public float angleSpeed = 10.0f;
 	public float amplitude = 80.0f;
 	protected float alpha = 0.0f;
-	private Vector3 origin = Vector3.zero;
+	protected Vector3 origin = Vector3.zero;
+
 
 
 	// Use this for initialization

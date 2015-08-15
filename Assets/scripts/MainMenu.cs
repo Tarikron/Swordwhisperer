@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
 	public GameObject creditsPanel;
 	public GameObject allPanel;
 	public GameObject blackscreen;
+	public GameObject loadingScreen;
 
 	private CanvasGroup optionPanelGroup = null;
 	private CanvasGroup creditsPanelGroup = null;
@@ -23,6 +24,8 @@ public class MainMenu : MonoBehaviour
 	AsyncOperation async;
 	private bool fading = false;
 
+	private bool test = false;
+
 	void Start()
 	{
 		optionPanelGroup = optionPanel.GetComponent<CanvasGroup>();
@@ -30,14 +33,13 @@ public class MainMenu : MonoBehaviour
 		allPanelGroup = allPanel.GetComponent<CanvasGroup>();
 		blackScreenGroup = blackscreen.GetComponent<blackScreenHandler>();
 		
-		StartCoroutine(load());
-
 		blackScreenGroup.bInit = false;
 		blackScreenGroup.init(0.0f);
 	}
 
 	void Update()
 	{
+		
 		if (allPanelGroup.alpha >= 1.0f)
 		{
 			if (fading)
@@ -45,7 +47,9 @@ public class MainMenu : MonoBehaviour
 				blackScreenGroup.timeDelay = 0.0f;
 				blackScreenGroup.state = blackScreenHandler.eCutsceneSteps.FADE_IN;
 				if (blackScreenGroup.IsFadeDone())
-					ActivateScene();
+				{
+					StartCoroutine(load());
+				}
 			}
 			else
 			{
@@ -64,8 +68,9 @@ public class MainMenu : MonoBehaviour
 				{
 					allPanelGroup.alpha = 1.0f;
 					delayTimer = 0.0f;
+					loadingScreen.GetComponent<MeshRenderer>().enabled = true;
+					loadingScreen.GetComponent<SkeletonAnimation>().enabled = true;
 				}
-
 			}
 
 			delayTimer += Time.deltaTime;
@@ -73,16 +78,12 @@ public class MainMenu : MonoBehaviour
 	}
 
 	IEnumerator load() {
-		Debug.LogWarning("ASYNC LOAD STARTED - " +
+		Debug.Log("ASYNC LOAD STARTED - " +
 		                 "DO NOT EXIT PLAY MODE UNTIL SCENE LOADS... UNITY WILL CRASH");
 		async = Application.LoadLevelAsync(levelName);
-		async.allowSceneActivation = false;
+
 		yield return async;
-	}
-	
-	private void ActivateScene() {
-		if (async != null)
-			async.allowSceneActivation = true;
+
 	}
 
 	public void Play()

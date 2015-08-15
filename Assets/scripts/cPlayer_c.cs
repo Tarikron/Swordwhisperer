@@ -229,6 +229,8 @@ public class cPlayer_c : cUnit
 	{
 		if (iSwordTakeAfter == eSwordTakeAfter.WHILE)
 		{
+			bSkipMovementForAnim = true;
+			bCutscene = true;
 			if (timeToGetOneLife <= lifeTimer)
 			{
 				if (currentLife < startLife)
@@ -248,6 +250,8 @@ public class cPlayer_c : cUnit
 				playback = false;
 				playPowerUp(playback);
 				iSwordTakeAfter = eSwordTakeAfter.NONE;
+				bSkipMovementForAnim = false;
+				bCutscene = false;
 			}
 		}
 
@@ -260,14 +264,17 @@ public class cPlayer_c : cUnit
 		Vector3 playerPos = this.gameObject.transform.position;
 		
 		float distance = Vector2.Distance (playerPos,enemyPos);
-		if (distance <= 4 && !sword.bCollectedSword) 
+		if (distance <= 4 && !sword.bCollectedSword && iAnimTakeSword == eAnimTakeSword.ANIM_NONE) 
 		{
 			dialog.SendMessage("msg_eventTrigger","sword_take",SendMessageOptions.RequireReceiver);
 
-			if (Input.GetButtonDown("CtrlBButton") && iAnimTakeSword == eAnimTakeSword.ANIM_NONE)
+			if (Input.GetButtonDown("CtrlBButton"))
+			{
 				iAnimTakeSword = eAnimTakeSword.ANIM_WALK;
+				dialog.SendMessage("msg_eventTriggerEnd","sword_take",SendMessageOptions.RequireReceiver);
+			}
 		}
-		else
+		else if (sword.bCollectedSword && distance <= 8 && iAnimTakeSword != eAnimTakeSword.ANIM_NONE)
 			dialog.SendMessage("msg_eventTriggerEnd","sword_take",SendMessageOptions.RequireReceiver);
 
 		switch (iAnimTakeSword)
@@ -277,7 +284,7 @@ public class cPlayer_c : cUnit
 				
 				//start swordAfterPickEvent
 				iSwordTakeAfter = eSwordTakeAfter.WHILE;
-
+				animHandler.addAnimation(animations.idle_sword,true);
 				//Camera mainCam = Camera.main;
 				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
 				//gameCam.decreaseFactor = 0.5f;
@@ -286,7 +293,8 @@ public class cPlayer_c : cUnit
 				GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
 
 				playerSoul.transform.position = vineSoul.transform.position;
-
+				playerSoul.SendMessage("msg_vineSoul",vineSoul.transform.position,SendMessageOptions.RequireReceiver);
+				
 				vineSoul.SetActive(false);
 
 				sword.bCollectedSword = true;
@@ -300,6 +308,8 @@ public class cPlayer_c : cUnit
 			case eAnimTakeSword.ANIM_START:
 			{
 				iAnimTakeSword = eAnimTakeSword.ANIM_START;
+				bSkipMovementForAnim = true;
+				bCutscene = true;
 				break;
 			}
 			case eAnimTakeSword.ANIM_TAKESTART:
@@ -317,12 +327,6 @@ public class cPlayer_c : cUnit
 			case eAnimTakeSword.ANIM_WALK:
 			{
 				dialog.SendMessage("msg_eventTriggerEnd","sword_take",SendMessageOptions.RequireReceiver);
-
-				//Camera mainCam = Camera.main;
-				//GameCamera gameCam = mainCam.GetComponent<GameCamera>();
-
-				//gameCam.startShake();
-				//gameCam.decreaseFactor = 0.0f;
 
 				transform.position = Vector3.MoveTowards(playerPos,enemyPos,Time.deltaTime * walkVelocity);
 				
@@ -676,7 +680,7 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		sword.bCollectedSword = true;
+		//sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;
@@ -825,9 +829,10 @@ public class cPlayer_c : cUnit
 				wakeup = false;
 			}
 		}
-
+		
 		handleSwordPickup();
 		handleSwordAfterPickup();
+
 		//skip all related input/movement/loop animation for cutscene
 		if (bCutscene == false)
 		{
@@ -963,7 +968,7 @@ public class cPlayer_c : cUnit
 			sleepAnim = false;
 			iAnimWalk = eAnimWalk.ANIM_END;
 			if (animName == animations.wakeup)
-				currentLife = 2;
+				currentLife = 6;
 
 		}
 		else if (animName == animations.walk_start_sword || animName == animations.walk_start_nosword)
@@ -1061,6 +1066,12 @@ public class cPlayer_c : cUnit
 
 			makeRed ();
 
+			Camera mainCam = Camera.main;
+			GameCamera gameCam = mainCam.GetComponent<GameCamera>();
+			gameCam.startShake();
+			gameCam.decreaseFactor = 0.5f;
+
+
 			ui.txtLife.text = currentLife+" Life";
 		
 			angleToFlyback = Vector3.Angle(lastDirection,new Vector3(1.0f,0.0f,0.0f) );
@@ -1069,8 +1080,12 @@ public class cPlayer_c : cUnit
 
 			playDamageVoiceClips();
 		}
-
 	}
+	public Vector3 getMovement()
+	{
+		return lastDirection;
+	}
+
 
 	//########################################
 	//################# Sounds ###########
