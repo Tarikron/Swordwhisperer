@@ -134,19 +134,23 @@ public class cPhysics : MonoBehaviour
 			
 			if (slopeL > 1.0f && slopeL < 90.0f || slopeR > 1.0f && slopeR < 90.0f )
 			{
+				//Debug.Log ("1 - " + deltaY);
+
 				if ( slopeL < 90.0f)
 				{
-					deltaY = Mathf.Tan ((slopeL * Mathf.PI)/180.0f) * deltaX * xDir;
+					deltaY += Mathf.Tan ((slopeL * Mathf.PI)/180.0f) * deltaX * xDir;
 					onSlope = true;
 				}
 				else if (slopeR < 90.0f)
 				{
-					deltaY = Mathf.Tan ((slopeR * Mathf.PI)/180.0f) * deltaX * xDir;
+					deltaY += Mathf.Tan ((slopeR * Mathf.PI)/180.0f) * deltaX * xDir;
 					onSlope = true;
 				}
 				
 				if (cFunction.xor(dst_left < dst_right && xDir > 0.0f,dst_left < dst_right && xDir < 0.0f)) //moving down to left or up to right
 					deltaY *= -1.0f;
+
+				//Debug.Log ("2 - " + deltaY);
 			}
 			
 			ray = new Ray(new Vector2(transform.position.x,transform.position.y), (new Vector2 (deltaX*xDir, deltaY)));

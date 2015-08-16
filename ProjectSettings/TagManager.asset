@@ -26,6 +26,7 @@ TagManager:
   - playerSoul
   - eventHandler
   - turtleParticle
+  - waypoint
   layers:
   - Default
   - TransparentFX
