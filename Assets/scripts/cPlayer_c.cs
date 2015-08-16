@@ -76,7 +76,7 @@ public class cPlayer_c : cUnit
 	public float attackDmg = 1.0f;
 
 	private bool bExternCutScene = false;
-
+	private bool bLockScene = false;
 	private struct stHitBoxes
 	{
 		public BoxCollider2D hitBox_attack_123;
@@ -708,7 +708,7 @@ public class cPlayer_c : cUnit
 
 		if (!bBlackScreenGone)
 			return;
-		if (bExternCutScene)
+		if (bExternCutScene || bLockScene)
 		{
 			animHandler.addAnimation(animations.idle_sword,true);
 			animHandler.playAnimation();
@@ -1013,12 +1013,22 @@ public class cPlayer_c : cUnit
 	//################# Receiver/Messages ###########
 	//########################################
 
+	void msg_stopMovementStart()
+	{
+		bLockScene = true;
+	}
+	void msg_stopMovementEnd()
+	{
+		bLockScene = false;
+	}
+
 	void msg_externCutsceneStart()
 	{
 		bExternCutScene = true;
 	}
 	void msg_externCutsceneEnd()
 	{
+
 		bExternCutScene = false;
 
 		//little bit dirty here... but we only have one event

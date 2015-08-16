@@ -25,6 +25,7 @@ public class Dialog
 		public int click_away;
 		public int help;
 		public float duration;
+		public int cutscene_lock;
 	}
 	public stPerson person;
 	public List<stPerson> persons = new List<stPerson>();

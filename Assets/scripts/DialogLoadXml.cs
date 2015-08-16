@@ -64,7 +64,7 @@ public class DialogLoadXml : MonoBehaviour {
 							dlg.person.soundfile = currentNode["soundfile"].InnerText;
 							dlg.person.help = int.Parse(currentNode["help"].InnerText);
 							dlg.person.duration = float.Parse(currentNode["duration"].InnerText);
-
+							dlg.person.cutscene_lock = int.Parse(currentNode["cutscene_lock"].InnerText);
 							dlg.persons.Add(dlg.person);
 
 							if (currentNode.NextSibling == null)

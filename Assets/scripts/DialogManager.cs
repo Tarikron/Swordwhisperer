@@ -28,6 +28,7 @@ public class DialogManager : MonoBehaviour {
 	public GameObject chatBoxIcn2;
 	public GameObject particle;
 
+	public bool lockScene = false;
 	// Use this for initialization
 	void Start () {
 		dlgCanvas = GetComponent<CanvasGroup>();
@@ -51,12 +52,15 @@ public class DialogManager : MonoBehaviour {
 			{
 				stopEvent = false;
 				nextMessage = false;
+				GameObject.FindGameObjectWithTag("player").GetComponent<cPlayer_c>().SendMessage("msg_stopMovementEnd",null,SendMessageOptions.DontRequireReceiver);
 				return;
 			}
 			//we have event in dialogs
 			if (!nextMessage && !stopEvent && dlgCanvas.alpha < 1.0f)
 			{
 				float fade_in = dlg.persons[currentIndex].fade_in;
+
+
 
 				if (dlg.persons[currentIndex].help == 0)
 				{
@@ -72,9 +76,15 @@ public class DialogManager : MonoBehaviour {
 						startsize += (1.0f * Time.deltaTime)/(fade_in/2);
 						if (startsize <= 1.0f)
 							particle.GetComponent<ParticleSystem>().startSize = startsize;
+
+						if (dlg.person.cutscene_lock == 1)
+							GameObject.FindGameObjectWithTag("player").GetComponent<cPlayer_c>().SendMessage("msg_stopMovementStart",null,SendMessageOptions.DontRequireReceiver);
+
 					}
 					if (dlgCanvas.alpha > 1.0f)
+					{
 						dlgCanvas.alpha = 1.0f;
+					}
 					if (c1.a > 1.0f)
 						c1.a = 1.0f;
 					if (c2.a > 1.0f)
@@ -113,8 +123,13 @@ public class DialogManager : MonoBehaviour {
 					if (startsize >= 0.0f)
 						particle.GetComponent<ParticleSystem>().startSize = startsize;
 
-					if (dlgCanvas.alpha < 0.0f)
+					if (dlgCanvas.alpha <= 0.0f)
+					{
 						dlgCanvas.alpha = 0.0f;
+						lockScene = false;
+						if (dlg.person.cutscene_lock == 1)
+							GameObject.FindGameObjectWithTag("player").GetComponent<cPlayer_c>().SendMessage("msg_stopMovementEnd",null,SendMessageOptions.DontRequireReceiver);
+					}
 					if (c1.a < 0.0f)
 						c1.a = 0.0f;
 					if (c2.a < 0.0f)
@@ -181,11 +196,13 @@ public class DialogManager : MonoBehaviour {
 		stopEvent = false;
 		currentIndex = 0;
 		checkForNext = false;
+		lockScene = false;
 		durationTimer = 0.0f;
 
 	}
 	void msg_eventTriggerEnd(string nextEvent)
 	{
+		lockScene = false;
 		if (currentEvent != "" && nextEvent == currentEvent)
 			stopEvent = true;
 	}
