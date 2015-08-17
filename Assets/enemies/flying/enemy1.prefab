@@ -53,9 +53,10 @@ GameObject:
   - 50: {fileID: 5014770}
   - 61: {fileID: 6145210}
   - 82: {fileID: 8271426}
-  - 82: {fileID: 8240908}
   - 114: {fileID: 11441506}
-  m_Layer: 0
+  - 114: {fileID: 11491354}
+  - 114: {fileID: 11406244}
+  m_Layer: 12
   m_Name: enemy1
   m_TagString: enemyFlying
   m_Icon: {fileID: 0}
@@ -70,7 +71,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 497640}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Particle_Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,13 +87,13 @@ GameObject:
   m_Component:
   - 4: {fileID: 430110}
   - 212: {fileID: 21223500}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PressButton_go
   m_TagString: attackButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &161198
 GameObject:
   m_ObjectHideFlags: 1
@@ -103,7 +104,7 @@ GameObject:
   - 4: {fileID: 437624}
   - 198: {fileID: 19800460}
   - 199: {fileID: 19981612}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Particle System 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +121,7 @@ GameObject:
   - 4: {fileID: 463000}
   - 198: {fileID: 19861926}
   - 199: {fileID: 19948868}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Particle System 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +138,7 @@ GameObject:
   - 4: {fileID: 402570}
   - 198: {fileID: 19820828}
   - 199: {fileID: 19995264}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +164,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 146066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.54, y: 0, z: 0}
+  m_LocalPosition: {x: 92.7600021, y: 8.26000023, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 483076}
@@ -351,75 +352,6 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1.90613008, y: 1.80265999}
---- !u!82 &8240908
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 146066}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
 --- !u!82 &8271426
 AudioSource:
   m_ObjectHideFlags: 1
@@ -489,6 +421,17 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!114 &11406244
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff40aaaf7b9e3d94fb38d4457a22c030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11422902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -506,7 +449,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 146066}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
   m_Name: 
@@ -525,15 +468,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3f3fdf07b7255498cc29acb85fc27f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startLife: 2
-  currentLife: 2
+  startLife: 1
+  currentLife: 1
   aggroRange: 15
   triggerRange: 10
   multibleProjectile: 0
-  fastShotInterval: .200000003
-  shotInterval: 2
+  fastShotInterval: .300000012
+  shotInterval: 6
   attackCollideDmg: 1
-  audioSource: {fileID: 8240908}
+  audioSource: {fileID: 8271426}
   damagedClip1: {fileID: 8300000, guid: 128e0121c11ca4530b0099e3ce817458, type: 3}
   damagedClip2: {fileID: 8300000, guid: bad36644ad05d4890b3ed3dcc53fb1fa, type: 3}
   damagedClip3: {fileID: 8300000, guid: baa8e2537da92493b9836426325053ea, type: 3}
@@ -600,6 +543,24 @@ MonoBehaviour:
   timeScale: 1
   loop: 1
   _animationName: Idle
+--- !u!114 &11491354
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7d459a22e97ea419f036c99b8e6e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplineRoot: {fileID: 0}
+  Duration: 9
+  OrientationMode: 0
+  WrapMode: 1
+  AutoStart: 1
+  AutoClose: 1
+  HideOnExecute: 1
 --- !u!198 &19800460
 ParticleSystem:
   m_ObjectHideFlags: 1

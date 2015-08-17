@@ -19,6 +19,8 @@ public class SplineController : MonoBehaviour
 	SplineInterpolator mSplineInterp;
 	Transform[] mTransforms;
 
+
+
 	void OnDrawGizmos()
 	{
 		Transform[] trans = GetTransforms();
@@ -47,9 +49,12 @@ public class SplineController : MonoBehaviour
 
 	void Start()
 	{
-		mSplineInterp = GetComponent(typeof(SplineInterpolator)) as SplineInterpolator;
 
-		mTransforms = GetTransforms();
+		if (mSplineInterp == null)
+			mSplineInterp = GetComponent(typeof(SplineInterpolator)) as SplineInterpolator;
+
+		if (mTransforms == null)
+			mTransforms = GetTransforms();
 
 		if (HideOnExecute)
 			DisableTransforms();
@@ -62,6 +67,9 @@ public class SplineController : MonoBehaviour
 	{
 		if (mSplineInterp == null)
 			mSplineInterp = GetComponent(typeof(SplineInterpolator)) as SplineInterpolator;
+
+		EnableTransforms();
+
 		if (mTransforms == null)
 			mTransforms = GetTransforms();
 		
@@ -150,6 +158,20 @@ public class SplineController : MonoBehaviour
 				if (child.CompareTag("waypoint"))
 				{
 					child.gameObject.SetActive(false);
+				}
+			}
+		}
+	}
+	void EnableTransforms()
+	{
+		if (SplineRoot != null)
+		{
+			for (int i=0; i < SplineRoot.GetComponent<bossWayPoint>().unityShitWorkaround.Count; i++)
+			{
+				GameObject go = SplineRoot.GetComponent<bossWayPoint>().unityShitWorkaround[i];
+				if (go.CompareTag("waypoint"))
+				{
+					go.SetActive(true);
 				}
 			}
 		}

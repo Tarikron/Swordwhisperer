@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(cEnemyPhysic))]
 public class cEnemyBoss1 : cEnemy
 {
 	public float accelerationX = 10.0f;
@@ -31,8 +32,21 @@ public class cEnemyBoss1 : cEnemy
 	private SkeletonAnimation skeletonAnimation;
 	private bool tookDamge = false;
 	private Color originColor;
-	private int delayFrames=4;
-	private int frameCounter=0;
+	private float delayFrames=0.3f;
+	private float frameCounter=0;
+
+	[HideInInspector]
+	public cEnemyPhysic enemyPhysics;
+
+	private float deathAlpha = 0.0f;
+	private float startSpeedGround = 2.0f;
+	private float speedGround = 2.0f;
+	
+	private float startAlphaGround = 10.0f;
+	private float speedAlphaGround = 10.0f;
+
+	private float angleTemp = 0.0f;
+	private float fadeOutTime = 0.5f;
 
 	public override void Start()
 	{
@@ -68,8 +82,61 @@ public class cEnemyBoss1 : cEnemy
 		originColor.r = skeletonAnimation.skeleton.r;
 		originColor.g = skeletonAnimation.skeleton.g;
 		originColor.b = skeletonAnimation.skeleton.b;
-	}
 
+		enemyPhysics = GetComponent<cEnemyPhysic>();
+	}
+	private bool death()
+	{
+		switch (iDieState)
+		{	
+		case eDieState.DIE_START:
+		{
+			bool playDeath = false;
+			
+			//if different namens, we have to play it, if null we can play anyway
+			playDeath = cFunction.xor (audioSource.clip != null && audioSource.clip.name != deathClip.name, audioSource.clip == null);
+			
+			//last clip we give a shit and abusing .clip, since he will die..
+			if (deathClip && playDeath)
+			{
+				audioSource.clip = deathClip;
+				audioSource.PlayOneShot(deathClip);
+			}
+			
+			//Vector3 scale = transform.localScale;
+			Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
+			//scale -= vec;
+			//if (scale.x < 0.0f)
+			//scale.x = 0.0f;
+			//if (scale.y < 0.0f)
+			//	scale.y = 0.0f;
+			//transform.localScale = scale;
+			currentSpeed.y += -9.81f * Time.deltaTime;
+			if (enemyPhysics.GetDistanceToGround() > 1.0f)
+				transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
+			else
+			{
+				transform.position += new Vector3(speedGround * Time.deltaTime,0.0f,0.0f);
+				
+				speedGround = -startSpeedGround * Time.deltaTime + speedGround;
+				speedAlphaGround = -startAlphaGround * Time.deltaTime + speedAlphaGround;
+			}
+			transform.RotateAround(transform.position,Vector3.forward,speedAlphaGround * Time.deltaTime);
+			
+			if (speedAlphaGround >= 0.0f)
+			{
+				iDieState = eDieState.DIE_DONE;
+			}
+			return true;
+			break;
+		}
+		case eDieState.DIE_DONE:
+			die ();
+			return true;
+		}
+		
+		return false;
+	}
 	public void Update()
 	{
 		int minionCount = lMinions.Count;
@@ -85,9 +152,9 @@ public class cEnemyBoss1 : cEnemy
 				skeletonAnimation.skeleton.a = 1.0f;
 				
 				tookDamge = false;
-				frameCounter = 0;
+				frameCounter = 0.0f;
 			}
-			frameCounter++;
+			frameCounter+=Time.deltaTime;
 		}
 		if (iDieState == eDieState.DIE_NONE && isDead() && !tookDamge)
 		{
@@ -95,7 +162,7 @@ public class cEnemyBoss1 : cEnemy
 			iDieState = eDieState.DIE_START;
 		}
 		
-		if (defaultDeath()) //if we are dead, no need for others
+		if (death()) //if we are dead, no need for others
 			return;
 
 		transform.position = new Vector3(transform.position.x,transform.position.y + Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180),transform.position.z);
@@ -105,6 +172,9 @@ public class cEnemyBoss1 : cEnemy
 
 		_centre.x = transform.position.x;// + _colliderOffset.x + _colliderSize.x/2 + transform.lossyScale.x/2 + 0.5f;
 		_centre.y = transform.position.y;// + _colliderOffset.y + _colliderSize.y/2 + transform.lossyScale.y/2 + 0.5f;
+
+
+		defaultIdleMovement();
 
 		int minionsC = 0;
 
@@ -148,6 +218,60 @@ public class cEnemyBoss1 : cEnemy
 			}
 		}
 
+	}
+
+	private void defaultIdleMovement()
+	{
+		GameObject player = GameObject.FindGameObjectWithTag("player");
+		Vector3 pos1 = Vector3.zero;
+		Vector3 pos2 = Vector3.zero;
+
+		pos1.x = player.transform.position.x;
+		pos2.x = transform.position.x;
+
+		float distance = Vector3.Distance(pos1,pos2);
+		
+		if (distance <= triggerRange)
+		{
+			if (shots == 0)
+			{
+				shots = Random.Range (1,4);
+				
+				if (!firstProjectileShot && currentShots == 0)
+					intervalTimer = 0.0f;
+				else if (firstProjectileShot)
+					intervalTimer = shotInterval;
+			}
+			
+			if (shots > 0)
+			{
+				multibleProjectile = false;
+				if (shots > 1)
+					multibleProjectile = true;
+				
+				attackShot(player,player.transform.position);
+				if (currentShots >= shots)
+				{
+					//we are done
+					//time up ?
+					currentShots = 0;
+					shots = 0;
+					//charge next ? or shot more ? or go back to origin?
+				}
+				
+			}
+		}
+	}
+
+	protected override void die()
+	{
+		
+		skeletonAnimation.skeleton.a -= Time.deltaTime/fadeOutTime;
+		if (skeletonAnimation.skeleton.a <= 0.0f)
+		{
+			skeletonAnimation.skeleton.a = 0.0f;
+			base.die();
+		}
 	}
 
 	void msg_damage(float dmg)
