@@ -680,7 +680,7 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		//sword.bCollectedSword = true;
+		sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;

@@ -39,7 +39,6 @@ public class MainMenu : MonoBehaviour
 
 	void Update()
 	{
-		
 		if (allPanelGroup.alpha >= 1.0f)
 		{
 			if (fading)
@@ -48,6 +47,8 @@ public class MainMenu : MonoBehaviour
 				blackScreenGroup.state = blackScreenHandler.eCutsceneSteps.FADE_IN;
 				if (blackScreenGroup.IsFadeDone())
 				{
+					loadingScreen.GetComponent<MeshRenderer>().enabled = true;
+					loadingScreen.GetComponent<SkeletonAnimation>().enabled = true;
 					StartCoroutine(load());
 				}
 			}
@@ -68,8 +69,6 @@ public class MainMenu : MonoBehaviour
 				{
 					allPanelGroup.alpha = 1.0f;
 					delayTimer = 0.0f;
-					loadingScreen.GetComponent<MeshRenderer>().enabled = true;
-					loadingScreen.GetComponent<SkeletonAnimation>().enabled = true;
 				}
 			}
 

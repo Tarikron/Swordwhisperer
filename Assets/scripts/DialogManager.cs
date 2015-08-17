@@ -28,7 +28,9 @@ public class DialogManager : MonoBehaviour {
 	public GameObject chatBoxIcn2;
 	public GameObject particle;
 
+	private bool hasPlayed = false;
 	public bool lockScene = false;
+	private AudioSource audioSource = null;
 	// Use this for initialization
 	void Start () {
 		dlgCanvas = GetComponent<CanvasGroup>();
@@ -39,6 +41,9 @@ public class DialogManager : MonoBehaviour {
 		dialogs = loadXml.parseXml();
 		if (dlgMessage)
 			dlgMessage.text = currentXml;
+
+
+		audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -205,5 +210,11 @@ public class DialogManager : MonoBehaviour {
 		lockScene = false;
 		if (currentEvent != "" && nextEvent == currentEvent)
 			stopEvent = true;
+		
+		if (!hasPlayed)
+		{
+			audioSource.PlayOneShot((AudioClip)Resources.Load("Sounds/" + nextEvent));
+			hasPlayed = true;
+		}
 	}
 }

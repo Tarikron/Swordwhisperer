@@ -58,6 +58,17 @@ public class SplineController : MonoBehaviour
 			FollowSpline();
 	}
 
+	public void Init()
+	{
+		if (mSplineInterp == null)
+			mSplineInterp = GetComponent(typeof(SplineInterpolator)) as SplineInterpolator;
+		if (mTransforms == null)
+			mTransforms = GetTransforms();
+		
+		DisableTransforms();
+		FollowSpline();
+	}
+
 	void SetupSplineInterpolator(SplineInterpolator interp, Transform[] trans)
 	{
 		interp.Reset();
@@ -150,7 +161,7 @@ public class SplineController : MonoBehaviour
 	/// </summary>
 	void FollowSpline()
 	{
-		if (mTransforms.Length > 0)
+		if (mTransforms != null && mTransforms.Length > 0)
 		{
 			SetupSplineInterpolator(mSplineInterp, mTransforms);
 			mSplineInterp.StartInterpolation(null, true, WrapMode);
