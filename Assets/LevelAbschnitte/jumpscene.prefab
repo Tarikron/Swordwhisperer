@@ -1771,7 +1771,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1406139753
-  m_SortingOrder: 999
+  m_SortingOrder: 200
 --- !u!23 &2351744
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -2014,6 +2014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angleSpeed: 10
+  direction: 1
 --- !u!114 &11439890
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2050,6 +2051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angleSpeed: 10
+  direction: 1
 --- !u!114 &11449440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2086,6 +2088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angleSpeed: 10
+  direction: 1
 --- !u!114 &11460374
 MonoBehaviour:
   m_ObjectHideFlags: 1

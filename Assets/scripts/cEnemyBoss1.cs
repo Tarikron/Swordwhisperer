@@ -165,7 +165,10 @@ public class cEnemyBoss1 : cEnemy
 		if (death()) //if we are dead, no need for others
 			return;
 
-		transform.position = new Vector3(transform.position.x,transform.position.y + Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180),transform.position.z);
+		float newY = transform.position.y + Time.deltaTime * Mathf.Sin(bossAlpha * Mathf.PI/180);
+		if (newY > 7.0f) //a bit dirty
+			newY = 7.0f;
+		transform.position = new Vector3(transform.position.x,newY,transform.position.z);
 		bossAlpha += 2.0f;
 		if (bossAlpha > 360.0f)
 			bossAlpha = 0.0f;

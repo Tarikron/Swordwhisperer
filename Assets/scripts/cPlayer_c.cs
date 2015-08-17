@@ -476,6 +476,13 @@ public class cPlayer_c : cUnit
 		}
 		if (!bFalling && !bJumping) 
 		{
+			if (!bFalling && anim.sAnimation == animations.jump_fall)
+			{
+				if (sword.bCollectedSword)
+					animationToPlay = animations.idle_sword;
+				else
+					animationToPlay = animations.idle_nosword;
+			}
 			if (!audioSourceSteps.isPlaying)
 			{
 				if (animationToPlay == animations.run_sword)

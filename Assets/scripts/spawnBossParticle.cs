@@ -20,11 +20,12 @@ public class spawnBossParticle : MonoBehaviour
 	enum eSpawnSteps {SPAWN_NONE = 0 , SPAWN_START = 1, SPAWN_MINIONS = 2, SPAWN_END = 3, SPAWN_DONE = 4};
 	private eSpawnSteps iState = eSpawnSteps.SPAWN_NONE;
 
+	private int randomRoute = 1;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+
 	}
 	
 	// Update is called once per frame
@@ -60,6 +61,7 @@ public class spawnBossParticle : MonoBehaviour
 							{
 								ps.enableEmission = true;
 								ps.Play();
+								randomRoute = Random.Range(1,3);
 							}
 						//startSizeTime = startSize
 						//Time.deltaTime = x
@@ -91,7 +93,7 @@ public class spawnBossParticle : MonoBehaviour
 						go.transform.position = transform.position;
 						SplineController spline = go.GetComponent<SplineController>();
 
-						spline.SplineRoot = GameObject.Find ("splineBossWaypoints"+currentSpawn);
+						spline.SplineRoot = GameObject.Find ("splineBossWaypoints"+randomRoute);
 						spline.Init();
 					}
 					spawnTimer = 0.0f;

@@ -147,7 +147,7 @@ public class cPhysics : MonoBehaviour
 					onSlope = true;
 				}
 				
-				if (cFunction.xor(dst_left < dst_right && xDir > 0.0f,dst_left < dst_right && xDir < 0.0f)) //moving down to left or up to right
+				if (deltaX != 0.0f && cFunction.xor(dst_left < dst_right && xDir > 0.0f,dst_left < dst_right && xDir < 0.0f)) //moving up to left or down to right
 					deltaY *= -1.0f;
 
 				//Debug.Log ("2 - " + deltaY);
