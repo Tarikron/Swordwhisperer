@@ -330,7 +330,7 @@ public class cFlyingEnemy : cEnemy {
 	private  IEnumerator WaitForSec(float sec)
 	{
 		yield return new WaitForSeconds(sec);
-		iAttackState = eAttackState.ATTACK_TO_ORIGIN;
+		iAttackState = eAttackState.ATTACK_SHOT;//eAttackState.ATTACK_TO_ORIGIN;
 
 		currentChargeSpeed = 0.0f;
 
@@ -343,14 +343,14 @@ public class cFlyingEnemy : cEnemy {
 		yield return new WaitForSeconds(sec);
 		waitForAttack = false;
 
-		int x = Random.Range (0,100);
+		/*int x = Random.Range (0,100);
 		if  (x < 70)
 		{
-			iAttackState = eAttackState.ATTACK_CHARGE;
+			//iAttackState = eAttackState.ATTACK_CHARGE;
 			firstProjectileShot = false;
 			playAttackClips();
 		}
-		else
+		else*/
 			iAttackState = eAttackState.ATTACK_SHOT;
 				
 		yield break;
@@ -429,7 +429,7 @@ public class cFlyingEnemy : cEnemy {
 
 			pos.x = collideX + transform.position.x;
 			pos.y = collideY + transform.position.y;
-			Debug.DrawRay(pos,origin_direction.normalized * dist);
+			//Debug.DrawRay(pos,origin_direction.normalized * dist);
 			if (hit = Physics2D.Raycast (pos, origin_direction.normalized ,5.0f,Physics.AllLayers))
 			{
 				//something at our place :/ live here for now
@@ -489,6 +489,13 @@ public class cFlyingEnemy : cEnemy {
 	{
 		RaycastHit2D hit;
 		Vector2 pos = Vector2.zero;
+		
+		Vector3 enemyPos = transform.position;
+		float distance = Vector3.Distance(enemyPos,playerPos);
+		bool shot = false;
+		if (distance <= triggerRange)
+			shot = true;
+
 		//go back a bit and wait 1sec for next attack 
 		float goBackDistance = Vector3.Distance (lastPlayerPos,transform.position);
 		if (goBackDistance < 12.0f)
@@ -509,12 +516,12 @@ public class cFlyingEnemy : cEnemy {
 			Debug.DrawRay(pos,currentDirection.normalized * 4.0f);
 
 			if (hit = Physics2D.Raycast (pos, currentDirection.normalized ,2.0f,newMask))
-				startIdleAttack(true);
+				startIdleAttack(shot);
 			else
 				moveToDirection(currentDirection);
 		}
 		else
-			startIdleAttack(true);
+			startIdleAttack(shot);
 	}
 
 	private void defaultIdleMovement(bool shot)
@@ -590,14 +597,14 @@ public class cFlyingEnemy : cEnemy {
 		if (aggroRange <= playerDistance) //we are out of range
 		{
 			if (iAttackState != eAttackState.ATTACK_NONE)
-				iAttackState = eAttackState.ATTACK_TO_ORIGIN;
+				iAttackState = eAttackState.ATTACK_SHOT; //eAttackState.ATTACK_TO_ORIGIN;
 		}
 		else
 		{
 			//we are in range
 			if (iAttackState == eAttackState.ATTACK_NONE && triggerRange >= playerDistance)
 			{
-				iAttackState = eAttackState.ATTACK_CHARGE;
+				iAttackState = eAttackState.ATTACK_SHOT; //eAttackState.ATTACK_CHARGE;
 				originBeforeAttackPos = transform.position;
 			}
 		}
@@ -640,12 +647,12 @@ public class cFlyingEnemy : cEnemy {
 		Vector3 playerPos = player.gameObject.transform.position;
 		Vector3 enemyPos = transform.position;
 		float distance = Vector3.Distance(enemyPos,playerPos);
-
+		iAttackState = eAttackState.ATTACK_SHOT;
 		manageMovement(distance);
 
 		//manageAttack(distance);
 
-		//we are charging to player or flying back.. so no need for movement calculation
+		/*we are charging to player or flying back.. so no need for movement calculation
 		if (!IsCharging)
 		{
 			targetSpeed.x = speedX;
@@ -663,7 +670,7 @@ public class cFlyingEnemy : cEnemy {
 					break;
 			}
 		}
-
+*/
 	}
 
 	void msg_damage(float dmg)

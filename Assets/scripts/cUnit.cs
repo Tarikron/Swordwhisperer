@@ -29,7 +29,7 @@ public class cUnit : MonoBehaviour
 			currentLife = startLife;
 	}
 
-	protected bool isDead()
+	public bool isDead()
 	{
 		if (currentLife <= 0)
 			return true;

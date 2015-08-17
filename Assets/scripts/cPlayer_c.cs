@@ -76,7 +76,7 @@ public class cPlayer_c : cUnit
 	public float attackDmg = 1.0f;
 
 	private bool bExternCutScene = false;
-
+	private bool bLockScene = false;
 	private struct stHitBoxes
 	{
 		public BoxCollider2D hitBox_attack_123;
@@ -491,7 +491,7 @@ public class cPlayer_c : cUnit
 					audioSourceSteps.Play();
 				}
 			}
-			if (!bSkipAnimForAttack)
+			if (!bSkipAnimForAttack && !bFalling)
 				animHandler.addAnimation (animationToPlay, animLoop);
 		}
 		float xAxis = Input.GetAxisRaw("Horizontal");
@@ -708,7 +708,7 @@ public class cPlayer_c : cUnit
 
 		if (!bBlackScreenGone)
 			return;
-		if (bExternCutScene)
+		if (bExternCutScene || bLockScene)
 		{
 			animHandler.addAnimation(animations.idle_sword,true);
 			animHandler.playAnimation();
@@ -730,6 +730,7 @@ public class cPlayer_c : cUnit
 			}
 			hurtTimer += Time.deltaTime;
 		}*/
+		//tookDamage = false;
 		if (tookDamage)
 		{
 			if (damageBlinkTimer <= 0.0f)
@@ -840,7 +841,7 @@ public class cPlayer_c : cUnit
 			if ((x >= 0.0f && x <= 0.05f) || (x <= 0.0f && x >= -0.05f ))
 				x = 0.0f;
 
-			if (sword.bCollectedSword && !tookDamage)
+			if (sword.bCollectedSword)
 				handleAttack ();
 
 			if (!bSkipMovementForAnim)
@@ -848,28 +849,26 @@ public class cPlayer_c : cUnit
 				//movement
 				if (bCanJump && sword.bCollectedSword)
 					handleJump (x);
-				handleMovement (x);
 
+				movementDirection.y = 0.0f;
 				//jumps & gravitation
 				//we start with jumpVelocity, now we decrease it
 				if (currentSpeed.y > 0.0f)
 					currentSpeed.y -= accelerationY * Time.deltaTime; 
 				else
 				{
-
 					if (playerPhysics.grounded == false && playerPhysics.onSlope == false)
 					{
 						//we are falling if we have negative speedY and we are not grounded
 						if (sword.bCollectedSword && bCanJump)
 						{
-
 							float distanceGround = playerPhysics.GetDistanceToGround();
-							if  (distanceGround > 0.04)
+
+							if  (distanceGround > 0.5f)
 							{
 								animHandler.addAnimation(animations.jump_fall,true);
 								bFalling = true;
 							}
-
 						}
 						//we want to gain speed if we are falling
 						currentSpeed.y -= accelerationY * Time.deltaTime; 
@@ -877,20 +876,14 @@ public class cPlayer_c : cUnit
 					else
 					{
 						//movement is handled earlier, if we jump we need to know if we go to idle
-						if (bFalling && movementDirection.x == 0.0f)
-						{
-							if (sword.bCollectedSword)
-								animHandler.addAnimation(animations.idle_sword,true);
-							else
-								animHandler.addAnimation(animations.idle_nosword,true);
-						}
 						bFalling = false;
-						movementDirection.y = 0.0f;
 						//reset to normal gravity 
 						currentSpeed.y = -accelerationY * Time.deltaTime; 
 					}
 					bJumping = false;
 				}
+				handleMovement (x);
+
 				//Debug.Log("jump speed: " + currentSpeedY);
 				movementDirection.y = currentSpeed.y * Time.deltaTime;
 				lastDirection = playerPhysics.Move (movementDirection);
@@ -1020,12 +1013,22 @@ public class cPlayer_c : cUnit
 	//################# Receiver/Messages ###########
 	//########################################
 
+	void msg_stopMovementStart()
+	{
+		bLockScene = true;
+	}
+	void msg_stopMovementEnd()
+	{
+		bLockScene = false;
+	}
+
 	void msg_externCutsceneStart()
 	{
 		bExternCutScene = true;
 	}
 	void msg_externCutsceneEnd()
 	{
+
 		bExternCutScene = false;
 
 		//little bit dirty here... but we only have one event

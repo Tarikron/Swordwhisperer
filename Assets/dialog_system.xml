@@ -8,6 +8,7 @@
 				<fade_out>2</fade_out>
 				<duration>1</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>
@@ -19,6 +20,7 @@
 				<fade_out>0.5</fade_out>
 				<duration>1</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
 				<help>1</help>
 			</person>
 		</dialog>		
@@ -30,6 +32,7 @@
 				<fade_out>2</fade_out>
 				<duration>1</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>
@@ -41,6 +44,7 @@
 				<fade_out>2</fade_out>
 				<duration>1</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>
@@ -52,6 +56,7 @@
 				<fade_out>0.4</fade_out>
 				<duration>0.5</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>
@@ -61,8 +66,9 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
-				<duration>2</duration>
+				<duration>3</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>
@@ -74,6 +80,41 @@
 				<fade_out>2</fade_out>
 				<duration>2</duration>
 				<click_away>0</click_away>
+				<cutscene_lock>0</cutscene_lock>
+				<help>0</help>
+			</person>
+		</dialog>
+		<dialog eventTrigger="woodStart">
+			<person uid="me123" order="1">
+				<text>I was right ...</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>2</duration>
+				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
+				<help>0</help>
+			</person>
+		</dialog>
+		<dialog eventTrigger="nearBoss">
+			<person uid="me123" order="1">
+				<text>It's that Monster! This is my chance to ...</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>2</duration>
+				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
+				<help>0</help>
+			</person>
+			<person uid="me123" order="1">
+				<text>... put an end to this nightmare.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>2</duration>
+				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
 				<help>0</help>
 			</person>
 		</dialog>		
