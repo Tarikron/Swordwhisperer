@@ -496,6 +496,10 @@ public class cFlyingEnemy : cEnemy {
 		if (distance <= triggerRange)
 			shot = true;
 
+		startIdleAttack(shot);
+
+		return;
+
 		//go back a bit and wait 1sec for next attack 
 		float goBackDistance = Vector3.Distance (lastPlayerPos,transform.position);
 		if (goBackDistance < 12.0f)

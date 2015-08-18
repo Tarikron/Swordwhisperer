@@ -268,11 +268,14 @@ public class cEnemyBoss1 : cEnemy
 
 	protected override void die()
 	{
-		
 		skeletonAnimation.skeleton.a -= Time.deltaTime/fadeOutTime;
 		if (skeletonAnimation.skeleton.a <= 0.0f)
 		{
 			skeletonAnimation.skeleton.a = 0.0f;
+
+			GameObject player = GameObject.FindGameObjectWithTag("player");
+			player.SendMessage("msg_looseStrength",null,SendMessageOptions.RequireReceiver);
+
 			base.die();
 		}
 	}

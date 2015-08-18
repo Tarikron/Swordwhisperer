@@ -151,6 +151,9 @@ public class cPlayer_c : cUnit
 		[SpineAnimation]
 		public string jump_fall;
 
+		[SpineAnimation]
+		public string sleep;
+
 	}
 	public animPlayer animations;
 
@@ -201,6 +204,8 @@ public class cPlayer_c : cUnit
 
 	public float OneLifePerTime = 3.0f;
 	public float OneLifeTimer = 0.0f;
+
+	private bool endScene = false;
 
 	void playPowerUp(bool playbackspeed)
 	{
@@ -292,9 +297,7 @@ public class cPlayer_c : cUnit
 				GameObject vineSoul = GameObject.FindGameObjectWithTag("vineSoul");
 				GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
 
-				playerSoul.transform.position = vineSoul.transform.position;
 				playerSoul.SendMessage("msg_vineSoul",vineSoul.transform.position,SendMessageOptions.RequireReceiver);
-				
 				vineSoul.SetActive(false);
 
 				sword.bCollectedSword = true;
@@ -552,6 +555,24 @@ public class cPlayer_c : cUnit
 		}
 	}
 
+	void handleBeamAttack()
+	{
+		GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
+
+		if (playerSoul.GetComponent<cPlayerSoul>().beamAttack)
+		{
+
+		}
+		else
+		{
+			if (Input.GetButtonDown ("beamAttack")) 
+			{
+				playerSoul.GetComponent<cPlayerSoul>().beamAttack = true;
+				bSkipMovementForAnim = true;
+			}
+		}
+	}
+
 	void handleAttack()
 	{
 		//enable collider after delay
@@ -687,7 +708,7 @@ public class cPlayer_c : cUnit
 		hitBoxes.hitBox_attack_123 = transform.FindChild("hitBox_attack_123").gameObject.GetComponent<BoxCollider2D>();
 		hitBoxes.hitBox_attack_3 = transform.FindChild("hitBox_attack_3").gameObject.GetComponent<BoxCollider2D>();
 
-		sword.bCollectedSword = true;
+		//sword.bCollectedSword = true;
 
 		hitBoxes.current = 0;
 		hitBoxes.maxDelay = 5;
@@ -712,6 +733,13 @@ public class cPlayer_c : cUnit
 			Application.LoadLevel ("swordwhisperer");
 		else if (Input.GetKeyDown (KeyCode.Escape))
 			Application.LoadLevel("menu");
+
+		if (endScene)
+		{
+			animHandler.addAnimation(animations.sleep,true);
+			animHandler.playAnimation();
+			return;
+		}
 
 		if (!bBlackScreenGone)
 			return;
@@ -849,8 +877,10 @@ public class cPlayer_c : cUnit
 				x = 0.0f;
 
 			if (sword.bCollectedSword)
+			{
 				handleAttack ();
-
+				handleBeamAttack();
+			}
 			if (!bSkipMovementForAnim)
 			{
 				//movement
@@ -1019,6 +1049,16 @@ public class cPlayer_c : cUnit
 	//########################################
 	//################# Receiver/Messages ###########
 	//########################################
+
+	void msg_looseLife()
+	{
+		endScene = true;
+	}
+
+	void msg_looseStrength()
+	{
+		sword.bCollectedSword = false;
+	}
 
 	void msg_stopMovementStart()
 	{
