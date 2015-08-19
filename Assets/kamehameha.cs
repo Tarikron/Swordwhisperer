@@ -8,7 +8,7 @@ public class kamehameha : MonoBehaviour {
 
 	private float origin_startSize = 0.0f;
 	public bool animation = false;
-	private float fadeOutTime = 2.0f;
+	private float fadeOutTime = 0.2f;
 	private ParticleSystem ps;
 
 	// Use this for initialization
@@ -25,7 +25,7 @@ public class kamehameha : MonoBehaviour {
 
 		if (state == eKaMe.SHOTON)
 		{
-			if (animation)
+			if (!animation)
 			{
 				ps.enableEmission = true;
 				ps.startSize = origin_startSize;
@@ -38,10 +38,11 @@ public class kamehameha : MonoBehaviour {
 		}
 		else if (state == eKaMe.SHOTOFF)
 		{
-			if (animation)
+			if (!animation)
 			{
 				ps.enableEmission = false;
 				ps.startSize = 0.0f;
+				state = eKaMe.NONE;
 				return;
 			}
 			ps.startSize -= Time.deltaTime/fadeOutTime;

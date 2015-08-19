@@ -31,6 +31,9 @@ public class cPlayer_c : cUnit
 	//settings via unity
 	public Canvas dialog;
 	public Canvas helpMoveCanvas;
+	public Canvas helpLaserCanvas;
+	private bool helpLaser = false;
+	private float helpLaserDirection = 1.0f;
 
 	private float helpMoveTimer = 0.0f;
 	public float helpMoveTime = 5.0f;
@@ -176,6 +179,8 @@ public class cPlayer_c : cUnit
 		public AudioClip damageVoice1;
 		public AudioClip damageVoice2;
 		public AudioClip damageVoice3;
+
+		public AudioClip powerUp;
 	}
 	public audioSFX audioClipsSFX;
 	public AudioSource audioSourceSFX;
@@ -209,11 +214,17 @@ public class cPlayer_c : cUnit
 	private bool endScene = false;
 	private bool firstSoul = false;
 
+	private float laserCooldownTime = 5.0f;
+	private float laserCooldownTimer = 0.0f;
+
 	void playPowerUp(bool playbackspeed)
 	{
 		PowerUp.enableEmission = true;
 		if (!PowerUp.isPlaying)
+		{
+			audioSourceSFX.PlayOneShot(audioClipsSFX.powerUp);
 			PowerUp.Play ();
+		}
 		if (!playbackspeed)
 			PowerUp.Stop();
 		ParticleSystem[] systems = PowerUp.gameObject.GetComponentsInChildren<ParticleSystem>();
@@ -567,13 +578,15 @@ public class cPlayer_c : cUnit
 		}
 		else
 		{
-			if (Input.GetButtonDown ("beamAttack")) 
+			if (Input.GetButtonDown ("beamAttack") && laserCooldownTime <= laserCooldownTimer) 
 			{
 				playerSoul.GetComponent<cPlayerSoul>().beamAttack = true;
 				bBeamActive = true;
 				animHandler.addAnimation(animations.idle_sword,true);
 				animHandler.playAnimation();
+				laserCooldownTimer = 0.0f;
 			}
+			laserCooldownTimer += Time.deltaTime;
 		}
 	}
 
@@ -868,7 +881,23 @@ public class cPlayer_c : cUnit
 				wakeup = false;
 			}
 		}
-		
+
+		if (helpLaser)
+		{
+			if (helpLaserDirection == 1.0f && Input.anyKeyDown)
+				helpLaserDirection = -1.0f;
+
+			helpLaserCanvas.GetComponent<CanvasGroup>().alpha += Time.deltaTime/helpFadeTime * helpLaserDirection;
+			if (helpLaserCanvas.GetComponent<CanvasGroup>().alpha >= 1.0f)
+				helpLaserCanvas.GetComponent<CanvasGroup>().alpha = 1.0f;
+
+			if (helpLaserCanvas.GetComponent<CanvasGroup>().alpha <= 0.0f)
+			{
+				helpLaserDirection = 1.0f;
+				helpLaser = false;
+			}
+		}
+
 		handleSwordPickup();
 		handleSwordAfterPickup();
 
@@ -884,7 +913,6 @@ public class cPlayer_c : cUnit
 				handleAttack ();
 				handleBeamAttack(x);
 			}
-			Debug.Log ("player skip: " + bBeamActive);
 			if (!bSkipMovementForAnim && !bBeamActive)
 			{
 				//movement
@@ -972,12 +1000,16 @@ public class cPlayer_c : cUnit
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 
+
 		if ((collision.gameObject.layer & LayerMask.NameToLayer("ground")) ==  LayerMask.NameToLayer("ground"))
 		{
 			iJumpCounter = 0;
 		}
-
-		if (collision.gameObject.tag == "soul")
+		if (collision.gameObject.tag == "spike")
+		{
+			msg_hit(1.0f);
+		}
+		else if (collision.gameObject.tag == "soul")
 		{
 			if (!firstSoul)
 			{
@@ -1072,11 +1104,13 @@ public class cPlayer_c : cUnit
 
 	void msg_looseStrength()
 	{
+		GamePad.SetVibration(0,0.0f,0.0f);
 		sword.bCollectedSword = false;
 	}
 
 	void msg_stopMovementStart()
 	{
+		GamePad.SetVibration(0,0.0f,0.0f);
 		bLockScene = true;
 	}
 	void msg_stopMovementEnd()
@@ -1091,7 +1125,10 @@ public class cPlayer_c : cUnit
 	void msg_externCutsceneEnd(string dialogMsg)
 	{
 		bExternCutScene = false;
-
+		if (dialogMsg == "helpLaser")
+		{
+			helpLaser = true;
+		}
 		if (dialogMsg != null && dialogMsg.Length > 0)
 		{
 			//little bit dirty here... but we only have one event

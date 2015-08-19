@@ -120,7 +120,7 @@ public class cameraCheckBoss : MonoBehaviour
 						blackSceenHdl.init();
 						
 						IsCutsceneDone = true;
-						player.SendMessage("msg_externCutsceneEnd","",SendMessageOptions.RequireReceiver);
+						player.SendMessage("msg_externCutsceneEnd","helpLaser",SendMessageOptions.RequireReceiver);
 					}
 				}
 				else
@@ -132,7 +132,7 @@ public class cameraCheckBoss : MonoBehaviour
 					{
 						gameCam.SetTrackSpeed(originTrackSpeed.x,originTrackSpeed.y);
 						IsCutsceneDone = true;
-						player.SendMessage("msg_externCutsceneEnd","",SendMessageOptions.RequireReceiver);
+						player.SendMessage("msg_externCutsceneEnd","helpLaser",SendMessageOptions.RequireReceiver);
 					}	
 				}
 

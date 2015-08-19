@@ -48,6 +48,12 @@ public class cEnemyBoss1 : cEnemy
 	private float angleTemp = 0.0f;
 	private float fadeOutTime = 0.5f;
 
+	public GameObject spikeAttack = null;
+	private float spikeTime = 0.8f;
+	private float spikeTimer = 0.0f;
+
+	private bool bSpike = false;
+
 	public override void Start()
 	{
 		base.Start();
@@ -85,6 +91,36 @@ public class cEnemyBoss1 : cEnemy
 
 		enemyPhysics = GetComponent<cEnemyPhysic>();
 	}
+
+	private void handleSpikes()
+	{
+		GameObject player = GameObject.FindGameObjectWithTag("player");
+		Vector3 pos1 = Vector3.zero;
+		Vector3 pos2 = Vector3.zero;
+		
+		pos1.x = player.transform.position.x;
+		pos2.x = transform.position.x;
+		
+		float distance = Vector3.Distance(pos1,pos2);
+		if (distance <= 15.0f)
+		{
+			if (spikeTime <= spikeTimer)
+			{
+				GameObject go = GameObject.Instantiate(spikeAttack);
+
+				Vector3 pos = go.transform.position;
+				pos.x = transform.position.x;
+				pos.x -= Random.Range (5.0f,20.0f);
+
+				go.transform.position = pos;
+				bSpike = true;
+				spikeTimer = 0.0f;
+			}
+			spikeTimer += Time.deltaTime;
+		}
+
+	}
+
 	private bool death()
 	{
 		switch (iDieState)
@@ -125,8 +161,7 @@ public class cEnemyBoss1 : cEnemy
 				
 				if (speedAlphaGround >= 0.0f)
 				{
-					iDieState = eDieState.DIE_DONE;
-					killAllMinions();
+					iDieState = eDieState.DIE_DONE;					
 				}
 				return true;
 				break;
@@ -191,6 +226,8 @@ public class cEnemyBoss1 : cEnemy
 
 
 		defaultIdleMovement();
+		handleSpikes();
+
 
 		int minionsC = 0;
 
@@ -288,6 +325,10 @@ public class cEnemyBoss1 : cEnemy
 
 			GameObject player = GameObject.FindGameObjectWithTag("player");
 			player.SendMessage("msg_looseStrength",null,SendMessageOptions.RequireReceiver);
+
+			Camera.main.gameObject.GetComponent<GameManager>().changeMusic("darkwoods");
+
+			killAllMinions();
 
 			base.die();
 		}

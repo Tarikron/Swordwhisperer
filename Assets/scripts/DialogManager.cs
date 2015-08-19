@@ -204,6 +204,12 @@ public class DialogManager : MonoBehaviour {
 		lockScene = false;
 		durationTimer = 0.0f;
 
+		if (!hasPlayed)
+		{
+			audioSource.PlayOneShot((AudioClip)Resources.Load("Sounds/" + nextEvent));
+			hasPlayed = true;
+		}
+
 	}
 	void msg_eventTriggerEnd(string nextEvent)
 	{
@@ -211,10 +217,6 @@ public class DialogManager : MonoBehaviour {
 		if (currentEvent != "" && nextEvent == currentEvent)
 			stopEvent = true;
 		
-		if (!hasPlayed)
-		{
-			audioSource.PlayOneShot((AudioClip)Resources.Load("Sounds/" + nextEvent));
-			hasPlayed = true;
-		}
+		hasPlayed = false;
 	}
 }

@@ -26,6 +26,18 @@ public class GameManager : MonoBehaviour {
 
 	private float first = 0.0f;
 
+	public AudioClip cave;
+	public AudioClip field;
+	public AudioClip woods;
+	public AudioClip darkwoods;
+	public AudioClip boss;
+	private float clipFadeOutTime = 0.2f;
+
+	private bool musicChange = false;
+	private string clipToChange = "";
+	private float volumeDirection = -1.0f;
+	private float volumeFade = 0.2f;
+
 	void Start () 
 	{
 		//player = GameObject.Instantiate(playerPrefab);
@@ -71,7 +83,49 @@ public class GameManager : MonoBehaviour {
 		}
 
 	}
-	
+
+	public void changeMusic(string area)
+	{
+		if (!musicChange)
+		{
+			musicChange = true;
+			clipToChange = area;
+			if (area == "darkwoods")
+				volumeFade = 1.0f;
+			else
+				volumeFade = 0.6f;
+		}
+	}
+
+	private void changeMusic2()
+	{
+		GetComponent<AudioSource>().volume += Time.deltaTime/volumeFade * volumeDirection;
+		
+		if (GetComponent<AudioSource>().volume <= 0.0f)
+		{
+			if (clipToChange == "boss")
+				GetComponent<AudioSource>().clip = boss;
+			else if (clipToChange == "field")
+				GetComponent<AudioSource>().clip = field;
+			else if (clipToChange == "woods")
+				GetComponent<AudioSource>().clip = woods;
+			else if (clipToChange == "darkwoods")
+				GetComponent<AudioSource>().clip = darkwoods;
+			else if (clipToChange == "cave")
+				GetComponent<AudioSource>().clip = cave;
+
+			clipToChange = "";
+			volumeDirection = 1.0f;
+		}
+		else if (GetComponent<AudioSource>().volume >= 1.0f)
+		{
+			GetComponent<AudioSource>().Play();
+			musicChange = false;
+			volumeDirection = -1.0f;
+
+		}
+	}
+
 	void Update()
 	{
 		//handle cam for player, if player is in air
@@ -82,6 +136,10 @@ public class GameManager : MonoBehaviour {
 		Vector3 p2 = c.ViewportToWorldPoint(new Vector3(0, 0, Mathf.Abs(transform.position.z)));
 
 		moveClouds(p2);
+		if (musicChange)
+			changeMusic2 ();
+
+
 
 		for (int i =0; i < prefab_levels.Length; i++)
 		{

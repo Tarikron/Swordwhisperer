@@ -94,8 +94,8 @@ public class spawnBossParticle : MonoBehaviour
 						SplineController spline = go.GetComponent<SplineController>();
 						GameObject waypoints = GameObject.Find ("splineBossWaypoints"+randomRoute);
 						Vector3 pos = waypoints.transform.position;
-						pos.x += Random.Range (0.0f,3.0f);
-						pos.y += Random.Range (0.0f,3.0f);
+						pos.x += Random.Range (0.0f,0.2f);
+						pos.y += Random.Range (0.0f,0.2f);
 						waypoints.transform.position = pos;
 
 						spline.SplineRoot = waypoints;

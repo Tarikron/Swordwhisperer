@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 463406}
   - 198: {fileID: 19804420}
   - 199: {fileID: 19907204}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Flagments
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 495062}
   - 198: {fileID: 19813206}
   - 199: {fileID: 19956912}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Dust Puff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - 4: {fileID: 459670}
   - 198: {fileID: 19840326}
   - 199: {fileID: 19928434}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Dust Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - 4: {fileID: 491446}
   - 198: {fileID: 19825360}
   - 199: {fileID: 19950106}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Spurt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,8 @@ GameObject:
   - 4: {fileID: 419686}
   - 212: {fileID: 21216756}
   - 61: {fileID: 6137728}
-  m_Layer: 0
+  - 50: {fileID: 5035432}
+  m_Layer: 17
   m_Name: spike
   m_TagString: spike
   m_Icon: {fileID: 0}
@@ -93,7 +94,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 490230}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: spikeGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +109,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 425562}
-  m_Layer: 0
+  - 114: {fileID: 11437974}
+  m_Layer: 17
   m_Name: spikeAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +124,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 135042}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.11000001, z: 0}
+  m_LocalPosition: {x: 0, y: 1.08000004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 425562}
@@ -134,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 168734}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 274.940002, y: 2.1400001, z: 0}
+  m_LocalPosition: {x: 341.23999, y: 2.1400001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 491446}
@@ -185,7 +187,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 134466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.12, z: 0}
+  m_LocalPosition: {x: 0, y: -1.00999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 495062}
@@ -205,19 +207,47 @@ Transform:
   m_Children: []
   m_Father: {fileID: 491446}
   m_RootOrder: 0
+--- !u!50 &5035432
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135042}
+  m_Mass: 9.99999975e-05
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_FixedAngle: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!61 &6137728
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 135042}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: -.0225524902, y: -.0574427843}
   serializedVersion: 2
   m_Size: {x: .651931763, y: 3.03785419}
+--- !u!114 &11437974
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302e18cc78b9b244f9745d032991bd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spikeSprite: {fileID: 135042}
+  spikeParticle: {fileID: 134466}
 --- !u!198 &19804420
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -228,7 +258,7 @@ ParticleSystem:
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   moveWithTransform: 1
@@ -1216,7 +1246,7 @@ ParticleSystem:
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   moveWithTransform: 1
@@ -2169,14 +2199,14 @@ ParticleSystem:
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 5
+      scalar: 1.63
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3222,7 +3252,7 @@ ParticleSystem:
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   moveWithTransform: 1
@@ -4265,7 +4295,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1406139753
-  m_SortingOrder: 0
+  m_SortingOrder: 34
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
@@ -4339,7 +4369,7 @@ SpriteRenderer:
   m_SortingLayerID: 1406139753
   m_SortingOrder: 34
   m_Sprite: {fileID: 21300000, guid: b5b57f69e31d5b045bc5e56e824a8465, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

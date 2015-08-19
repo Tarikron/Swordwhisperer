@@ -25,7 +25,7 @@ public class endeScene : MonoBehaviour {
 			if (credits.GetComponent<CanvasGroup>().alpha >= 1.0f)
 			{
 				Vector3 pos = creditsMoveUp.transform.position;
-				pos.y += Time.deltaTime * 4.0f;
+				pos.y += Time.deltaTime * 6.0f;
 				if (pos.y < 8.5f)
 					creditsMoveUp.transform.position = pos; 
 				credits.GetComponent<CanvasGroup>().alpha = 1.0f;

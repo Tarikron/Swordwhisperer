@@ -12,7 +12,7 @@ public class cPlayerSoul : cSoul
 	public bool beamAttack = false;
 	private bool beamStarted = false;
 
-	public float uptimeforbeam = 7.0f;
+	public float uptimeforbeam = 10.0f;
 	private float beamTimer = 0.0f;
 
 	private bool pulsiere = false;
@@ -157,6 +157,7 @@ public class cPlayerSoul : cSoul
 		beamStarted = false;
 		stopMovement = false;
 		beamAttack = false;
+		beamTimer = 0.0f;
 	}
 
 	void msg_vineSoul(Vector3 vineOrigin)
