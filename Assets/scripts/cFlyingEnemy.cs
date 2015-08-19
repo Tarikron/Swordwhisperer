@@ -700,14 +700,14 @@ public class cFlyingEnemy : cEnemy {
 		iAttackState = eAttackState.ATTACK_SHOT;
 	}
 
+
 	//collsions
 	void OnCollisionEnter2D(Collision2D collision)
-	{				
+	{	
 		if (collision.gameObject.tag == "player")
 		{
 			if (eAttackType.ATTACK_CHARGE == attackType)
 			{
-				Debug.Log ("collide");
 				lastPlayerPos = collision.gameObject.transform.position;
 				iAttackState = eAttackState.ATTACK_SHOT;
 				currentChargeSpeed = 5.0f;

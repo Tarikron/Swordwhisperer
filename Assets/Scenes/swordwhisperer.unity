@@ -608,6 +608,38 @@ Prefab:
       propertyPath: EmissionModule.enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 19819896, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 191564, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 175118, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 114530, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 107510, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 106414, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 121270, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 165020, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
+      propertyPath: m_TagString
+      value: beam
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 195a07379f7d1f5409c67ddee5c723d0, type: 2}
   m_IsPrefabParent: 0
@@ -1988,24 +2020,6 @@ SpriteRenderer:
   m_SortingOrder: 13
   m_Sprite: {fileID: 21300000, guid: 8487a19ccfbe8c641ace85a77fee5294, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
---- !u!1 &151809350 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 184836, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
-  m_PrefabInternal: {fileID: 887588745}
---- !u!114 &151809351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 151809350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1 &153125836
 GameObject:
   m_ObjectHideFlags: 0
@@ -9073,14 +9087,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 11462920, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
-      propertyPath: SplineRoot
-      value: 
-      objectReference: {fileID: 1960681556}
     - target: {fileID: 3397620, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 11462920, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
+      propertyPath: SplineRoot
+      value: 
+      objectReference: {fileID: 1960681556}
     - target: {fileID: 197364, guid: 0ff515afe6f7dc14583fabf4108262e6, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -11384,14 +11398,6 @@ Prefab:
     - target: {fileID: 3357860, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
-      propertyPath: aggroRange
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 11417350, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
-      propertyPath: triggerRange
-      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}

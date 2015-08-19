@@ -55,6 +55,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &164340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 481266}
+  - 65: {fileID: 6526342}
+  m_Layer: 0
+  m_Name: hurtBox3D
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &167194
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +135,7 @@ GameObject:
   - 114: {fileID: 11474020}
   - 114: {fileID: 11417350}
   - 82: {fileID: 8282232}
+  - 114: {fileID: 11484468}
   m_Layer: 0
   m_Name: boss
   m_TagString: boss1
@@ -169,12 +186,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 184836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 260.299988, y: 6.32000017, z: 0}
+  m_LocalPosition: {x: 260.299988, y: 6.55000019, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children:
   - {fileID: 416156}
   - {fileID: 499928}
   - {fileID: 472496}
+  - {fileID: 481266}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &472496
@@ -192,6 +210,18 @@ Transform:
   - {fileID: 494576}
   m_Father: {fileID: 470808}
   m_RootOrder: 2
+--- !u!4 &481266
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164340}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 470808}
+  m_RootOrder: 3
 --- !u!4 &494576
 Transform:
   m_ObjectHideFlags: 1
@@ -320,6 +350,18 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1.2310859, y: 1.24952364}
+--- !u!65 &6526342
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164340}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &8282232
 AudioSource:
   m_ObjectHideFlags: 1
@@ -402,8 +444,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startLife: 7
   currentLife: 7
-  aggroRange: 2
-  triggerRange: 1
+  aggroRange: 10
+  triggerRange: 7
   multibleProjectile: 0
   fastShotInterval: .200000003
   shotInterval: 2
@@ -470,6 +512,20 @@ MonoBehaviour:
   timeScale: 1
   loop: 1
   _animationName: Idle
+--- !u!114 &11484468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 184836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e297f0e8a7c72343ae65862f0ef704b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &11490034
 MonoBehaviour:
   m_ObjectHideFlags: 1

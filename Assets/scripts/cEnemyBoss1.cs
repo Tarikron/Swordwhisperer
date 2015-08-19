@@ -292,6 +292,7 @@ public class cEnemyBoss1 : cEnemy
 		tookDamge = true;
 	}
 
+
 }
 
 

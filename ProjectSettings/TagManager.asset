@@ -28,6 +28,7 @@ TagManager:
   - turtleParticle
   - waypoint
   - bossSpawn
+  - beam
   layers:
   - Default
   - TransparentFX

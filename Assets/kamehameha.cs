@@ -58,4 +58,18 @@ public class kamehameha : MonoBehaviour {
 	{
 		return origin_startSize;
 	}
+
+	void OnParticleCollision (GameObject gameObject)
+	{
+		Debug.Log ("beam collide1");
+		cEnemyBoss1 ceb = gameObject.GetComponentInParent<cEnemyBoss1>();
+		if (ceb == null)
+		{
+			cFlyingEnemy cfe = gameObject.GetComponentInParent<cFlyingEnemy>();
+			if (cfe != null)
+				cfe.gameObject.SendMessage("msg_damage",1.0f,SendMessageOptions.DontRequireReceiver);
+		}
+		else
+			ceb.gameObject.SendMessage("msg_damage",1.0f,SendMessageOptions.DontRequireReceiver);
+	}
 }
