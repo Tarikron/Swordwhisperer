@@ -975,6 +975,7 @@ public class cPlayer_c : cUnit
 
 		if (collision.gameObject.tag == "soul")
 		{
+			GameObject.FindGameObjectWithTag("playerSoul").SendMessage("collectSoul",null,SendMessageOptions.DontRequireReceiver);
 			collision.gameObject.SetActive(false);
 		}
 		else if (collision.gameObject.name == "groundGameEnd")

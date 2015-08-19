@@ -76,6 +76,8 @@ public class cFlyingEnemy : cEnemy {
 	[HideInInspector]
 	public cEnemyPhysic enemyPhysics;
 
+	private float dieDirection = 1.0f;
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -153,16 +155,17 @@ public class cFlyingEnemy : cEnemy {
 				//	scale.y = 0.0f;
 			//transform.localScale = scale;
 			currentSpeed.y += -9.81f * Time.deltaTime;
+
 			if (enemyPhysics.GetDistanceToGround() > 1.0f)
-				transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
+				transform.position += new Vector3(dieDirection * 10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
 			else
 			{
-					transform.position += new Vector3(speedGround * Time.deltaTime,0.0f,0.0f);
+					transform.position += new Vector3(dieDirection * speedGround * Time.deltaTime,0.0f,0.0f);
 
 					speedGround = -startSpeedGround * Time.deltaTime + speedGround;
 					speedAlphaGround = -startAlphaGround * Time.deltaTime + speedAlphaGround;
 			}
-			transform.RotateAround(transform.position,Vector3.forward,speedAlphaGround * Time.deltaTime);
+			transform.RotateAround(transform.position,Vector3.forward,dieDirection * speedAlphaGround * Time.deltaTime);
 
 			if (speedAlphaGround >= 0.0f)
 			{
@@ -694,6 +697,11 @@ public class cFlyingEnemy : cEnemy {
 		}
 
 		takeDmg(dmg);	
+
+		dieDirection = 1.0f;
+		GameObject player = GameObject.FindGameObjectWithTag("player");
+		if (player.transform.rotation.y >= 1.0f)
+			dieDirection = -1.0f;
 
 		tookDamge = true;
 		lastPlayerPos = player.transform.position;

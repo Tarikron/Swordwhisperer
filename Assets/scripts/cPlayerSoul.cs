@@ -16,6 +16,16 @@ public class cPlayerSoul : cSoul
 	public float uptimeforbeam = 5.0f;
 	private float beamTimer = 0.0f;
 
+	private bool pulsiere = false;
+	private float origin_startSize = 0.0f;
+	public float pulsarTime = 0.4f;
+	private float pulsarDirection = 1.0f;
+	public int pulseCount = 0;
+	private bool pulseDie = false;
+
+	public int requiredSouls = 5;
+	private int collectedSouls = 0;
+
 	// Use this for initialization
 	public override void Start ()
 	{
@@ -28,12 +38,30 @@ public class cPlayerSoul : cSoul
 
 		endKaMeHaMeHa(false);
 	}
-	
+
+	void msg_pulse()
+	{
+		pulseDie = true;
+	}
+
+	void collectSoul()
+	{
+		pulsiere = true;
+		collectedSouls++;
+
+		if (collectedSouls == requiredSouls)
+		{
+			//ready to fire
+			pulsiere = true;
+			pulsarTime = 0.2f;
+		}
+	}
+
 	// Update is called once per frame
 	public override void Update ()
 	{
 		base.Update();
-		
+
 		if (ps && vinePosition != Vector3.zero)
 		{
 			transform.position = Vector3.MoveTowards(transform.position,origin,4.0f * Time.deltaTime);
@@ -55,6 +83,52 @@ public class cPlayerSoul : cSoul
 			}
 
 			beamTimer += Time.deltaTime;
+		}
+		else
+		{
+			if (pulseDie)
+			{
+				ps.startSize += -1.0f * Time.deltaTime/pulsarTime;
+
+				if (ps.startSize <= 0.0f)
+				{
+					ps.startSize = 0.0f;
+				}
+			}
+			else if (pulsiere)
+			{
+				if (pulseCount >= 2)
+				{
+					pulsarDirection = -1.0f;
+					ps.startSize += pulsarDirection * Time.deltaTime/pulsarTime;
+					if (ps.startSize <= origin_startSize)
+					{
+						ps.startSize = origin_startSize;
+						pulsiere = false;
+						pulsarDirection = 1.0f;
+						pulseCount = 0;
+					}
+				}
+				else
+				{
+					ps.startSize += pulsarDirection * Time.deltaTime/pulsarTime;
+					if (ps.startSize >= 1.5f)
+					{
+						if (collectedSouls < requiredSouls)
+							pulseCount++;
+
+						ps.startSize = 1.5f;
+						pulsarDirection = -1.0f;
+					}
+					else if (ps.startSize <= 0.5f)
+					{
+						ps.startSize = 0.5f;
+						pulsarDirection = 1.0f;
+					}
+				}
+
+
+			}
 		}
 
 	}
@@ -110,6 +184,7 @@ public class cPlayerSoul : cSoul
 		transform.position = vinePosition;
 		ps.enableEmission = true;
 		ps.startSize = 1.0f;
+		origin_startSize = ps.startSize;
 	}
 }
 

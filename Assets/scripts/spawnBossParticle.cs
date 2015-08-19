@@ -92,8 +92,13 @@ public class spawnBossParticle : MonoBehaviour
 						GameObject go = GameObject.Instantiate(minionToSpawn);
 						go.transform.position = transform.position;
 						SplineController spline = go.GetComponent<SplineController>();
-						Debug.Log(randomRoute);
-						spline.SplineRoot = GameObject.Find ("splineBossWaypoints"+randomRoute);
+						GameObject waypoints = GameObject.Find ("splineBossWaypoints"+randomRoute);
+						Vector3 pos = waypoints.transform.position;
+						pos.x += Random.Range (0.0f,2.0f);
+						pos.y += Random.Range (0.0f,2.0f);
+
+						spline.SplineRoot = waypoints;
+						
 						spline.Init();
 					}
 					spawnTimer = 0.0f;
