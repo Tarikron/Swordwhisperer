@@ -55,6 +55,7 @@ public class DialogManager : MonoBehaviour {
 
 			if (currentIndex+1 > dlg.persons.Count)
 			{
+				hasPlayed = false;
 				stopEvent = false;
 				nextMessage = false;
 				GameObject.FindGameObjectWithTag("player").GetComponent<cPlayer_c>().SendMessage("msg_stopMovementEnd",null,SendMessageOptions.DontRequireReceiver);
@@ -206,7 +207,10 @@ public class DialogManager : MonoBehaviour {
 
 		if (!hasPlayed)
 		{
-			audioSource.PlayOneShot((AudioClip)Resources.Load("Sounds/" + nextEvent));
+			Debug.Log (nextEvent);
+			AudioClip clip = (AudioClip)Resources.Load("Sounds/" + nextEvent);
+			Debug.Log (clip.length);
+			audioSource.PlayOneShot(clip);
 			hasPlayed = true;
 		}
 

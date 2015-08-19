@@ -89,7 +89,7 @@ public class GameCamera : MonoBehaviour {
 			if (zoom1Pos.x <= zoom.x && zoom2Pos.x >= zoom.x)
 			{
 				float endZ = -14.0f;
-				float startZ = -9.4f-0.01f;
+				float startZ = -9.3f+0.7f;
 
 				//zoom.z + -9.4f;
 				float distanceX_ALL = zoom2Pos.x - zoom1Pos.x;
@@ -103,8 +103,13 @@ public class GameCamera : MonoBehaviour {
 				zoom.z = currentZoom;
 
 				transform.position = zoom;
-
+				if (zoom.x <= 31.0f)
+				{
+					zoom.z = -9.3f;
+					transform.position = zoom;
+				}
 			}
+
 			transform.position += vShake * Time.deltaTime;
 
 

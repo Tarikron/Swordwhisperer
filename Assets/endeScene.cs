@@ -7,7 +7,6 @@ public class endeScene : MonoBehaviour {
 	public GameObject creditsMoveUp = null;
 
 	private bool msgSend = false;
-
 	private float fadeTime = 2.0f;
 
 	// Use this for initialization
@@ -28,6 +27,7 @@ public class endeScene : MonoBehaviour {
 				pos.y += Time.deltaTime * 6.0f;
 				if (pos.y < 8.5f)
 					creditsMoveUp.transform.position = pos; 
+
 				credits.GetComponent<CanvasGroup>().alpha = 1.0f;
 			}
 			return;

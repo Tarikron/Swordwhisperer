@@ -54,6 +54,8 @@ public class cEnemyBoss1 : cEnemy
 
 	private bool bSpike = false;
 
+	public bool bossActive = false;
+
 	public override void Start()
 	{
 		base.Start();
@@ -327,7 +329,7 @@ public class cEnemyBoss1 : cEnemy
 			player.SendMessage("msg_looseStrength",null,SendMessageOptions.RequireReceiver);
 
 			Camera.main.gameObject.GetComponent<GameManager>().changeMusic("darkwoods");
-
+			bossActive = false;
 			killAllMinions();
 
 			base.die();

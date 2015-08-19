@@ -181,6 +181,7 @@ public class cPlayer_c : cUnit
 		public AudioClip damageVoice3;
 
 		public AudioClip powerUp;
+		public AudioClip beamLaser;
 	}
 	public audioSFX audioClipsSFX;
 	public AudioSource audioSourceSFX;
@@ -222,7 +223,9 @@ public class cPlayer_c : cUnit
 		PowerUp.enableEmission = true;
 		if (!PowerUp.isPlaying)
 		{
-			audioSourceSFX.PlayOneShot(audioClipsSFX.powerUp);
+			if (audioClipsSFX.powerUp)
+				audioSourceSFX.PlayOneShot(audioClipsSFX.powerUp);
+
 			PowerUp.Play ();
 		}
 		if (!playbackspeed)
@@ -575,6 +578,10 @@ public class cPlayer_c : cUnit
 		if (playerSoul.GetComponent<cPlayerSoul>().beamAttack)
 		{
 			playerSoul.GetComponent<cPlayerSoul>().rotateKaMeHaMeHa(x);
+
+			if (audioClipsSFX.beamLaser)
+				audioSourceSFX.PlayOneShot(audioClipsSFX.beamLaser);
+
 		}
 		else
 		{
@@ -854,7 +861,8 @@ public class cPlayer_c : cUnit
 		float absX = Mathf.Abs(x);
 		if (sleepAnim)
 		{
-			dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
+			if (helpMoveTimer >= helpMoveTime/2.0f)
+				dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
 
 			if (helpMoveTimer >= helpMoveTime)
 			{
@@ -1008,6 +1016,7 @@ public class cPlayer_c : cUnit
 		if (collision.gameObject.tag == "spike")
 		{
 			msg_hit(1.0f);
+			collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 		}
 		else if (collision.gameObject.tag == "soul")
 		{
@@ -1100,6 +1109,9 @@ public class cPlayer_c : cUnit
 	void msg_looseLife()
 	{
 		endScene = true;
+
+		GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
+		playerSoul.SendMessage("msg_pulseDie",null,SendMessageOptions.RequireReceiver);
 	}
 
 	void msg_looseStrength()
@@ -1115,6 +1127,7 @@ public class cPlayer_c : cUnit
 	}
 	void msg_stopMovementEnd()
 	{
+		GamePad.SetVibration(0,0.0f,0.0f);
 		bLockScene = false;
 	}
 
@@ -1128,6 +1141,7 @@ public class cPlayer_c : cUnit
 		if (dialogMsg == "helpLaser")
 		{
 			helpLaser = true;
+			GameObject.FindGameObjectWithTag("boss1").GetComponent<cEnemyBoss1>().bossActive = true;
 		}
 		if (dialogMsg != null && dialogMsg.Length > 0)
 		{

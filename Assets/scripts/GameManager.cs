@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour {
 	private float volumeDirection = -1.0f;
 	private float volumeFade = 0.2f;
 
+	private bool clipChanged = false;
+	private bool decrease = false;
+
 	void Start () 
 	{
 		//player = GameObject.Instantiate(playerPrefab);
@@ -86,9 +89,31 @@ public class GameManager : MonoBehaviour {
 
 	public void changeMusic(string area)
 	{
-		if (!musicChange)
+		GameObject _boss = GameObject.FindGameObjectWithTag("boss1");
+
+		AudioClip clip = null;
+		if (_boss != null && area == "boss")
+			clip = boss;
+		else if (area == "field")
+			clip = field;
+		else if (area == "woods")
+			clip = woods;
+		else if (area == "darkwoods")
+			clip = darkwoods;
+		else if (area == "cave")
+			clip = cave;
+
+
+	    if (_boss != null && _boss.GetComponent<cEnemyBoss1>().bossActive)
+			clip = boss;
+
+		if (clip == null)
+			return;
+
+		if (GetComponent<AudioSource>().clip.name != clip.name)
 		{
 			musicChange = true;
+			clipChanged = false;
 			clipToChange = area;
 			if (area == "darkwoods")
 				volumeFade = 1.0f;
@@ -99,31 +124,40 @@ public class GameManager : MonoBehaviour {
 
 	private void changeMusic2()
 	{
-		GetComponent<AudioSource>().volume += Time.deltaTime/volumeFade * volumeDirection;
-		
-		if (GetComponent<AudioSource>().volume <= 0.0f)
-		{
-			if (clipToChange == "boss")
-				GetComponent<AudioSource>().clip = boss;
-			else if (clipToChange == "field")
-				GetComponent<AudioSource>().clip = field;
-			else if (clipToChange == "woods")
-				GetComponent<AudioSource>().clip = woods;
-			else if (clipToChange == "darkwoods")
-				GetComponent<AudioSource>().clip = darkwoods;
-			else if (clipToChange == "cave")
-				GetComponent<AudioSource>().clip = cave;
+		AudioClip clip = null;
+		if (clipToChange == "boss")
+			clip = boss;
+		else if (clipToChange == "field")
+			clip = field;
+		else if (clipToChange == "woods")
+			clip = woods;
+		else if (clipToChange == "darkwoods")
+			clip = darkwoods;
+		else if (clipToChange == "cave")
+			clip = cave;
+		GameObject _boss = GameObject.FindGameObjectWithTag("boss1");
+		if (_boss != null && _boss.GetComponent<cEnemyBoss1>().bossActive)
+			clip = boss;
 
-			clipToChange = "";
-			volumeDirection = 1.0f;
-		}
-		else if (GetComponent<AudioSource>().volume >= 1.0f)
+		if (clip == null)
+			return;
+		
+		GetComponent<AudioSource>().volume += Time.deltaTime/volumeFade * volumeDirection;
+		if (GetComponent<AudioSource>().volume >= 1.0f)
 		{
-			GetComponent<AudioSource>().Play();
 			musicChange = false;
 			volumeDirection = -1.0f;
-
+			clipToChange = "";
+			clipChanged = true;
+			return;
 		}
+		if (GetComponent<AudioSource>().volume <= 0.0f)
+		{
+			GetComponent<AudioSource>().clip = clip;
+			GetComponent<AudioSource>().Play();
+			volumeDirection = 1.0f;
+		}
+
 	}
 
 	void Update()
@@ -138,8 +172,6 @@ public class GameManager : MonoBehaviour {
 		moveClouds(p2);
 		if (musicChange)
 			changeMusic2 ();
-
-
 
 		for (int i =0; i < prefab_levels.Length; i++)
 		{
