@@ -64,6 +64,7 @@ public class cPlayer_c : cUnit
 	private int iJumpCounter = 0;
 	private Vector2 movementDirection;
 	private bool bSkipMovementForAnim = false;
+	private bool bBeamActive = false;
 	private bool bSkipAnimForAttack = false;
 
 	private float attackDelayCounter = 0.0f;
@@ -206,6 +207,7 @@ public class cPlayer_c : cUnit
 	public float OneLifeTimer = 0.0f;
 
 	private bool endScene = false;
+	private bool firstSoul = false;
 
 	void playPowerUp(bool playbackspeed)
 	{
@@ -568,7 +570,9 @@ public class cPlayer_c : cUnit
 			if (Input.GetButtonDown ("beamAttack")) 
 			{
 				playerSoul.GetComponent<cPlayerSoul>().beamAttack = true;
-				bSkipMovementForAnim = true;
+				bBeamActive = true;
+				animHandler.addAnimation(animations.idle_sword,true);
+				animHandler.playAnimation();
 			}
 		}
 	}
@@ -728,10 +732,9 @@ public class cPlayer_c : cUnit
 	// Update is called once per frame
 	void Update () 
 	{
-	
 		if (Input.GetKeyDown(KeyCode.F2))
 			Application.LoadLevel ("swordwhisperer");
-		else if (Input.GetKeyDown (KeyCode.Escape))
+		else if (Input.GetKeyDown (KeyCode.Escape) || Input.GetButtonDown ("escape"))
 			Application.LoadLevel("menu");
 
 		if (endScene)
@@ -881,7 +884,8 @@ public class cPlayer_c : cUnit
 				handleAttack ();
 				handleBeamAttack(x);
 			}
-			if (!bSkipMovementForAnim)
+			Debug.Log ("player skip: " + bBeamActive);
+			if (!bSkipMovementForAnim && !bBeamActive)
 			{
 				//movement
 				if (bCanJump && sword.bCollectedSword)
@@ -934,7 +938,7 @@ public class cPlayer_c : cUnit
 
 	public void moveAgain()
 	{
-		bSkipMovementForAnim = false;
+		bBeamActive = false;
 	}
 
 	public bool isCutscene()
@@ -975,8 +979,14 @@ public class cPlayer_c : cUnit
 
 		if (collision.gameObject.tag == "soul")
 		{
+			if (!firstSoul)
+			{
+				firstSoul = true;
+				dialog.SendMessage("msg_eventTrigger","collectSoul",SendMessageOptions.RequireReceiver);
+			}
+
 			GameObject.FindGameObjectWithTag("playerSoul").SendMessage("collectSoul",null,SendMessageOptions.DontRequireReceiver);
-			collision.gameObject.SetActive(false);
+			collision.gameObject.SendMessage("msg_pulseDie",null,SendMessageOptions.RequireReceiver);
 		}
 		else if (collision.gameObject.name == "groundGameEnd")
 		{
@@ -1036,7 +1046,6 @@ public class cPlayer_c : cUnit
 				attackNext = true;
 				attackState = eAttackType.ATTACK_3;
 			}
-
 		}
 		else if (animName == animations.attack3)
 		{
@@ -1079,14 +1088,15 @@ public class cPlayer_c : cUnit
 	{
 		bExternCutScene = true;
 	}
-	void msg_externCutsceneEnd()
+	void msg_externCutsceneEnd(string dialogMsg)
 	{
-
 		bExternCutScene = false;
 
-		//little bit dirty here... but we only have one event
-		dialog.SendMessage("msg_eventTrigger","afterCamDrive",SendMessageOptions.RequireReceiver);
-
+		if (dialogMsg != null && dialogMsg.Length > 0)
+		{
+			//little bit dirty here... but we only have one event
+			dialog.SendMessage("msg_eventTrigger",dialogMsg,SendMessageOptions.RequireReceiver);
+		}
 	}
 
 	void msg_blackscreenArrive()

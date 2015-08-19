@@ -7,23 +7,20 @@ public class cPlayerSoul : cSoul
 	cPlayer_c player = null;
 	GameObject chainAttack = null;
 
-	private ParticleSystem ps = null;
 	private Vector3 vinePosition = Vector3.zero;
 
 	public bool beamAttack = false;
 	private bool beamStarted = false;
 
-	public float uptimeforbeam = 5.0f;
+	public float uptimeforbeam = 7.0f;
 	private float beamTimer = 0.0f;
 
 	private bool pulsiere = false;
 	private float origin_startSize = 0.0f;
-	public float pulsarTime = 0.4f;
 	private float pulsarDirection = 1.0f;
 	public int pulseCount = 0;
-	private bool pulseDie = false;
 
-	public int requiredSouls = 5;
+	public int requiredSouls = 3;
 	private int collectedSouls = 0;
 
 	// Use this for initialization
@@ -32,16 +29,10 @@ public class cPlayerSoul : cSoul
 		base.Start();
 
 		player = GetComponentInParent<cPlayer_c>();
-		ps = GetComponent<ParticleSystem>();
 
 		chainAttack = transform.FindChild("ChainAttack").gameObject;
 
 		endKaMeHaMeHa(false);
-	}
-
-	void msg_pulse()
-	{
-		pulseDie = true;
 	}
 
 	void collectSoul()
@@ -86,16 +77,8 @@ public class cPlayerSoul : cSoul
 		}
 		else
 		{
-			if (pulseDie)
-			{
-				ps.startSize += -1.0f * Time.deltaTime/pulsarTime;
 
-				if (ps.startSize <= 0.0f)
-				{
-					ps.startSize = 0.0f;
-				}
-			}
-			else if (pulsiere)
+			if (pulsiere)
 			{
 				if (pulseCount >= 2)
 				{

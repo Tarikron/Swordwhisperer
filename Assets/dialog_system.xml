@@ -36,6 +36,28 @@
 				<help>0</help>
 			</person>
 		</dialog>
+		<dialog eventTrigger="collectSoul">
+			<person uid="me123" order="1">
+				<text>Collect all my soul parts to renew my former strength.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>1</duration>
+				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
+				<help>0</help>
+			</person>
+			<person uid="me123" order="1">
+				<text>... when it banished me here it also broke my soul into pieces.</text>
+				<soundfile>talk_me123.mp3</soundfile>
+				<fade_in>2</fade_in>
+				<fade_out>2</fade_out>
+				<duration>1</duration>
+				<click_away>0</click_away>
+				<cutscene_lock>1</cutscene_lock>
+				<help>0</help>
+			</person>			
+		</dialog>		
 		<dialog eventTrigger="outOfCave">
 			<person uid="me123" order="1">
 				<text>After many years, I'm finally free!</text>
@@ -78,7 +100,7 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
-				<duration>2</duration>
+				<duration>1</duration>
 				<click_away>0</click_away>
 				<cutscene_lock>0</cutscene_lock>
 				<help>0</help>
@@ -86,7 +108,7 @@
 		</dialog>
 		<dialog eventTrigger="woodStart">
 			<person uid="me123" order="1">
-				<text>I was right ...</text>
+				<text>Last time I have been here i got a beating ...</text>
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
@@ -112,7 +134,7 @@
 				<soundfile>talk_me123.mp3</soundfile>
 				<fade_in>2</fade_in>
 				<fade_out>2</fade_out>
-				<duration>2</duration>
+				<duration>1</duration>
 				<click_away>0</click_away>
 				<cutscene_lock>1</cutscene_lock>
 				<help>0</help>

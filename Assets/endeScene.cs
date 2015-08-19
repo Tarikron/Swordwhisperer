@@ -4,9 +4,11 @@ using System.Collections;
 public class endeScene : MonoBehaviour {
 
 	public GameObject credits = null;
+	public GameObject creditsMoveUp = null;
+
 	private bool msgSend = false;
 
-	private float fadeTime = 4.0f;
+	private float fadeTime = 2.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +23,13 @@ public class endeScene : MonoBehaviour {
 			//start credits
 			credits.GetComponent<CanvasGroup>().alpha += Time.deltaTime/fadeTime;
 			if (credits.GetComponent<CanvasGroup>().alpha >= 1.0f)
+			{
+				Vector3 pos = creditsMoveUp.transform.position;
+				pos.y += Time.deltaTime * 4.0f;
+				if (pos.y < 8.5f)
+					creditsMoveUp.transform.position = pos; 
 				credits.GetComponent<CanvasGroup>().alpha = 1.0f;
+			}
 			return;
 		}
 
@@ -38,6 +46,14 @@ public class endeScene : MonoBehaviour {
 		{
 			player.SendMessage("msg_looseLife",null,SendMessageOptions.RequireReceiver);
 			msgSend = true;
+
+			Camera mainCam = Camera.main;
+			GameCamera gameCam = mainCam.GetComponent<GameCamera>();
+			Vector3 pos = Vector3.zero;
+			pos.x = 10.0f;
+			pos.y = 5.0f;
+			gameCam.SetOffset(pos);
+			gameCam.SetTrackSpeed(8.0f,8.0f);
 		}
 	}
 }

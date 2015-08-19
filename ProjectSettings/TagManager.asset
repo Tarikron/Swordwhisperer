@@ -29,6 +29,7 @@ TagManager:
   - waypoint
   - bossSpawn
   - beam
+  - spike
   layers:
   - Default
   - TransparentFX

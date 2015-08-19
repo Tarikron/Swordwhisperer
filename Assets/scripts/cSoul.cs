@@ -8,13 +8,22 @@ public class cSoul : MonoBehaviour {
 	protected float alpha = 0.0f;
 	protected Vector3 origin = Vector3.zero;
 
-	protected bool stopMovement = false;
+	public bool stopMovement = false;
+	protected bool pulseDie = false;
+	protected ParticleSystem ps = null;
+	public float pulsarTime = 0.4f;
 
+	void msg_pulseDie()
+	{
+		pulseDie = true;
+		GetComponent<BoxCollider2D>().enabled = false;
+	}
 
 	// Use this for initialization
 	public virtual void Start () 
 	{
 		origin = transform.position;
+		ps = GetComponent<ParticleSystem>();
 	}
 	
 	// Update is called once per frame
@@ -31,6 +40,17 @@ public class cSoul : MonoBehaviour {
 			Vector3 vPos = transform.position;
 			vPos.y =  vPos.y + (Mathf.Sin (alpha * Mathf.PI/180)/amplitude );
 			transform.position = vPos;
+		}
+		if (pulseDie)
+		{
+			ps.startSize += -1.0f * Time.deltaTime/pulsarTime;
+			
+			if (ps.startSize <= 0.0f)
+			{
+				ps.startSize = 0.0f;
+				Destroy(this.gameObject);
+				return;
+			}
 		}
 
 	}

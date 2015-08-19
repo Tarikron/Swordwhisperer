@@ -89,54 +89,67 @@ public class cEnemyBoss1 : cEnemy
 	{
 		switch (iDieState)
 		{	
-		case eDieState.DIE_START:
-		{
-			bool playDeath = false;
-			
-			//if different namens, we have to play it, if null we can play anyway
-			playDeath = cFunction.xor (audioSource.clip != null && audioSource.clip.name != deathClip.name, audioSource.clip == null);
-			
-			//last clip we give a shit and abusing .clip, since he will die..
-			if (deathClip && playDeath)
+			case eDieState.DIE_START:
 			{
-				audioSource.clip = deathClip;
-				audioSource.PlayOneShot(deathClip);
-			}
-			
-			//Vector3 scale = transform.localScale;
-			Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
-			//scale -= vec;
-			//if (scale.x < 0.0f)
-			//scale.x = 0.0f;
-			//if (scale.y < 0.0f)
-			//	scale.y = 0.0f;
-			//transform.localScale = scale;
-			currentSpeed.y += -9.81f * Time.deltaTime;
-			if (enemyPhysics.GetDistanceToGround() > 1.0f)
-				transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
-			else
-			{
-				transform.position += new Vector3(speedGround * Time.deltaTime,0.0f,0.0f);
+				bool playDeath = false;
 				
-				speedGround = -startSpeedGround * Time.deltaTime + speedGround;
-				speedAlphaGround = -startAlphaGround * Time.deltaTime + speedAlphaGround;
+				//if different namens, we have to play it, if null we can play anyway
+				playDeath = cFunction.xor (audioSource.clip != null && audioSource.clip.name != deathClip.name, audioSource.clip == null);
+				
+				//last clip we give a shit and abusing .clip, since he will die..
+				if (deathClip && playDeath)
+				{
+					audioSource.clip = deathClip;
+					audioSource.PlayOneShot(deathClip);
+				}
+				
+				//Vector3 scale = transform.localScale;
+				Vector3 vec = new Vector3(0.8f,0.8f,0.8f) * Time.deltaTime;
+				//scale -= vec;
+				//if (scale.x < 0.0f)
+				//scale.x = 0.0f;
+				//if (scale.y < 0.0f)
+				//	scale.y = 0.0f;
+				//transform.localScale = scale;
+				currentSpeed.y += -9.81f * Time.deltaTime;
+				if (enemyPhysics.GetDistanceToGround() > 1.0f)
+					transform.position += new Vector3(10.0f * Time.deltaTime,currentSpeed.y * Time.deltaTime,0.0f);
+				else
+				{
+					transform.position += new Vector3(speedGround * Time.deltaTime,0.0f,0.0f);
+					
+					speedGround = -startSpeedGround * Time.deltaTime + speedGround;
+					speedAlphaGround = -startAlphaGround * Time.deltaTime + speedAlphaGround;
+				}
+				transform.RotateAround(transform.position,Vector3.forward,speedAlphaGround * Time.deltaTime);
+				
+				if (speedAlphaGround >= 0.0f)
+				{
+					iDieState = eDieState.DIE_DONE;
+					killAllMinions();
+				}
+				return true;
+				break;
 			}
-			transform.RotateAround(transform.position,Vector3.forward,speedAlphaGround * Time.deltaTime);
-			
-			if (speedAlphaGround >= 0.0f)
-			{
-				iDieState = eDieState.DIE_DONE;
+			case eDieState.DIE_DONE:
+			{				
+				die ();
+				return true;
 			}
-			return true;
-			break;
-		}
-		case eDieState.DIE_DONE:
-			die ();
-			return true;
 		}
 		
 		return false;
 	}
+
+	private void killAllMinions()
+	{
+		GameObject[] gos = GameObject.FindGameObjectsWithTag("enemyFlying");
+		foreach(GameObject go in gos)
+		{
+			go.SendMessage("msg_damage",5.0f,SendMessageOptions.RequireReceiver);
+		}
+	}
+
 	public void Update()
 	{
 		int minionCount = lMinions.Count;
