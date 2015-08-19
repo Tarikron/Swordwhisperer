@@ -8,6 +8,7 @@ public class cSoul : MonoBehaviour {
 	protected float alpha = 0.0f;
 	protected Vector3 origin = Vector3.zero;
 
+	protected bool stopMovement = false;
 
 
 	// Use this for initialization
@@ -18,14 +19,19 @@ public class cSoul : MonoBehaviour {
 	
 	// Update is called once per frame
 	public virtual void Update () {
-		alpha += angleSpeed * Time.deltaTime;
-		if (alpha > 360.0f)
-			alpha = alpha - 360.0f;
-		if (alpha < -360.0f)
-			alpha = alpha + 360.0f;
+	
+		if (!stopMovement)
+		{
+			alpha += angleSpeed * Time.deltaTime;
+			if (alpha > 360.0f)
+				alpha = alpha - 360.0f;
+			if (alpha < -360.0f)
+				alpha = alpha + 360.0f;
 
-		Vector3 vPos = transform.position;
-		vPos.y =  vPos.y + (Mathf.Sin (alpha * Mathf.PI/180)/amplitude );
-		transform.position = vPos;
+			Vector3 vPos = transform.position;
+			vPos.y =  vPos.y + (Mathf.Sin (alpha * Mathf.PI/180)/amplitude );
+			transform.position = vPos;
+		}
+
 	}
 }

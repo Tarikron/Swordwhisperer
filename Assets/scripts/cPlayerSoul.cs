@@ -11,6 +11,10 @@ public class cPlayerSoul : cSoul
 	private Vector3 vinePosition = Vector3.zero;
 
 	public bool beamAttack = false;
+	private bool beamStarted = false;
+
+	public float uptimeforbeam = 5.0f;
+	private float beamTimer = 0.0f;
 
 	// Use this for initialization
 	public override void Start ()
@@ -38,11 +42,29 @@ public class cPlayerSoul : cSoul
 				vinePosition = Vector3.zero;
 		}
 
-		if (beamAttack && ps.enableEmission == true)
+		if (!beamStarted && beamAttack && ps.enableEmission == true)
 			startKaMeHaMeHa(true);
+
+		if (beamStarted)
+		{
+			if (beamTimer >= uptimeforbeam)
+			{
+				endKaMeHaMeHa(true);
+				beamStarted = false;
+				GetComponentInParent<cPlayer_c>().moveAgain();
+			}
+
+			beamTimer += Time.deltaTime;
+		}
+
 	}
 
-
+	public void rotateKaMeHaMeHa(float x)
+	{
+		Vector3 rotAround = Vector3.zero;
+		rotAround.z = 1.0f;
+		transform.RotateAround(transform.position,rotAround,x);
+	}
 
 	private void startKaMeHaMeHa(bool animation = true)
 	{
@@ -58,6 +80,8 @@ public class cPlayerSoul : cSoul
 				ka.state = kamehameha.eKaMe.SHOTON;
 			}
 		}
+		beamStarted = true;
+		stopMovement = true;
 	}
 	private void endKaMeHaMeHa(bool animation = true)
 	{
@@ -73,6 +97,9 @@ public class cPlayerSoul : cSoul
 				ka.state = kamehameha.eKaMe.SHOTOFF;
 			}
 		}
+		beamStarted = false;
+		stopMovement = false;
+		beamAttack = false;
 	}
 
 	void msg_vineSoul(Vector3 vineOrigin)

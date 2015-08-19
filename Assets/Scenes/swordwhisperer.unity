@@ -21837,6 +21837,7 @@ MonoBehaviour:
   angleSpeed: 160
   amplitude: 80
   beamAttack: 0
+  uptimeforbeam: 5
 --- !u!1 &1520729533
 GameObject:
   m_ObjectHideFlags: 0

@@ -555,13 +555,13 @@ public class cPlayer_c : cUnit
 		}
 	}
 
-	void handleBeamAttack()
+	void handleBeamAttack(float x)
 	{
 		GameObject playerSoul = GameObject.FindGameObjectWithTag("playerSoul");
 
 		if (playerSoul.GetComponent<cPlayerSoul>().beamAttack)
 		{
-
+			playerSoul.GetComponent<cPlayerSoul>().rotateKaMeHaMeHa(x);
 		}
 		else
 		{
@@ -879,7 +879,7 @@ public class cPlayer_c : cUnit
 			if (sword.bCollectedSword)
 			{
 				handleAttack ();
-				handleBeamAttack();
+				handleBeamAttack(x);
 			}
 			if (!bSkipMovementForAnim)
 			{
@@ -930,6 +930,11 @@ public class cPlayer_c : cUnit
 		
 		animHandler.playAnimation();
 
+	}
+
+	public void moveAgain()
+	{
+		bSkipMovementForAnim = false;
 	}
 
 	public bool isCutscene()
