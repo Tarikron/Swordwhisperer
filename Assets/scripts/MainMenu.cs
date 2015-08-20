@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown("escape"))
+		if (Input.GetButtonDown("quit"))
 		{
 			System.Diagnostics.Process.GetCurrentProcess().Kill();
 			Exit();

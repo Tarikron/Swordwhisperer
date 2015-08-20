@@ -15,7 +15,7 @@ public class cPlayerSoul : cSoul
 	public float uptimeforbeam = 10.0f;
 	private float beamTimer = 0.0f;
 
-	private bool pulsiere = false;
+	public bool pulsiere = false;
 	private float origin_startSize = 0.0f;
 	private float pulsarDirection = 1.0f;
 	public int pulseCount = 0;

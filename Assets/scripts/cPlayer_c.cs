@@ -593,7 +593,7 @@ public class cPlayer_c : cUnit
 		}
 		else
 		{
-			if (Input.GetButtonDown ("beamAttack") && laserCooldownTime <= laserCooldownTimer) 
+			if (playerSoul.GetComponent<cPlayerSoul>().pulsiere && Input.GetButtonDown ("beamAttack") && laserCooldownTime <= laserCooldownTimer) 
 			{
 				playerSoul.GetComponent<cPlayerSoul>().beamAttack = true;
 				bBeamActive = true;
@@ -762,8 +762,19 @@ public class cPlayer_c : cUnit
 	{
 		if (Input.GetKeyDown(KeyCode.F2))
 			Application.LoadLevel ("swordwhisperer");
-		else if (Input.GetKeyDown (KeyCode.Escape) || Input.GetButtonDown ("escape"))
+		else if (Input.GetKeyDown (KeyCode.Escape) || Input.GetButtonDown ("quit"))
 			Application.LoadLevel("menu");
+
+		ParticleSystem ps = GameObject.FindGameObjectWithTag("playerSoul").GetComponent<ParticleSystem>();
+		if (ps.startSize > 0.0f && currentLife < startLife)
+		{
+			if (OneLifePerTime <= OneLifeTimer)
+			{
+				currentLife+=1.0f;
+				OneLifeTimer = 0.0f;
+			}
+			OneLifeTimer += Time.deltaTime;
+		}
 
 		if (endScene)
 		{
@@ -819,17 +830,7 @@ public class cPlayer_c : cUnit
 			}
 			damageBlinkTimer-=Time.deltaTime;
 		}
-
-		if (sword.bCollectedSword && currentLife < startLife)
-		{
-			if (OneLifePerTime <= OneLifeTimer)
-			{
-				currentLife+=1.0f;
-				OneLifeTimer = 0.0f;
-			}
-			OneLifeTimer += Time.deltaTime;
-		}
-
+		
 		if (false)
 		{
 			movementDirection.x = 0.0f;
