@@ -869,6 +869,9 @@ public class cPlayer_c : cUnit
 		float absX = Mathf.Abs(x);
 		if (sleepAnim)
 		{
+			if (Camera.main.GetComponent<AudioSource>().mute)
+				Camera.main.GetComponent<AudioSource>().mute = false;
+
 			if (helpMoveTimer >= helpMoveTime/2.0f)
 				dialog.SendMessage("msg_eventTrigger","wakeUp",SendMessageOptions.RequireReceiver);
 

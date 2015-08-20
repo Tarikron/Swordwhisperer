@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour {
 	private bool clipChanged = false;
 	private bool decrease = false;
 
+	private bool soundInit = false;
+
 	void Start () 
 	{
 		//player = GameObject.Instantiate(playerPrefab);
@@ -172,6 +174,19 @@ public class GameManager : MonoBehaviour {
 		moveClouds(p2);
 		if (musicChange)
 			changeMusic2 ();
+
+		if (!soundInit)
+		{
+			AudioSource audioSource = Camera.main.GetComponent<AudioSource>();
+			if (audioSource)
+			{
+				if (audioSource.volume < 1.0f)
+					audioSource.volume += Time.deltaTime/0.4f;
+
+				if (audioSource.volume >= 1.0f)
+					soundInit = true;
+			}
+		}
 
 		for (int i =0; i < prefab_levels.Length; i++)
 		{

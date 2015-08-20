@@ -39,10 +39,23 @@ public class MainMenu : MonoBehaviour
 
 	void Update()
 	{
+		if (Input.GetKeyDown("escape"))
+		{
+			System.Diagnostics.Process.GetCurrentProcess().Kill();
+			Exit();
+			return;
+		}
 		if (allPanelGroup.alpha >= 1.0f)
 		{
 			if (fading)
 			{
+				AudioSource audioSource = Camera.main.GetComponent<AudioSource>();
+				if (audioSource)
+				{
+					if (audioSource.volume > 0.0f)
+						audioSource.volume -= Time.deltaTime/0.4f;
+				}
+
 				blackScreenGroup.timeDelay = 0.0f;
 				blackScreenGroup.state = blackScreenHandler.eCutsceneSteps.FADE_IN;
 				if (blackScreenGroup.IsFadeDone())

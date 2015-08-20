@@ -15,6 +15,7 @@ public class cVineSoul : cSoul
 	{
 		base.Update();
 
+
 		if (alpha < -180.0f)
 			GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = 29;
 		if (alpha > -10.0f)

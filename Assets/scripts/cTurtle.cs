@@ -36,6 +36,10 @@ public class cTurtle : cEnemy {
 
 	private int interacts = 0;
 
+
+	private int sleepCounter = 0;
+	private int attackCounter = 0;
+
 	[System.Serializable]
 	public struct animTurtle
 	{
@@ -155,18 +159,41 @@ public class cTurtle : cEnemy {
 			{
 				animLoop = true;
 
+				if (sleepCounter >= 3)
+				{
+					interacts = 1;
+					sleepCounter = 0;
+				}
+				if (attackCounter >= 3)
+				{
+					interacts = 0;
+					attackCounter = 0;
+				}
 				if (sleeper && interacts == 0)
 				{
+					sleepCounter++;
 					currentTimeScale = 0.7f;
 					animationToPlay = "sleep";
 					sleep = true;
+
 				}
 				else
 				{
-					animationToPlay = "attack_Bite";
-					transform.FindChild("biteBox").gameObject.GetComponent<BoxCollider2D>().enabled = true;
-					attackBite = true;
-					animLoop = false;
+					if (interacts == 0)
+					{
+						sleepCounter++;
+						currentTimeScale = 0.7f;
+						animationToPlay = "sleep";
+						sleep = true;
+					}
+					else
+					{
+						attackCounter++;
+						animationToPlay = "attack_Bite";
+						transform.FindChild("biteBox").gameObject.GetComponent<BoxCollider2D>().enabled = true;
+						attackBite = true;
+						animLoop = false;
+					}
 				}
 				interacts = Random.Range (10,100);
 				interacts = interacts % 2;

@@ -13,6 +13,9 @@ public class cSoul : MonoBehaviour {
 	protected ParticleSystem ps = null;
 	public float pulsarTime = 0.4f;
 
+	public float min = 0.0f;
+	public float max = 0.0f;
+
 	void msg_pulseDie()
 	{
 		pulseDie = true;
@@ -37,9 +40,22 @@ public class cSoul : MonoBehaviour {
 			if (alpha < -360.0f)
 				alpha = alpha + 360.0f;
 
-			Vector3 vPos = transform.position;
-			vPos.y =  vPos.y + (Mathf.Sin (alpha * Mathf.PI/180)/amplitude );
-			transform.position = vPos;
+			Vector3 vPos = transform.localPosition;
+			vPos.y =  vPos.y + (Mathf.Sin (alpha * Mathf.PI/180)/amplitude ) * (Time.deltaTime * 100.0f);
+			if (min != 0.0f && max != 0.0f)
+			{
+				if (vPos.y > max)
+				{
+					vPos.y = max;
+					alpha *= -1.0f;
+				}
+				if (vPos.y < min)
+				{
+					vPos.y = min;
+					alpha *= -1.0f;
+				}
+			}
+			transform.localPosition = vPos;
 		}
 		if (pulseDie)
 		{
