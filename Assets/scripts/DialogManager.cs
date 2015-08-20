@@ -207,9 +207,7 @@ public class DialogManager : MonoBehaviour {
 
 		if (!hasPlayed)
 		{
-			Debug.Log (nextEvent);
 			AudioClip clip = (AudioClip)Resources.Load("Sounds/" + nextEvent);
-			Debug.Log (clip.length);
 			audioSource.PlayOneShot(clip);
 			hasPlayed = true;
 		}

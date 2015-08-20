@@ -2079,6 +2079,23 @@ MeshFilter:
 Transform:
   m_PrefabParentObject: {fileID: 470808, guid: 63113376a67e7ee4aa42d0bef957dac4, type: 2}
   m_PrefabInternal: {fileID: 887588745}
+--- !u!1 &178692544 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 152678, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+  m_PrefabInternal: {fileID: 1222046864}
+--- !u!61 &178692549
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 178692544}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!1001 &179746182
 Prefab:
   m_ObjectHideFlags: 0
@@ -14058,11 +14075,15 @@ Prefab:
     - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
       propertyPath: audioClipsSFX.powerUp
       value: 
-      objectReference: {fileID: 8300000, guid: 9bf8b50274539004a9be50e589cd1feb, type: 3}
+      objectReference: {fileID: 8300000, guid: f03c304a1e8077e4b9beadc47a0f202d, type: 3}
     - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
       propertyPath: hurtVelocity
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11452782, guid: c6a50a06da7e41740861f418822d763d, type: 2}
+      propertyPath: audioClipsSFX.beamLaser
+      value: 
+      objectReference: {fileID: 8300000, guid: 4386827d651dca84e9ace5723f3bd1bc, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c6a50a06da7e41740861f418822d763d, type: 2}
   m_IsPrefabParent: 0

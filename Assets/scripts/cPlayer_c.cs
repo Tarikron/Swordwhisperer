@@ -549,7 +549,7 @@ public class cPlayer_c : cUnit
 				iJumpCounter = 0;
 
 			iJumpCounter++;
-			if (iJumpCounter <= 2)
+			if (iJumpCounter <= 1)
 			{
 				bJumping = true;
 				if (!bSkipAnimForAttack)
@@ -580,8 +580,16 @@ public class cPlayer_c : cUnit
 			playerSoul.GetComponent<cPlayerSoul>().rotateKaMeHaMeHa(x);
 
 			if (audioClipsSFX.beamLaser)
-				audioSourceSFX.PlayOneShot(audioClipsSFX.beamLaser);
+			{
+				if (audioSourceSFX.clip.name != audioClipsSFX.beamLaser.name)
+					audioSourceSFX.Stop();
 
+				if (!audioSourceSFX.isPlaying)
+				{
+					audioSourceSFX.clip = audioClipsSFX.beamLaser;
+					audioSourceSFX.Play();
+				}
+			}
 		}
 		else
 		{
@@ -916,7 +924,7 @@ public class cPlayer_c : cUnit
 			if ((x >= 0.0f && x <= 0.05f) || (x <= 0.0f && x >= -0.05f ))
 				x = 0.0f;
 
-			if (sword.bCollectedSword)
+			if (sword.bCollectedSword && playerPhysics.grounded)
 			{
 				handleAttack ();
 				handleBeamAttack(x);
